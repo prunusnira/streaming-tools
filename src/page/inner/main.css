@@ -1,0 +1,15 @@
+.mainContainer {
+    height: calc(100%-60px);
+}
+
+.divleft {
+    float: left;
+    width: 25%;
+    height: 100%;
+}
+
+.divright {
+    float: right;
+    width: 25%;
+    height: 100%;
+}
