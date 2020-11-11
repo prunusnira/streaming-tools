@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {RouteComponentProps} from 'react-router-dom';
-import { Container } from 'reactstrap';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { actionCreator } from '../redux/action';
 import { StoreState } from '../redux/reducer';
-import Footer from './footer/footer';
-import Header from './header/header';
 import MainPage from './inner/main';
 
 import LoginContainer from './login/loginContainer';
@@ -56,11 +53,7 @@ class IndexContainer extends Component<RouteComponentProps<IMatchProps> & Props>
         }
         else {
             return (
-                <Container className="overallContainer">
-                    <Header />
-                    <MainPage />
-                    <Footer />
-                </Container>
+                <MainPage />
             );
         }
     }

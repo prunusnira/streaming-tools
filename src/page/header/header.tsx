@@ -1,14 +1,18 @@
 import React from 'react';
 import './header.css';
 
-function Header() {
+interface Props {
+    loginName: string
+}
+
+function Header(props: Props) {
     return (
         <header className="header">
             <section>
                 Twitch LoL-Style BanPicker
             </section>
             <section>
-                Login Info Here
+                {props.loginName}
             </section>
         </header>
     );

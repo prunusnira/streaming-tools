@@ -14,4 +14,5 @@ build() {
     cp -r build/* dist
 }
 
-build
+rm ./script/build.log
+build >> ./script/build.log

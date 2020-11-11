@@ -1,21 +1,21 @@
 import React, { Component, Fragment } from "react";
 import Team from "./team";
+import TeamListPresenter from "./teamlistPresenter";
 
 interface Props {
-    teamNum: number;
+    team: Team;
 }
 
 class TeamListContainer extends Component<Props> {
-    team: Team;
-
     constructor(props: Props) {
         super(props);
-        this.team = new Team(props.teamNum);
     }
 
     render() {
         return (
-            <Fragment></Fragment>
+            <TeamListPresenter
+                teamNum={this.props.team.teamNum}
+                userlist={this.props.team.members} />
         );
     }
 }

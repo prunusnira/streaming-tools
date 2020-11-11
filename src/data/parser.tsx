@@ -26,7 +26,18 @@ class Parser {
             // 채팅 내용
             let chat = "";
             for(let i = 4; i < parsed.length; i++) {
-                chat += parsed[i];
+                if(i == 4) {
+                    const splited = parsed[i].split(":");
+                    for(let i = 1; i < splited.length; i++) {
+                        chat += splited[i];
+                        if(i !== splited.length - 1) {
+                            chat += ":";
+                        }
+                    }
+                }
+                else {
+                    chat += parsed[i];
+                }
                 if(i < parsed.length - 1) chat += " ";
             }
             map.set("msg", chat);

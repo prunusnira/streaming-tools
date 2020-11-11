@@ -2,14 +2,26 @@
     height: calc(100%-60px);
 }
 
-.divleft {
+.divleft-overall {
     float: left;
     width: 25%;
     height: 100%;
 }
 
-.divright {
+.divright-overall {
     float: right;
     width: 25%;
+    height: 100%;
+}
+
+.divleft-banpick {
+    float: left;
+    width: 50%;
+    height: 100%;
+}
+
+.divright-banpick {
+    float: right;
+    width: 50%;
     height: 100%;
 }

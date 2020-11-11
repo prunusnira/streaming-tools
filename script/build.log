@@ -1,0 +1,55 @@
+building react
+Creating an optimized production build...
+Compiled with warnings.
+
+src\data\parser.tsx
+  Line 1:10:   'forEachChild' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 29:22:  Expected '===' and instead saw '=='       eqeqeq
+
+src\page\indexContainer.tsx
+  Line 33:27:  Expected '===' and instead saw '=='  eqeqeq
+
+src\page\inner\banpick\banpickPresenter.tsx
+  Line 2:51:   'Container' is defined but never used      @typescript-eslint/no-unused-vars
+  Line 14:15:  'self' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src\page\inner\chat\chatPresenter.tsx
+  Line 15:13:  <iframe> elements must have a unique title property  jsx-a11y/iframe-has-title
+
+src\page\inner\main.tsx
+  Line 116:30:  Expected '!==' and instead saw '!='           eqeqeq
+  Line 170:13:  Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 173:13:  Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+
+src\page\inner\teamlist\teamlistContainer.tsx
+  Line 1:28:  'Fragment' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 10:5:  Useless constructor                   @typescript-eslint/no-useless-constructor
+
+src\page\inner\userSelector.tsx
+  Line 32:20:  Expected '===' and instead saw '=='  eqeqeq
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+File sizes after gzip:
+
+  74.32 KB         build\static\js\2.7445d78f.chunk.js
+  22.49 KB         build\static\css\2.1f103c4b.chunk.css
+  4.89 KB (+12 B)  build\static\js\main.07b9f2b3.chunk.js
+  1.36 KB          build\static\js\3.4676bd72.chunk.js
+  1.13 KB          build\static\js\runtime-main.4e2fbe5a.js
+  408 B            build\static\css\main.29e13c7d.chunk.css
+
+The project was built assuming it is hosted at /.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  npm install -g serve
+  serve -s build
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+
