@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import { Col, Container, Row } from 'reactstrap';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import Message from '../../data/message';
 import { Observer } from '../../data/observer/observer';
@@ -108,11 +107,13 @@ class MainPage extends Component<Props, State> {
         this.irc.registerObserver(this.observer);
 
         this.userProfile = new GetUserProfile();
+        this.tts = new TTSPlay();
+    }
+
+    componentDidMount = () => {
         this.userProfile.requestUserProfile(
             this.props.userid, this.props.acctok,
             this.props.clientId, this.updateStreamerInfo);
-
-        this.tts = new TTSPlay();
     }
 
     // 동작 시작
@@ -237,24 +238,31 @@ class MainPage extends Component<Props, State> {
                 // 팀 등록
                 if(this.state.getUsers && (msg.getMessage().startsWith("!team ") || msg.getMessage().startsWith("!팀 "))) {
                     const teamNum = msg.getMessage().split(" ")[1].split("\r\n")[0];
-    
+
+                    const team0 = this.state.team0;
+                    const team1 = this.state.team1;
+
                     // 이미 다른 팀에 들어가있다면 삭제함
-                    if(this.state.team0.hasMember(msg.getUserId())) {
-                        this.state.team0.removeMember(msg.getUserId());
+                    if(team0.hasMember(msg.getUserId())) {
+                        team0.removeMember(msg.getUserId());
                     }
-                    if(this.state.team1.hasMember(msg.getUserId())) {
-                        this.state.team1.removeMember(msg.getUserId());
+                    if(team1.hasMember(msg.getUserId())) {
+                        team1.removeMember(msg.getUserId());
                     }
     
                     if(teamNum === "1") {
                         console.log(msg.getUserId()+"가 팀 "+teamNum+"으로 등록");
-                        this.state.team0.addMember(user);
+                        team0.addMember(user);
                     }
                     else if(teamNum === "2") {
                         console.log(msg.getUserId()+"가 팀 "+teamNum+"으로 등록");
-                        this.state.team1.addMember(user);
+                        team1.addMember(user);
                     }
-                    this.setState({});
+                    
+                    this.setState({
+                        team0: team0,
+                        team1: team1
+                    });
                 }
     
                 // 픽 등록
@@ -271,31 +279,39 @@ class MainPage extends Component<Props, State> {
                         }
         
                         let currentTeam = 0;
+
+                        const pickTeam0 = this.state.pickTeam0;
+                        const pickTeam1 = this.state.pickTeam1;
+                        const banTeam0 = this.state.banTeam0;
+                        const banTeam1 = this.state.banTeam1;
+                        const team0 = this.state.team0;
+                        const team1 = this.state.team1;
+                        let totalPick = this.state.totalPickCount;
     
-                        if(this.state.team0.hasMember(msg.getUserId())) {
+                        if(team0.hasMember(msg.getUserId())) {
                             currentTeam = 1;
                             msg.setMessage(pickMsg);
     
                             // 팀에 소속되어있다면 해당 팀의 픽 리스트에 등록
-                            this.state.pickTeam0.push(msg);
-                            this.state.banTeam0.push(false);
+                            pickTeam0.push(msg);
+                            banTeam0.push(false);
     
                             // 픽 한 유저는 리스트에서 더 사용할 수 없도록 처리함
-                            this.state.team0.changePickable(msg.getUserId());
-                            this.state.team0.currentPick++;
+                            team0.changePickable(msg.getUserId());
+                            team0.currentPick++;
                             nextPick++;
                         }
-                        if(this.state.team1.hasMember(msg.getUserId())) {
+                        if(team1.hasMember(msg.getUserId())) {
                             currentTeam = 2;
                             msg.setMessage(pickMsg);
-                            this.state.pickTeam1.push(msg);
-                            this.state.banTeam1.push(false);
-                            this.state.team1.changePickable(msg.getUserId());
-                            this.state.team1.currentPick++;
+                            pickTeam1.push(msg);
+                            banTeam1.push(false);
+                            team1.changePickable(msg.getUserId());
+                            team1.currentPick++;
                             nextPick++;
                         }
         
-                        this.state.totalPickCount++;
+                        totalPick++;
                         console.log(msg.getUserId()+"(팀"+currentTeam+") MSG: "+pickMsg);
     
                         // 현재 픽 수와 밴 간격을 계산하여 다음 페이즈를 결정
@@ -306,8 +322,8 @@ class MainPage extends Component<Props, State> {
                             nextPick = 2;
 
                             // 각 팀의 현재 pick도 초기화
-                            this.state.team0.currentPick = 0;
-                            this.state.team1.currentPick = 0;
+                            team0.currentPick = 0;
+                            team1.currentPick = 0;
                         }
                         
                         this.setState({
@@ -315,7 +331,15 @@ class MainPage extends Component<Props, State> {
                             currentUser: null,
                             currentPickCount: nextPick,
                             currentChat: new Array<Message>(),
-                            currentPhase: nextPhase
+                            currentPhase: nextPhase,
+
+                            pickTeam0: pickTeam0,
+                            pickTeam1: pickTeam1,
+                            banTeam0: banTeam0,
+                            banTeam1: banTeam1,
+                            team0: team0,
+                            team1: team1,
+                            totalPickCount: totalPick
                         });
                     }
                     else {
@@ -332,8 +356,22 @@ class MainPage extends Component<Props, State> {
 
     // 랜덤으로 유저 선택하기 (callback)
     getUserSelected = (user: User) => {
-        // 유저 등록 및 다이얼로그 열기
-        console.log("선택된 유저: "+user.getUserName());
+        // 해당 유저의 프로필 이미지를 가져오기 위해 유저 정보 불러오기를 수행
+        this.userProfile.requestUserProfile(
+            user.getUserId(),
+            this.props.acctok,
+            this.props.clientId,
+            this.updateCurrentUser);
+    }
+
+    updateCurrentUser = (map: Map<string, string>) => {
+        const user = new User(
+            map.get("login")!, map.get("display_name")!, true
+        );
+        user.setProfileUrl(map.get("profile_image_url")!);
+
+        console.log("선택된 유저: "+user.getUserName() + " ("+user.getUserId()+")");
+
         this.tts.speech(user.getUserName());
         this.setState({
             currentUser: user,
@@ -352,53 +390,83 @@ class MainPage extends Component<Props, State> {
 
     // region Picked Message Edit
     editPick = (team: number, val: string, idx: number) => {
+        const pickTeam0 = this.state.pickTeam0;
+        const pickTeam1 = this.state.pickTeam1;
         if(team === 1) {
-            this.state.pickTeam0[idx].setMessage(val);
+            pickTeam0[idx].setMessage(val);
         }
         else if(team === 2) {
-            this.state.pickTeam1[idx].setMessage(val);
+            pickTeam1[idx].setMessage(val);
         }
         
-        this.setState({});
+        this.setState({
+            pickTeam0: pickTeam0,
+            pickTeam1: pickTeam1
+        });
     }
 
     removePick = (team: number, idx: number) => {
+        const pickTeam0 = this.state.pickTeam0;
+        const banTeam0 = this.state.banTeam0;
+        const team0 = this.state.team0;
+
+        const pickTeam1 = this.state.pickTeam1;
+        const banTeam1 = this.state.banTeam1;
+        const team1 = this.state.team1;
+
+        let pickCnt = this.state.currentPickCount;
+
         if(team === 1) {
-            this.state.pickTeam0.splice(idx, 1);
-            this.state.banTeam0.splice(idx, 1);
-            this.state.team0.currentPick--;
+            pickTeam0.splice(idx, 1);
+            banTeam0.splice(idx, 1);
+            team0.currentPick--;
         }
         else if(team === 2) {
-            this.state.pickTeam1.splice(idx, 1);
-            this.state.banTeam1.splice(idx, 1);
-            this.state.team1.currentPick--;
+            pickTeam1.splice(idx, 1);
+            banTeam1.splice(idx, 1);
+            team1.currentPick--;
         }
-        this.state.currentPickCount--;
-        this.setState({});
+        pickCnt--;
+
+        this.setState({
+            pickTeam0: pickTeam0,
+            pickTeam1: pickTeam1,
+            banTeam0: banTeam0,
+            banTeam1: banTeam1,
+            team0: team0,
+            team1: team1,
+            currentPickCount: pickCnt
+        });
     }
 
     banPick = (team: number, idx: number) => {
         let nextBan = this.state.currentBanCount;
+        let banDlg = this.state.banDlg;
+        const banTeam0 = this.state.banTeam0;
+        const banTeam1 = this.state.banTeam1;
+        const team0 = this.state.team0;
+        const team1 = this.state.team1;
+
         if(team === 1) {
             // 밴 하기 전에 현재 밴 숫자 확인
             if(this.state.team0.currentBan >= this.state.banNum) {
                 // 현재 턴의 밴 횟수 초과
-                this.state.banDlg = true;
+                banDlg = true;
             }
             else {
-                this.state.banTeam0[idx] = true;
-                this.state.team0.currentBan++;
+                banTeam0[idx] = true;
+                team0.currentBan++;
                 nextBan++;
             }
         }
         else if(team === 2) {
             if(this.state.team1.currentBan >= this.state.banNum) {
                 // 현재 턴의 밴 횟수 초과
-                this.state.banDlg = true;
+                banDlg = true;
             }
             else {
-                this.state.banTeam1[idx] = true;
-                this.state.team1.currentBan++;
+                banTeam1[idx] = true;
+                team1.currentBan++;
                 nextBan++;
             }
         }
@@ -411,12 +479,17 @@ class MainPage extends Component<Props, State> {
             nextBan = 0;
 
             // 각 팀의 현재 pick도 초기화
-            this.state.team0.currentBan = 0;
-            this.state.team1.currentBan = 0;
+            team0.currentBan = 0;
+            team1.currentBan = 0;
         }
         this.setState({
             currentBanCount: nextBan,
-            currentPhase: nextPhase
+            currentPhase: nextPhase,
+            banTeam0: banTeam0,
+            banTeam1: banTeam1,
+            team0: team0,
+            team1: team1,
+            banDlg: banDlg
         });
     }
 
@@ -427,23 +500,35 @@ class MainPage extends Component<Props, State> {
     }
 
     changeUserStatePicked = (user: User) => {
-        if(this.state.team0.hasMember(user.getUserId())) {
-            this.state.team0.changePickable(user.getUserId());
+        const team0 = this.state.team0;
+        const team1 = this.state.team1;
+
+        if(team0.hasMember(user.getUserId())) {
+            team0.changePickable(user.getUserId());
         }
-        if(this.state.team1.hasMember(user.getUserId())) {
-            this.state.team1.changePickable(user.getUserId());
+        if(team1.hasMember(user.getUserId())) {
+            team1.changePickable(user.getUserId());
         }
-        this.setState({});
+        this.setState({
+            team0: team0,
+            team1: team1
+        });
     }
 
     changeTeamName = (team: number, title: string) => {
+        const team0 = this.state.team0;
+        const team1 = this.state.team1;
+
         if(team === 1) {
-            this.state.team0.name = title;
+            team0.name = title;
         }
         if(team === 2) {
-            this.state.team1.name = title;
+            team1.name = title;
         }
-        this.setState({});
+        this.setState({
+            team0: team0,
+            team1: team1
+        });
     }
 
     // 강제 페이즈 변경
@@ -508,8 +593,8 @@ class MainPage extends Component<Props, State> {
                         <PhaseIndicator
                             phase={this.state.currentPhase}
                             switchPhase={this.switchPhase} />
-                        <div className="flex-fill d-flex">
-                            <div className="flex-fill">
+                        <div className="flex-fill d-flex growlimit">
+                            <div className="banpickbox-fixed growlimit">
                                 <BanPickContainer
                                     picklist={this.state.pickTeam0}
                                     banlist={this.state.banTeam0}
@@ -520,7 +605,7 @@ class MainPage extends Component<Props, State> {
                                     removePick={this.removePick}
                                     banPick={this.banPick} />
                             </div>
-                            <div className="flex-fill">
+                            <div className="banpickbox-fixed growlimit">
                                 <BanPickContainer
                                     picklist={this.state.pickTeam1}
                                     banlist={this.state.banTeam1}
@@ -552,6 +637,7 @@ class MainPage extends Component<Props, State> {
                     </div>
                 </div>
                 <UserDialog
+                    key="userdialog"
                     user={this.state.currentUser}
                     chat={this.state.currentChat}
                     display={this.state.userDlg}

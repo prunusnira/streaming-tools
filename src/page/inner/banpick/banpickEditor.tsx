@@ -41,7 +41,7 @@ class BanPickEditor extends Component<Props, State> {
                 <ModalHeader>
                     내용 수정
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody className="wordwrap">
                     현재 내용: {this.props.msg.getMessage()}<br/>
                     <Input type='text' value={this.state.editText} onChange={this.valueChange} />
                 </ModalBody>

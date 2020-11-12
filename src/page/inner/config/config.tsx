@@ -95,7 +95,7 @@ class Config extends Component<Props, State> {
                         팀 별 픽 개수
                         <InputGroup>
                             <Button disabled={this.props.start} onClick={() => this.props.changePickCount(false)}>-</Button>
-                            <Input disabled={this.props.start} type="number" value={this.props.pickSize} onClick={this.doNothing} />
+                            <Input disabled={this.props.start} type="number" value={this.props.pickSize} onChange={this.doNothing} />
                             <Button disabled={this.props.start} onClick={() => this.props.changePickCount(true)}>+</Button>
                         </InputGroup>
                     </Col>
@@ -103,7 +103,7 @@ class Config extends Component<Props, State> {
                         밴 간격
                         <InputGroup>
                             <Button disabled={this.props.start} onClick={() => this.props.changeBanInterval(false)}>-</Button>
-                            <Input disabled={this.props.start} type="number" value={this.props.banInterval} onClick={this.doNothing} />
+                            <Input disabled={this.props.start} type="number" value={this.props.banInterval} onChange={this.doNothing} />
                             <Button disabled={this.props.start} onClick={() => this.props.changeBanInterval(true)}>+</Button>
                         </InputGroup>
                     </Col>
@@ -111,7 +111,7 @@ class Config extends Component<Props, State> {
                         한 번에 밴하는 수
                         <InputGroup>
                             <Button disabled={this.props.start} onClick={() => this.props.changeBanCount(false)}>-</Button>
-                            <Input disabled={this.props.start} type="number" value={this.props.banNum} onClick={this.doNothing} />
+                            <Input disabled={this.props.start} type="number" value={this.props.banNum} onChange={this.doNothing} />
                             <Button disabled={this.props.start} onClick={() => this.props.changeBanCount(true)}>+</Button>
                         </InputGroup>
                     </Col>

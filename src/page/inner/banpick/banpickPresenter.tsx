@@ -28,85 +28,103 @@ class BanPickPresenter extends Component<Props> {
                     {
                         this.props.picklist.map((v, i) => {
                             return (
-                                <Fragment>
-                                    {
-                                        (function() {
-                                            if(self.props.banlist[i]) {
-                                                return (
-                                                    <Fragment>
-                                                        <Row>
-                                                            <Col xs="12">
-                                                                PICK {i+1}
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col className="banpick-content" xs="12">
-                                                                <del>{v.getMessage()}</del>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs="12">
-                                                                by {v.getUserName()} ({v.getUserId()})
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs="12">
-                                                                {v.getTime()}
-                                                            </Col>
-                                                        </Row>
-                                                    </Fragment>
-                                                )
-                                            }
-                                            else {
-                                                return (
-                                                    <Fragment>
-                                                        <Row>
-                                                            <Col xs="12">
-                                                                PICK {i+1}
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col className="banpick-content" xs="12">
-                                                                {v.getMessage()}
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs="12">
-                                                                by {v.getUserName()} ({v.getUserId()})
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs="12">
-                                                                {v.getTime()}
-                                                            </Col>
-                                                        </Row>
-                                                    </Fragment>
-                                                )
-                                            }
-                                        })()
-                                    }
-                                    <Row>
-                                        <Col xs="12">
-                                            <Button size="sm" onClick={() => this.props.edit(v, i)}>수정</Button>
-                                            <Button size="sm" onClick={() => this.props.remove(this.props.teamnum, i)}>삭제</Button>
-                                            {
-                                                (function() {
-                                                    if(self.props.phase === 1) {
-                                                        return (
-                                                            <Button size="sm" disabled>밴</Button>
-                                                        );
-                                                    }
-                                                    else if(self.props.phase === 2) {
-                                                        return (
-                                                            <Button size="sm" onClick={() => self.props.ban(self.props.teamnum, i)}>밴</Button>
-                                                        );
-                                                    }
-                                                })()
-                                            }
-                                            
-                                        </Col>
-                                    </Row>
-                                </Fragment>
+                                <Card>
+                                    <CardBody className="banpick-box">
+                                        {
+                                            (function() {
+                                                if(self.props.banlist[i]) {
+                                                    return (
+                                                        <Fragment>
+                                                            <Row>
+                                                                <Col xs="12">
+                                                                    PICK {i+1}
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col className="banpick-content" xs="12">
+                                                                    <del>{v.getMessage()}</del>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col xs="12">
+                                                                    by {v.getUserName()} ({v.getUserId()})
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col xs="12">
+                                                                    {v.getTime()}
+                                                                </Col>
+                                                            </Row>
+                                                        </Fragment>
+                                                    )
+                                                }
+                                                else {
+                                                    return (
+                                                        <Fragment>
+                                                            <Row>
+                                                                <Col xs="12">
+                                                                    PICK {i+1}
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col className="banpick-content" xs="12">
+                                                                    {v.getMessage()}
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col xs="12">
+                                                                    by {v.getUserName()} ({v.getUserId()})
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col xs="12">
+                                                                    {v.getTime()}
+                                                                </Col>
+                                                            </Row>
+                                                        </Fragment>
+                                                    )
+                                                }
+                                            })()
+                                        }
+                                        <Row>
+                                            <Col xs="12">
+                                                <Button
+                                                    className="banpick-btn"
+                                                    size="sm"
+                                                    color="dark"
+                                                    onClick={() => this.props.edit(v, i)}>수정</Button>
+                                                <Button
+                                                    className="banpick-btn"
+                                                    size="sm"
+                                                    color="dark"
+                                                    onClick={() => this.props.remove(this.props.teamnum, i)}>삭제</Button>
+                                                {
+                                                    (function() {
+                                                        if(self.props.phase === 1) {
+                                                            return (
+                                                                <Button
+                                                                    className="banpick-btn"
+                                                                    size="sm"
+                                                                    color="dark"
+                                                                    disabled>밴</Button>
+                                                            );
+                                                        }
+                                                        else if(self.props.phase === 2) {
+                                                            return (
+                                                                <Button
+                                                                    className="banpick-btn"
+                                                                    size="sm"
+                                                                    color="dark"
+                                                                    onClick={() => self.props.ban(self.props.teamnum, i)}>밴</Button>
+                                                            );
+                                                        }
+                                                    })()
+                                                }
+                                                
+                                            </Col>
+                                        </Row>
+                                    </CardBody>
+                                </Card>
                             )
                         })
                     }

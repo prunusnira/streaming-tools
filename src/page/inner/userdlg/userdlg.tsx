@@ -21,7 +21,15 @@ class UserDialog extends Component<Props> {
                         (function() {
                             if(self.props.user != null) {
                                 return (
-                                    self.props.user.getUserName() + "(" + self.props.user.getUserId() + ")"
+                                    <Fragment>
+                                        <img
+                                            alt="user-profileimg"
+                                            className="profile-image"
+                                            src={self.props.user.getProfileUrl()} />
+                                        &nbsp;
+                                        <b>{self.props.user.getUserName()}</b> ({self.props.user.getUserId()})
+                                    </Fragment>
+                                    
                                 );
                             }
                             else return "";
@@ -38,7 +46,7 @@ class UserDialog extends Component<Props> {
                                             {v.getTime()}
                                         </Col>
                                     </Row>
-                                    <Row className="msg-row no-wrap">
+                                    <Row className="no-wrap msg-row">
                                         <Col className="msg-cont no-wrap" xs="12">
                                             {v.getMessage()}
                                         </Col>

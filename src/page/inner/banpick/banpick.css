@@ -4,8 +4,24 @@
 
 .banpick-content {
     font-size: 1.5em;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.wordwrap {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.banpick-box {
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .banpicklist-body {
     overflow-y: auto;
+}
+
+.banpick-btn {
+    font-size: 90%;
 }

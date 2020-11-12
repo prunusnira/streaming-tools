@@ -17,6 +17,7 @@ class GetUserProfile {
                 // map으로 만듦
                 const map = new Map<string, string>();
                 const dataset = data.data[0];
+                map.set("login", dataset["login"]);
                 map.set("display_name", dataset["display_name"]);
                 map.set("profile_image_url", dataset["profile_image_url"]);
                 callback(map);

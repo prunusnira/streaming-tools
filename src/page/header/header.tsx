@@ -12,13 +12,14 @@ function Header(props: Props) {
     return (
         <header className="header d-flex align-items-center">
             <div className="flex-fill text-center">
-                Twitch BanPicker
+                Twitch BanPicker (Beta)
             </div>
             <div className="flex-fill text-center">
                 <img
                     alt="streamer-profileimg"
                     className="profile-image"
                     src={props.streamer.getProfileUrl()} />
+                &nbsp;
                 <b>{props.streamer.getUserName()}</b> ({props.streamer.getUserId()})
             </div>
             <div className="flex-fill text-right">
