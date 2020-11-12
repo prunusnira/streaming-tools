@@ -1,3 +1,5 @@
+import Message from "./message";
+
 class User {
     private id: string;
     private name: string;
@@ -5,6 +7,7 @@ class User {
     private subs: boolean;
     private picked: boolean;
     private profileUrl: string;
+    private lastChat: Message;
 
     constructor(id: string, name: string, subs: boolean) {
         this.id = id;
@@ -13,6 +16,7 @@ class User {
         this.subs = subs;
         this.picked = false;
         this.profileUrl = "";
+        this.lastChat = new Message('', '', '');
     }
 
     setPicked = () => {
@@ -23,9 +27,15 @@ class User {
         this.profileUrl = url;
     }
 
+    updateLastMessage = (msg: Message) => {
+        this.lastChat = msg;
+    }
+
     getUserId = () => { return this.id; }
     getUserName = () => { return this.name; }
     getProfileUrl = () => { return this.profileUrl; }
+    getLastMessage = () => { return this.lastChat; }
+    isSubscriber = () => { return this.subs; }
     isPicked = () => { return this.picked; }
 }
 

@@ -156,7 +156,7 @@ class TeamList extends Component<Props> {
                                                 <Button
                                                     className='btn-members'
                                                     onClick={() => self.props.changePick(v)}>
-                                                    <del>{v.getUserName()} ({v.getUserId()})</del>
+                                                    <del>{v.getUserName()}</del>
                                                 </Button>
                                             </Col>
                                         </Row>
@@ -169,7 +169,7 @@ class TeamList extends Component<Props> {
                                                 <Button
                                                     className='btn-members'
                                                     onClick={() => self.props.changePick(v)}>
-                                                    {v.getUserName()} ({v.getUserId()})
+                                                    {v.getUserName()}
                                                 </Button>
                                             </Col>
                                         </Row>

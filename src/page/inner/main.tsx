@@ -68,6 +68,8 @@ class MainPage extends Component<Props, State> {
     observer: Observer;
     userProfile: GetUserProfile;
     tts: TTSPlay;
+    currentUserLastMessage: Message;
+    currentUserSubscribed: boolean;
 
     state: State = {
         start: false,
@@ -108,6 +110,9 @@ class MainPage extends Component<Props, State> {
 
         this.userProfile = new GetUserProfile();
         this.tts = new TTSPlay();
+
+        this.currentUserLastMessage = new Message('', '', '');
+        this.currentUserSubscribed = false;
     }
 
     componentDidMount = () => {
@@ -232,31 +237,54 @@ class MainPage extends Component<Props, State> {
                     }
                 });
     
-                const user = new User(map.get("userid")!, map.get("display-name")!, isSub);
+                const team0 = this.state.team0;
+                const team1 = this.state.team1;
+                let user = null;
+
                 const msg = new Message(map.get("userid")!, map.get("display-name")!, map.get("msg")!);
-    
+                
+                if(team0.hasMember(msg.getUserId())) {
+                    user = team0.getMember(msg.getUserId());
+                }
+                else if(team1.hasMember(msg.getUserId())) {
+                    user = team1.getMember(msg.getUserId());
+                }
+                else {
+                    user = new User(map.get("userid")!, map.get("display-name")!, isSub);
+                }
+                user!.updateLastMessage(msg);
+                
                 // 팀 등록
                 if(this.state.getUsers && (msg.getMessage().startsWith("!team ") || msg.getMessage().startsWith("!팀 "))) {
                     const teamNum = msg.getMessage().split(" ")[1].split("\r\n")[0];
 
-                    const team0 = this.state.team0;
-                    const team1 = this.state.team1;
 
+                    let alreadyPicked = false;
                     // 이미 다른 팀에 들어가있다면 삭제함
                     if(team0.hasMember(msg.getUserId())) {
+                        if(team0.getMember(msg.getUserId())!.isPicked()) {
+                            alreadyPicked = true;
+                        }
                         team0.removeMember(msg.getUserId());
                     }
                     if(team1.hasMember(msg.getUserId())) {
+                        if(team1.getMember(msg.getUserId())!.isPicked()) {
+                            alreadyPicked = true;
+                        }
                         team1.removeMember(msg.getUserId());
+                    }
+
+                    if(alreadyPicked) {
+                        user!.setPicked();
                     }
     
                     if(teamNum === "1") {
                         console.log(msg.getUserId()+"가 팀 "+teamNum+"으로 등록");
-                        team0.addMember(user);
+                        team0.addMember(user!);
                     }
                     else if(teamNum === "2") {
                         console.log(msg.getUserId()+"가 팀 "+teamNum+"으로 등록");
-                        team1.addMember(user);
+                        team1.addMember(user!);
                     }
                     
                     this.setState({
@@ -357,6 +385,8 @@ class MainPage extends Component<Props, State> {
     // 랜덤으로 유저 선택하기 (callback)
     getUserSelected = (user: User) => {
         // 해당 유저의 프로필 이미지를 가져오기 위해 유저 정보 불러오기를 수행
+        this.currentUserLastMessage = user.getLastMessage();
+        this.currentUserSubscribed = user.isSubscriber();
         this.userProfile.requestUserProfile(
             user.getUserId(),
             this.props.acctok,
@@ -366,7 +396,7 @@ class MainPage extends Component<Props, State> {
 
     updateCurrentUser = (map: Map<string, string>) => {
         const user = new User(
-            map.get("login")!, map.get("display_name")!, true
+            map.get("login")!, map.get("display_name")!, this.currentUserSubscribed
         );
         user.setProfileUrl(map.get("profile_image_url")!);
 
@@ -376,7 +406,8 @@ class MainPage extends Component<Props, State> {
         this.setState({
             currentUser: user,
             userDlg: true,
-            currentPhase: 1
+            currentPhase: 1,
+            currentChat: [this.currentUserLastMessage]
         });
     }
 
@@ -589,12 +620,12 @@ class MainPage extends Component<Props, State> {
                             changeTeamName={this.changeTeamName}
                             getUserSelected={this.getUserSelected} />
                     </div>
-                    <div className="flex-fill flexwidth-2 d-flex flex-column">
+                    <div className="flexwidth-2 d-flex flex-column">
                         <PhaseIndicator
                             phase={this.state.currentPhase}
                             switchPhase={this.switchPhase} />
-                        <div className="flex-fill d-flex growlimit">
-                            <div className="banpickbox-fixed growlimit">
+                        <div className="d-flex banpickbox-height">
+                            <div className="banpickbox-width">
                                 <BanPickContainer
                                     picklist={this.state.pickTeam0}
                                     banlist={this.state.banTeam0}
@@ -605,7 +636,7 @@ class MainPage extends Component<Props, State> {
                                     removePick={this.removePick}
                                     banPick={this.banPick} />
                             </div>
-                            <div className="banpickbox-fixed growlimit">
+                            <div className="banpickbox-width">
                                 <BanPickContainer
                                     picklist={this.state.pickTeam1}
                                     banlist={this.state.banTeam1}
