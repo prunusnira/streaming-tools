@@ -11,11 +11,9 @@ function ChatPresenter(props: Props) {
     const baseUrl2: string = "/chat?parent=www.twitch.tv";
 
     return (
-        <Fragment>
-            <iframe
-                src={baseUrl+props.username+baseUrl2}
-                className="chat" />
-        </Fragment>
+        <iframe
+            src={baseUrl+props.username+baseUrl2}
+            className="chat" />
     );
 }
 

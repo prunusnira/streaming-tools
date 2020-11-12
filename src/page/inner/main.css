@@ -1,27 +1,26 @@
-.mainContainer {
-    height: calc(100%-60px);
+.phase {
+    font-size: 2em;
+    height: 50px;
+    background-color: black;
+    color: white;
+    font-weight: bold;
 }
 
-.divleft-overall {
-    float: left;
-    width: 25%;
-    height: 100%;
+.stretch {
+    height: calc(100% - 90px);
 }
 
-.divright-overall {
-    float: right;
-    width: 25%;
-    height: 100%;
+.no-wrap {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.divleft-banpick {
-    float: left;
-    width: 50%;
-    height: 100%;
+.flexwidth-1 {
+    flex-basis: 20%;
 }
-
-.divright-banpick {
-    float: right;
-    width: 50%;
-    height: 100%;
+.flexwidth-2 {
+    flex-basis: 50%;
+}
+.flexwidth-3 {
+    flex-basis: 30%;
 }

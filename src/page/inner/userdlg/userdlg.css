@@ -1,3 +1,19 @@
 .modelbody-userchat {
     height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.msg-time {
+    color: rgb(48, 48, 48);
+    font-size: 0.8em;
+}
+
+.msg-cont {
+    color: rgb(0, 0, 0);
+    word-wrap: break-word;
+}
+
+.msg-row {
+    padding-bottom: 0.5em;
 }

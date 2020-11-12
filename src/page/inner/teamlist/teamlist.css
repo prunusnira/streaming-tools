@@ -1,3 +1,14 @@
 .teamlist {
-    height: 40%;
+    height: 50%;
+}
+
+.btn-members {
+    background-color: transparent !important;
+    color: black !important;
+    padding: 0px !important;
+    border: none !important;
+}
+
+.teamlist-body {
+    overflow-y: auto;
 }

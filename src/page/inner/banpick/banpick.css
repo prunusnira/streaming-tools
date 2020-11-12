@@ -1,0 +1,11 @@
+.banpicklist {
+    height: 100%;
+}
+
+.banpick-content {
+    font-size: 1.5em;
+}
+
+.banpicklist-body {
+    overflow-y: auto;
+}

@@ -1,16 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from "reactstrap";
+import Message from "../../../data/message";
 import User from "../../../data/user";
 import './userdlg.css';
 
 interface Props {
     user: User|null,
-    chat: string[],
+    chat: Array<Message>,
     display: boolean,
     close: () => void
 }
 
-class UserDlgPresenter extends Component<Props> {
+class UserDialog extends Component<Props> {
     render() {
         const self = this;
         return (
@@ -20,22 +21,29 @@ class UserDlgPresenter extends Component<Props> {
                         (function() {
                             if(self.props.user != null) {
                                 return (
-                                    self.props.user.name + "(" + self.props.user.id + ")"
+                                    self.props.user.getUserName() + "(" + self.props.user.getUserId() + ")"
                                 );
                             }
                             else return "";
                         })()
                     }
                 </ModalHeader>
-                <ModalBody className='modelbody-userchat'>
+                <ModalBody id="userchat" className='modelbody-userchat'>
                     {
                         this.props.chat.map(v => {
                             return (
-                                <Row>
-                                    <Col xs="12">
-                                        {v}
-                                    </Col>
-                                </Row>
+                                <Fragment>
+                                    <Row className="no-wrap">
+                                        <Col className="msg-time no-wrap" xs="12">
+                                            {v.getTime()}
+                                        </Col>
+                                    </Row>
+                                    <Row className="msg-row no-wrap">
+                                        <Col className="msg-cont no-wrap" xs="12">
+                                            {v.getMessage()}
+                                        </Col>
+                                    </Row>
+                                </Fragment>
                             )
                         })
                     }
@@ -50,4 +58,4 @@ class UserDlgPresenter extends Component<Props> {
     }
 }
 
-export default UserDlgPresenter;
+export default UserDialog;

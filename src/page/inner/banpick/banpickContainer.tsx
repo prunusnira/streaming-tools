@@ -1,32 +1,36 @@
 import React, { Component, Fragment } from "react";
+import Message from "../../../data/message";
 import BanPickEditor from "./banpickEditor";
 import BanPickPresenter from "./banpickPresenter";
 
 interface Props {
-    picklist: string[],
+    picklist: Array<Message>,
+    banlist: Array<boolean>,
+    teamname: string,
     teamnum: number,
+    phase: number,
     editPick: (teamNum: number, val: string, idx: number) => void,
-    removePick: (teamNum: number, idx: number) => void
+    removePick: (teamNum: number, idx: number) => void,
+    banPick: (teamNum: number, idx: number) => void
 }
 
 interface State {
     editDlg: boolean,
-    editText: string,
+    editMsg: Message,
     editIdx: number
 }
 
 class BanPickContainer extends Component<Props, State> {
     state: State = {
         editDlg: false,
-        editText: "",
+        editMsg: new Message("", "", ""),
         editIdx: 0
     }
 
-    setEditMsg = (text: string, idx: number) => {
-        console.log(idx+" "+text);
+    setEditMsg = (msg: Message, idx: number) => {
         this.setState({
             editDlg: true,
-            editText: text,
+            editMsg: msg,
             editIdx: idx
         });
     }
@@ -42,12 +46,16 @@ class BanPickContainer extends Component<Props, State> {
             <Fragment>
                 <BanPickPresenter
                     picklist={this.props.picklist}
+                    banlist={this.props.banlist}
                     size={this.props.picklist.length}
+                    teamname={this.props.teamname}
                     teamnum={this.props.teamnum}
+                    phase={this.props.phase}
                     edit={this.setEditMsg}
-                    remove={this.props.removePick} />
+                    remove={this.props.removePick}
+                    ban={this.props.banPick} />
                 <BanPickEditor
-                    text={this.state.editText}
+                    msg={this.state.editMsg}
                     display={this.state.editDlg}
                     idx={this.state.editIdx}
                     team={this.props.teamnum}

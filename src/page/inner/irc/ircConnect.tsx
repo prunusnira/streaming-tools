@@ -25,7 +25,7 @@ class IRCConnect {
             const msg: string = ev.data;
 
             // 채팅 메시지 처리하기
-            if(msg === "PING :tmi.twitch.tv") {
+            if(msg.startsWith("PING :tmi.twitch.tv")) {
                 this.socket.send("PONG :tmi.twitch.tv");
                 return;
             }

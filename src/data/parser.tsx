@@ -15,9 +15,7 @@ class Parser {
             const userinfo = parsed[0].split(";");
             userinfo.forEach(s => {
                 const keypair = s.split("=");
-                if(keypair[0] === "display-name") {
-                    map.set("nickname", keypair[1]);
-                }
+                map.set(keypair[0], keypair[1]);
             });
     
             let id = parsed[1].split("!")[0];

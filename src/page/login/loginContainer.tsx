@@ -11,7 +11,7 @@ class LoginContainer extends Component {
             "?client_id=" + Ref.CLIENT_ID +
             "&redirect_uri=" + Ref.REDIR_URI +
             "&response_type=token" +
-            "&scope=user:edit+channel:read:subscriptions+chat:read";
+            "&scope=user:edit+channel:read:subscriptions+chat:read+user:read:email";
     }
 
     render() {
