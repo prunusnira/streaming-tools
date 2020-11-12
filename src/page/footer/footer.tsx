@@ -15,7 +15,7 @@ function Footer() {
                         <a target="_blank" href="https://github.com/prunusnira/twitch-banpicker">GitHub</a>
                     </Col>
                     <Col className="no-wrap text-center" xs="12">
-                        아마도 빠른 시일 내에 구글 크롬 익스텐션이 될 수도 있습니다
+                        아마도 나중엔 크롬 익스텐션이 될 수도 있습니다. 버그 수정 문의는 트위터로. 최소 1200px 이상의 넓이는 필수입니다.
                     </Col>
                 </Row>
             </Container>

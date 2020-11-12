@@ -39,7 +39,7 @@ class IndexContainer extends Component<RouteComponentProps<IMatchProps> & Props>
 
     render() {
         // redux에 데이터가 있는지 확인
-        if(this.props.loginName === "") {
+        if(this.props.loginName === null || this.props.loginName === undefined || this.props.loginName === "") {
             if(this.props.location.hash === "") {
                 return <LoginContainer />
             }

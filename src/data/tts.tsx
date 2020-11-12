@@ -14,7 +14,6 @@ class TTSPlay {
 
     speech = (txt: string) => {
         if(!window.speechSynthesis) {
-            alert("음성 재생을 지원하지 않는 브라우저입니다");
             return;
         }
         
@@ -22,11 +21,11 @@ class TTSPlay {
         const utterThis = new SpeechSynthesisUtterance(txt);
 
         utterThis.onend = (event: SpeechSynthesisEvent) => {
-            console.log('end');
+            console.log('TTS Finish');
         };
 
         utterThis.onerror = (event: SpeechSynthesisEvent) => {
-            console.log('error', event);
+            console.log('TTS Error', event);
         };
 
         let voiceFound = false;
@@ -38,7 +37,6 @@ class TTSPlay {
         }
 
         if(!voiceFound) {
-            alert('voice not found');
             return;
         }
 

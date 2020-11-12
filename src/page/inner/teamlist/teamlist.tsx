@@ -81,10 +81,6 @@ class TeamList extends Component<Props> {
                 let randVal = Math.floor(Math.random() * arr.length);
                 if(randVal == arr.length) randVal--;
         
-                console.log(arr.length);
-                console.log(randVal);
-                console.log(arr[randVal]);
-        
                 this.props.getUserSelected(arr[randVal]);
             }
             else {
@@ -125,8 +121,18 @@ class TeamList extends Component<Props> {
                         </Row>
                         <Row>
                             <Col xs="12">
-                                <Button size="sm" onClick={this.openTeamNameChanger}>팀명 변경</Button>
-                                <Button size="sm" onClick={() => this.selectUser(this.props.team.teamNum)}>이 팀에서 선택</Button>
+                                <Button
+                                    size="sm"
+                                    color="dark"
+                                    onClick={this.openTeamNameChanger}>
+                                        팀명 변경
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    color="dark"
+                                    onClick={() => this.selectUser(this.props.team.teamNum)}>
+                                        이 팀에서 선택
+                                </Button>
                             </Col>
                         </Row>
                     </CardHeader>

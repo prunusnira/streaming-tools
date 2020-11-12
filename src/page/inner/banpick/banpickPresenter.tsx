@@ -91,12 +91,12 @@ class BanPickPresenter extends Component<Props> {
                                             <Button size="sm" onClick={() => this.props.remove(this.props.teamnum, i)}>삭제</Button>
                                             {
                                                 (function() {
-                                                    if(self.props.phase === 0) {
+                                                    if(self.props.phase === 1) {
                                                         return (
                                                             <Button size="sm" disabled>밴</Button>
                                                         );
                                                     }
-                                                    else if(self.props.phase === 1) {
+                                                    else if(self.props.phase === 2) {
                                                         return (
                                                             <Button size="sm" onClick={() => self.props.ban(self.props.teamnum, i)}>밴</Button>
                                                         );
