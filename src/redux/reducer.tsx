@@ -3,7 +3,7 @@ import {RootAction} from './action';
 
 // reducer: 이전 상태와 action을 합쳐 새로운 상태(state)를 만드는 조작
 // action에서 정의한 action type을 import
-import {SAVEUSER, REMOVEUSER, SETUSERTOKEN} from './action';
+import {SAVEUSER, REMOVEUSER, SETUSERTOKEN, SETTIME} from './action';
 // combineReducers: 다수의 reducer를 하나로 합쳐주는 메소드
 import {combineReducers} from 'redux';
 
@@ -12,7 +12,8 @@ export interface TokenState {
     loginname: string,
     clientId: string,
     scope: Array<string>,
-    acctok: string
+    acctok: string,
+    time: number
 }
 
 // state의 초기값
@@ -20,7 +21,8 @@ const defaultTokenState: TokenState = {
     loginname: "",
     clientId: "",
     scope: new Array<string>(),
-    acctok: ""
+    acctok: "",
+    time: 0
 };
 
 // reducer 정의
@@ -50,6 +52,11 @@ export function tokenReducer (
                 clientId: action.clientId,
                 scope: action.scope,
                 acctok: action.acctok
+            });
+        case SETTIME:
+            return Object.assign({}, state, {
+                ...state,
+                time: action.time
             });
         default:
             return state;

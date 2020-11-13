@@ -34,6 +34,7 @@ class ValidContainer extends Component<Props> {
                 res.data.client_id as string,
                 res.data.scopes as Array<string>
             );
+            this.props.Actions.setTime(Date.now() / 1000 / 60 / 60);
             window.location.href = Ref.REDIR_URI;
         });
     }

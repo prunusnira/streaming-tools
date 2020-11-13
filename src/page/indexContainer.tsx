@@ -21,6 +21,7 @@ interface Props {
     loginName: string,
     scopes: Array<string>,
     acctok: string,
+    time: number,
     Actions: typeof actionCreator
 }
 
@@ -38,8 +39,11 @@ class IndexContainer extends Component<RouteComponentProps<IMatchProps> & Props>
     }
 
     render() {
-        // redux에 데이터가 있는지 확인
-        if(this.props.loginName === null || this.props.loginName === undefined || this.props.loginName === "") {
+        // redux의 시간 데이터 확인
+        const currentTime = Date.now() / 1000 / 60 / 60;
+        console.log(this.props.time);
+        console.log(currentTime - this.props.time);
+        if(this.props.time === undefined || this.props.time === 0 || currentTime - this.props.time > 1) {
             if(this.props.location.hash === "") {
                 return <LoginContainer />
             }
@@ -63,7 +67,8 @@ const mapStateToProps = (state: StoreState) => {
     return {
         scopes: state.tokenReducer.scope,
         loginName: state.tokenReducer.loginname,
-        clientId: state.tokenReducer.clientId
+        clientId: state.tokenReducer.clientId,
+        time: state.tokenReducer.time
     }
 };
 

@@ -6,6 +6,7 @@
 export const SAVEUSER = 'SAVEUSER';
 export const REMOVEUSER = 'REMOVEUSER';
 export const SETUSERTOKEN = 'SETUSERTOKEN';
+export const SETTIME = 'SETTIME';
 
 export interface ActionUserInfo {
 }
@@ -30,10 +31,16 @@ interface RemoveUserAction {
     acctok: string
 }
 
+interface SetTimeAction {
+    type: typeof SETTIME,
+    time: number
+}
+
 export type RootAction =
     SaveUserAction
     | RemoveUserAction
-    | SetUserTokenAction;
+    | SetUserTokenAction
+    | SetTimeAction;
 
 // action 정의
 // 액션이 dispatch에 의해 store로 전달되면
@@ -65,10 +72,18 @@ function removeUserOn(): RemoveUserAction {
     }
 }
 
+function setTime(time: number) {
+    return {
+        type: SETTIME,
+        time: time
+    }
+}
+
 // 액션생산자: 액션을 만드는 함수 혹은 변수
 // 나중에 dispatch를 해야 액션을 보낸다
 export const actionCreator = {
     saveUserOn,
     removeUserOn,
-    saveAccToken
+    saveAccToken,
+    setTime
 };
