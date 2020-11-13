@@ -5,7 +5,6 @@ import BanPickPresenter from "./banpickPresenter";
 
 interface Props {
     picklist: Array<Message>,
-    banlist: Array<boolean>,
     teamname: string,
     teamnum: number,
     phase: number,
@@ -46,7 +45,6 @@ class BanPickContainer extends Component<Props, State> {
             <Fragment>
                 <BanPickPresenter
                     picklist={this.props.picklist}
-                    banlist={this.props.banlist}
                     size={this.props.picklist.length}
                     teamname={this.props.teamname}
                     teamnum={this.props.teamnum}

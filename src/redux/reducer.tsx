@@ -51,7 +51,8 @@ export function tokenReducer (
                 loginname: action.loginname,
                 clientId: action.clientId,
                 scope: action.scope,
-                acctok: action.acctok
+                acctok: action.acctok,
+                time: action.time
             });
         case SETTIME:
             return Object.assign({}, state, {

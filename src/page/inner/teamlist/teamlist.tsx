@@ -10,7 +10,8 @@ interface Props {
     pickCount: number,
     banInterval: number,
     hide: boolean,
-    getUserSelected: (user: User) => void
+    phase: number,
+    getUserSelected: (user: User, team: number) => void
     changePick: (user: User) => void,
     changeTeamName: (team: number, title: string) => void
 }
@@ -58,11 +59,19 @@ class TeamList extends Component<Props> {
         let arr = new Array<User>();
         let partPickOver = false;
 
+        if(this.props.phase === 2) {
+            this.setState({
+                isNoUserDlg: true,
+                msg: '밴 페이즈가 진행중입니다. 밴을 수행하거나 강제 페이즈 변경을 해주세요'
+            });
+            return;
+        }
+
         if(this.props.totalPickCount >= this.props.pickCount * 2) {
             this.setState({
                 isNoUserDlg: true,
                 msg: '전체 픽 페이즈가 종료되었습니다. 결과를 확인해주세요.'
-            })
+            });
         }
         else {
             if(this.props.team.currentPick >= this.props.banInterval) {
@@ -81,7 +90,7 @@ class TeamList extends Component<Props> {
                 let randVal = Math.floor(Math.random() * arr.length);
                 if(randVal == arr.length) randVal--;
         
-                this.props.getUserSelected(arr[randVal]);
+                this.props.getUserSelected(arr[randVal], team);
             }
             else {
                 this.setState({

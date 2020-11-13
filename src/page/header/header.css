@@ -11,3 +11,7 @@
 .reset-btn {
     height: 50px;
 }
+
+.howto-body {
+    overflow-y: auto;
+}

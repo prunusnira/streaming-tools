@@ -5,6 +5,7 @@ import User from "../../../data/user";
 import './userdlg.css';
 
 interface Props {
+    team: number,
     user: User|null,
     chat: Array<Message>,
     display: boolean,

@@ -3,12 +3,14 @@ class Message {
     private name: string;
     private msg: string;
     private time: string;
+    private ban: boolean;
 
     constructor(id: string, name: string, msg: string) {
         this.id = id;
         this.name = name;
         this.msg = msg;
         this.time = this.getFormatDate(new Date());
+        this.ban = false;
     }
 
     getFormatDate = (date: Date) => {
@@ -30,9 +32,12 @@ class Message {
     getTime = () => { return this.time; }
     getMessage = () => { return this.msg; }
     getUserName = () => { return this.name; }
-    getUserId = () => {return this.id; }
+    getUserId = () => { return this.id; }
+    getBanStatus = () => { return this.ban; }
 
     setMessage = (msg: string) => { this.msg = msg; }
+    setBan = () => { this.ban = true; }
+    undoBan = () => { this.ban = false; }
 }
 
 export default Message;

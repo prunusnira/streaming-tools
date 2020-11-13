@@ -6,7 +6,6 @@ import './banpick.css';
 
 interface Props {
     picklist: Array<Message>,
-    banlist: Array<boolean>,
     size: number,
     teamname: string,
     teamnum: number,
@@ -32,7 +31,7 @@ class BanPickPresenter extends Component<Props> {
                                     <CardBody className="banpick-box">
                                         {
                                             (function() {
-                                                if(self.props.banlist[i]) {
+                                                if(v.getBanStatus()) {
                                                     return (
                                                         <Fragment>
                                                             <Row>
@@ -100,22 +99,40 @@ class BanPickPresenter extends Component<Props> {
                                                     onClick={() => this.props.remove(this.props.teamnum, i)}>삭제</Button>
                                                 {
                                                     (function() {
-                                                        if(self.props.phase === 1) {
+                                                        if(self.props.phase === 1 && v.getBanStatus()) {
                                                             return (
                                                                 <Button
                                                                     className="banpick-btn"
                                                                     size="sm"
                                                                     color="dark"
-                                                                    disabled>밴</Button>
+                                                                    disabled>밴 취소</Button>
                                                             );
                                                         }
-                                                        else if(self.props.phase === 2) {
+                                                        else if(self.props.phase === 1 && !v.getBanStatus()) {
                                                             return (
                                                                 <Button
                                                                     className="banpick-btn"
                                                                     size="sm"
                                                                     color="dark"
-                                                                    onClick={() => self.props.ban(self.props.teamnum, i)}>밴</Button>
+                                                                    disabled>밴 하기</Button>
+                                                            );
+                                                        }
+                                                        else if(self.props.phase === 2 && v.getBanStatus()) {
+                                                            return (
+                                                                <Button
+                                                                    className="banpick-btn"
+                                                                    size="sm"
+                                                                    color="dark"
+                                                                    onClick={() => self.props.ban(self.props.teamnum, i)}>밴 취소</Button>
+                                                            );
+                                                        }
+                                                        else if(self.props.phase === 2 && !v.getBanStatus()) {
+                                                            return (
+                                                                <Button
+                                                                    className="banpick-btn"
+                                                                    size="sm"
+                                                                    color="dark"
+                                                                    onClick={() => self.props.ban(self.props.teamnum, i)}>밴 하기</Button>
                                                             );
                                                         }
                                                     })()

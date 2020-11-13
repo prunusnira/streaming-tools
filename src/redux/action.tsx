@@ -28,7 +28,8 @@ interface RemoveUserAction {
     loginname: string,
     clientId: string,
     scope: Array<string>,
-    acctok: string
+    acctok: string,
+    time: number
 }
 
 interface SetTimeAction {
@@ -68,7 +69,8 @@ function removeUserOn(): RemoveUserAction {
         loginname: "",
         clientId: "",
         scope: new Array<string>(),
-        acctok: ""
+        acctok: "",
+        time: 0
     }
 }
 
