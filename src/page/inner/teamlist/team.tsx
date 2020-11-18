@@ -28,6 +28,10 @@ class Team {
         return null;
     }
 
+    getMembers = () => {
+        return this.members;
+    }
+
     hasMember = (id: string) => {
         return this.getMember(id) === null ? false : true;
     }

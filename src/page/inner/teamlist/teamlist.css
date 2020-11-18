@@ -1,5 +1,5 @@
 .teamlist {
-    height: 50%;
+    height: calc(50% - 35px);
 }
 
 .btn-members {

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Card, CardBody, CardHeader, Col, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
+import Roulette from '../../../data/roulette';
 import User from '../../../data/user';
 import Team from './team';
 import './teamlist.css';
@@ -13,14 +14,17 @@ interface Props {
     phase: number,
     getUserSelected: (user: User, team: number) => void
     changePick: (user: User) => void,
-    changeTeamName: (team: number, title: string) => void
+    changeTeamName: (team: number, title: string) => void,
+    notNego: () => void
 }
 
 interface State {
     open: boolean,
     newname: string,
     isNoUserDlg: boolean,
-    msg: string
+    isRoulette: boolean,
+    msg: string,
+    rouletteInner: string
 }
 
 class TeamList extends Component<Props> {
@@ -28,7 +32,9 @@ class TeamList extends Component<Props> {
         open: false,
         newname: "",
         isNoUserDlg: false,
-        msg: ""
+        isRoulette: false,
+        msg: "",
+        rouletteInner: ""
     }
 
     openTeamNameChanger = () => {
@@ -86,11 +92,30 @@ class TeamList extends Component<Props> {
             }
     
             if(arr.length > 0) {
-                // 현재 목록에서 유저 선택
-                let randVal = Math.floor(Math.random() * arr.length);
-                if(randVal == arr.length) randVal--;
-        
-                this.props.getUserSelected(arr[randVal], team);
+                this.setState({
+                    isRoulette: true
+                },
+                () => {
+                    // 현재 목록에서 유저 선택
+                    let randVal = Math.floor(Math.random() * arr.length);
+                    if(randVal == arr.length) randVal--;
+    
+                    // 룰렛 선택 표기
+                    const roulette = new Roulette(
+                        arr,
+                        false);
+                    
+                    roulette.setupPos(randVal);
+                    roulette.start();
+                    roulette.roulette(this.updateRoulette);
+                    roulette.stop((obj: Object) => {
+                        this.updateRoulette(arr[randVal]);
+
+                        this.props.notNego();
+                        this.props.getUserSelected(arr[randVal], team);
+                        setTimeout(this.closeRoulette, 1000);
+                    }, 3);
+                });
             }
             else {
                 this.setState({
@@ -101,10 +126,22 @@ class TeamList extends Component<Props> {
         }
     }
 
+    updateRoulette = (obj: Object) => {
+        this.setState({
+            rouletteInner: (obj as User).getUserName()
+        });
+    }
+
     close = () => {
         this.setState({
             isNoUserDlg: false,
             msg: ''
+        });
+    }
+
+    closeRoulette = () => {
+        this.setState({
+            isRoulette: false
         });
     }
 
@@ -144,20 +181,21 @@ class TeamList extends Component<Props> {
                                 </Button>
                             </Col>
                         </Row>
+                        <Row>
+                            <Col id="rTargetTest">
+                            </Col>
+                        </Row>
                     </CardHeader>
                     <CardBody className="teamlist-body">
                     {
-                        this.props.team.members.map(v => {
-                            if(self.props.hide) {
-                                return (
-                                    <Row>
-                                        <Col xs="12">
-                                            팀 목록 숨김 상태
-                                        </Col>
-                                    </Row>
-                                );
-                            }
-                            else {
+                        self.props.hide ? 
+                            (<Row>
+                                <Col xs="12">
+                                    팀 목록 숨김 상태
+                                </Col>
+                            </Row>)
+                            :
+                            self.props.team.members.map(v => {
                                 if(v.isPicked()) {
                                     return (
                                         <Row>
@@ -184,8 +222,7 @@ class TeamList extends Component<Props> {
                                         </Row>
                                     );
                                 }
-                            }
-                        })
+                            })
                     }
                     </CardBody>
                 </Card>
@@ -220,6 +257,14 @@ class TeamList extends Component<Props> {
                     <ModalFooter>
                         <Button onClick={this.close}>닫기</Button>
                     </ModalFooter>
+                </Modal>
+                <Modal isOpen={this.state.isRoulette}>
+                    <ModalHeader>
+                        누구누구!?
+                    </ModalHeader>
+                    <ModalBody className="text-center" style={{fontSize: "2em"}}>
+                        {this.state.rouletteInner}
+                    </ModalBody>
                 </Modal>
             </Fragment>
         );

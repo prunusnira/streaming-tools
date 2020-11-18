@@ -10,7 +10,7 @@ function Footer() {
                     <Col className="no-wrap text-center" xs="12">
                         (c) 2020 PrunusNira
                         &nbsp;&nbsp;
-                        <a target="_blank" href="https://twitter.com/privatenira">Twitter</a>
+                        <a target="_blank" href="https://twitter.com/_nira_one">Twitter</a>
                         &nbsp;&nbsp;
                         <a target="_blank" href="https://github.com/prunusnira/twitch-banpicker">GitHub</a>
                     </Col>

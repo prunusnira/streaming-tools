@@ -5,6 +5,7 @@ import Message from "../../../data/message";
 import './pickSelect.css';
 
 interface Props {
+    onRoulette: boolean,
     pickedMsgDlg: boolean,
     pickedFailMsgDlg: boolean,
     pickedMsg: Message,
@@ -25,16 +26,22 @@ class PickSelect extends Component<Props> {
                                 {this.props.pickedMsg.getMessage()}
                             </Col>
                         </Row>
-                        <Row>
-                            <Col className="text-center" xs="12">
-                                by {this.props.pickedMsg.getUserName()} ({this.props.pickedMsg.getUserId()})
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col className="text-center" xs="12">
-                                at {this.props.pickedMsg.getTime()}
-                            </Col>
-                        </Row>
+                        {
+                            this.props.onRoulette ?
+                            "" :
+                            <Fragment>
+                                <Row>
+                                    <Col className="text-center" xs="12">
+                                        by {this.props.pickedMsg.getUserName()} ({this.props.pickedMsg.getUserId()})
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className="text-center" xs="12">
+                                        at {this.props.pickedMsg.getTime()}
+                                    </Col>
+                                </Row>
+                            </Fragment>
+                        }
                     </ModalBody>
                     <ModalFooter>
                         <Button

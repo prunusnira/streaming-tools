@@ -40,13 +40,13 @@ class Header extends Component<Props, State> {
                 <div className="flex-fill text-right">
                     <Button
                         color="warning"
-                        className="reset-btn"
+                        className="reset-btn no-wrap"
                         onClick={this.showHowTo}>
-                        필독! 사용방법
+                        ☆★필독! 사용방법★☆
                     </Button>
                     <Button
                         color="danger"
-                        className="reset-btn"
+                        className="reset-btn no-wrap"
                         onClick={this.props.tokenReset}>
                         계정 토큰 리셋
                     </Button>
@@ -73,10 +73,8 @@ class Header extends Component<Props, State> {
                                                 먼저 전체 픽 수, 턴당 픽/밴 개수를 조절합니다
                                             </li>
                                             <li>
-                                                <b>시작</b>버튼을 눌러 각 팀을 지원 받습니다
-                                            </li>
-                                            <li>
-                                                <b>인원 그만 받기</b>/<b>인원 더 받기</b> 버튼으로 추가 인원을 받을지 여부를 정할 수 있습니다
+                                                <b>시작</b>버튼을 눌러 각 팀을 지원 받습니다<br/>
+                                                (<b>인원 그만 받기</b>/<b>더 받기</b> 버튼으로 추가 인원을 받을지를 정할 수 있습니다)
                                             </li>
                                             <li>
                                                 왼쪽의 각 팀 목록에서 사람을 골라 픽을 받습니다
@@ -89,7 +87,6 @@ class Header extends Component<Props, State> {
                                                 전체 픽이 완료될 때 까지 반복합니다
                                             </li>
                                         </ol>
-                                        * (부가요소) 밴/픽이 모두 끝나면 <b>하나 고르기</b> 버튼으로 당첨 내용을 골라봅시다
                                     </CardBody>
                                 </Card>
                             </Col>
@@ -110,14 +107,25 @@ class Header extends Component<Props, State> {
                                 </Card>
                             </Col>
                         </Row>
+                        <Row className="no-wrap">
+                            <Col className="no-wrap" xs="12">
+                                <Card>
+                                    <CardBody>
+                                        * (부가요소) 밴/픽이 모두 끝나면 <b>하나 고르기</b> 버튼으로 당첨 내용을 골라봅시다<br/>
+                                        * 팀원 목록에서 닉네임을 클릭하여 참가 가능 여부를 변경할 수 있습니다<br/>
+                                        * 왼쪽 상단의 타이머는 부가적인 기능을 가지고 있지는 않습니다<br/>
+                                        &nbsp;&nbsp;시간이 0이면 올라가고 0이 아니면 내려갑니다 (입력으로 변경 가능)
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        </Row>
                         <Card>
                             <CardBody>
-                                <h4>예시를 들어볼게요</h4>
-                                <b>전체 픽 수 = 5, 1턴당 픽 수 = 3, 1턴당 밴 수 = 1</b> 이라면?<br/><br/>
-                                1. 첫 PICK PHASE에서 각 팀당 3명씩 골라서 픽을 합니다 (팀 순서는 상관없습니다)<br/>
-                                2. 스트리머가 각 팀에서 1개씩 BAN을 합니다<br/>
-                                3. 이제 (전체 픽 수 - 1턴 당 픽수) = 2 이므로 각 팀당 2명을 더 뽑아서 픽을 합니다<br/>
-                                4. 끝!<br/><br/>
+                                <h4>예시</h4>
+                                <b>전체 픽 수 = 5, 1턴당 픽 수 = 3, 1턴당 밴 수 = 1</b><br/><br/>
+                                1st PICK → 각 팀당 3명씩 PICK (팀 순서는 상관없습니다)<br/>
+                                1st BAN → 각 팀에서 1개씩 BAN<br/>
+                                2nd PICK → (전체 픽 수 - 1턴 당 픽수) = 남은 픽 수 2 → 각 팀당 2명 PICK<br/>
                                 * 추가 밴을 진행하고 싶으면 <b>강제 페이즈 변경</b> 버튼을 눌러 진행하면 됩니다
                             </CardBody>
                         </Card>

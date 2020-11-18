@@ -3,7 +3,7 @@
 }
 
 .banpick-content {
-    font-size: 1.5em;
+    font-size: 1.75em;
     word-wrap: break-word;
     word-break: break-all;
 }
@@ -25,4 +25,8 @@
 
 .banpick-btn {
     font-size: 90%;
+}
+
+.banpick-btngroup {
+    width: 100%;
 }

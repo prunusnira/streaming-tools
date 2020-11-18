@@ -67,13 +67,13 @@ class Config extends Component<Props> {
                             className="config-btn"
                             color="danger"
                             onClick={this.props.selectFromPickList}>
-                                항목 선택하기
+                                하나 고르기
                         </Button>
                         <Button
                             className="config-btn"
                             color="dark"
                             onClick={this.props.hideTeamList}>
-                                팀원 가리기/표시
+                                팀원 표시
                         </Button>
                     </Col>
                 </Row>
@@ -81,25 +81,25 @@ class Config extends Component<Props> {
                     <Col className="text-center no-wrap" xs="4">
                         전체 픽 수
                         <InputGroup>
-                            <Button disabled={this.props.start} onClick={() => this.props.changePickCount(false)}>-</Button>
+                            <Button size="sm" color="dark" disabled={this.props.start} onClick={() => this.props.changePickCount(false)}>-</Button>
                             <Input disabled={this.props.start} type="number" value={this.props.pickSize} onChange={this.doNothing} />
-                            <Button disabled={this.props.start} onClick={() => this.props.changePickCount(true)}>+</Button>
+                            <Button size="sm" color="dark" disabled={this.props.start} onClick={() => this.props.changePickCount(true)}>+</Button>
                         </InputGroup>
                     </Col>
                     <Col className="text-center no-wrap" xs="4">
                         1턴당 픽
                         <InputGroup>
-                            <Button disabled={this.props.start} onClick={() => this.props.changeBanInterval(false)}>-</Button>
+                            <Button size="sm" color="dark" disabled={this.props.start} onClick={() => this.props.changeBanInterval(false)}>-</Button>
                             <Input disabled={this.props.start} type="number" value={this.props.banInterval} onChange={this.doNothing} />
-                            <Button disabled={this.props.start} onClick={() => this.props.changeBanInterval(true)}>+</Button>
+                            <Button size="sm" color="dark" disabled={this.props.start} onClick={() => this.props.changeBanInterval(true)}>+</Button>
                         </InputGroup>
                     </Col>
                     <Col className="text-center no-wrap" xs="4">
                         1턴당 밴
                         <InputGroup>
-                            <Button disabled={this.props.start} onClick={() => this.props.changeBanCount(false)}>-</Button>
+                            <Button size="sm" color="dark" disabled={this.props.start} onClick={() => this.props.changeBanCount(false)}>-</Button>
                             <Input disabled={this.props.start} type="number" value={this.props.banNum} onChange={this.doNothing} />
-                            <Button disabled={this.props.start} onClick={() => this.props.changeBanCount(true)}>+</Button>
+                            <Button size="sm" color="dark" disabled={this.props.start} onClick={() => this.props.changeBanCount(true)}>+</Button>
                         </InputGroup>
                     </Col>
                 </Row>

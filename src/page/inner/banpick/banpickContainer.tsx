@@ -10,7 +10,8 @@ interface Props {
     phase: number,
     editPick: (teamNum: number, val: string, idx: number) => void,
     removePick: (teamNum: number, idx: number) => void,
-    banPick: (teamNum: number, idx: number) => void
+    banPick: (teamNum: number, idx: number) => void,
+    nego: (userid: string) => void
 }
 
 interface State {
@@ -51,7 +52,8 @@ class BanPickContainer extends Component<Props, State> {
                     phase={this.props.phase}
                     edit={this.setEditMsg}
                     remove={this.props.removePick}
-                    ban={this.props.banPick} />
+                    ban={this.props.banPick}
+                    nego={this.props.nego} />
                 <BanPickEditor
                     msg={this.state.editMsg}
                     display={this.state.editDlg}

@@ -1,0 +1,17 @@
+.timer-control {
+    width: 100%;
+    height: 30px;
+}
+
+.overall {
+    height: 70px;
+}
+
+.timer-row {
+    height: 40px;
+}
+
+.timer-body {
+    height: 100%;
+    text-align: center;
+}

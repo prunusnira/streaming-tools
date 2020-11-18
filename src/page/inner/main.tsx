@@ -4,6 +4,7 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import Message from '../../data/message';
 import { Observer } from '../../data/observer/observer';
 import Parser from '../../data/parser';
+import Roulette from '../../data/roulette';
 import TTSPlay from '../../data/tts';
 import User from '../../data/user';
 import GetUserProfile from '../../data/userProfile';
@@ -22,6 +23,7 @@ import PhaseIndicator from './phase';
 import PickSelect from './pickSelect/pickSelect';
 import Team from './teamlist/team';
 import TeamList from './teamlist/teamlist';
+import Timer from './timer/timer';
 import UserDialog from './userdlg/userdlg';
 
 interface Props {
@@ -57,10 +59,14 @@ interface State {
     currentPickCount: number,
     currentBanCount: number,
     currentPhase: number,   // 0: 시작안함, 1: 픽, 2: 밴
+    currentNego: boolean,
+
     totalPickCount: number,
     currentPickedMessage: Message,
     pickedMsgDlg: boolean,
     pickedFailMsgDlg: boolean,
+    pickedMsgRoulette: boolean,
+    onPickRoulette: boolean,
 
     banDlg: boolean,
     banDlgTeamName: string,
@@ -79,25 +85,36 @@ class MainPage extends Component<Props, State> {
     state: State = {
         start: false,
         getUsers: false,
+
         streamer: new User("", "", false),
+
         team0: new Team(1, "TEAM 1"),
         team1: new Team(2, "TEAM 2"),
         hideTeamList: false,
+
         pickTeam0: new Array<Message>(),
         pickTeam1: new Array<Message>(),
+
         currentUser: null,
         currentChat: new Array<Message>(),
         userDlg: false,
+
         pickSize: 5,
         banInterval: 3,
         banNum: 1,
+
         currentPickCount: 0,
         currentBanCount: 0,
         currentPhase: 0,
+        currentNego: false,
+
         totalPickCount: 0,
         currentPickedMessage: new Message('', '', ''),
         pickedMsgDlg: false,
         pickedFailMsgDlg: false,
+        pickedMsgRoulette: false,
+        onPickRoulette: false,
+
         banDlg: false,
         banDlgTeamName: "",
         banDlgTeamNum: 0
@@ -296,7 +313,7 @@ class MainPage extends Component<Props, State> {
                 // 픽 등록
                 // 검사항목: 현재 유저가 선택된 유저인가
                 if(msg.getUserId() === this.state.currentUser?.getUserId()) {
-                    if(msg.getMessage().startsWith("!pick ") || msg.getMessage().startsWith("!픽 ")) {
+                    if(!this.state.currentNego && (msg.getMessage().startsWith("!pick ") || msg.getMessage().startsWith("!픽 "))) {
                         let nextPick = this.state.currentPickCount;
 
                         const pickSplited = msg.getMessage().split(" ");
@@ -337,6 +354,7 @@ class MainPage extends Component<Props, State> {
         
                         totalPick++;
                         console.log(msg.getUserId()+"(팀"+currentTeam+") MSG: "+pickMsg);
+                        this.tts.speech(pickMsg);
     
                         // 현재 픽 수와 밴 간격을 계산하여 다음 페이즈를 결정
                         let nextPhase = 1;
@@ -365,7 +383,11 @@ class MainPage extends Component<Props, State> {
                             team0: team0,
                             team1: team1,
                             totalPickCount: totalPick
-                        });
+                        },
+                        () => {
+                            this.scrollToBottomPick(currentTeam)
+                        }
+                        );
                     }
                     else {
                         // 메시지 받아서 디스플레이 되도록 추가
@@ -390,6 +412,36 @@ class MainPage extends Component<Props, State> {
             this.props.acctok,
             this.props.clientId,
             this.updateCurrentUser);
+    }
+
+    // Open negotitation
+    openNego = (userid: string) => {
+        let user: User|null = null;
+        let team = 0;
+        if(this.state.team0.hasMember(userid)) {
+            user = this.state.team0.getMember(userid);
+            team = 1;
+        }
+        else if(this.state.team1.hasMember(userid)) {
+            user = this.state.team1.getMember(userid);
+            team = 2;
+        }
+
+        if(team !== 0) {
+            this.setState({
+                currentNego: true
+            },
+            () => {
+                this.getUserSelected(user!, team)
+            }
+            );
+        }
+    }
+
+    notNego = () => {
+        this.setState({
+            currentNego: false
+        });
     }
 
     // 선택된 유저 정보 갱신
@@ -568,12 +620,33 @@ class MainPage extends Component<Props, State> {
         });
 
         if(arr.length > 0) {
-            let randVal = Math.floor(Math.random() * arr.length);
-            if(randVal == arr.length) randVal--;
-    
             this.setState({
-                currentPickedMessage: arr[randVal],
-                pickedMsgDlg: true
+                pickedMsgDlg: true,
+                onPickRoulette: true
+            },
+            () => {
+                let randVal = Math.floor(Math.random() * arr.length);
+                if(randVal == arr.length) randVal--;
+        
+                // 룰렛 선택 표기
+                const roulette = new Roulette(
+                    arr,
+                    false);
+                
+                roulette.setupPos(randVal);
+                roulette.start();
+                roulette.roulette(this.updateRoulette);
+                roulette.stop((obj: Object) => {
+                    this.updateRoulette(arr[randVal]);
+
+                    const tts = new TTSPlay();
+                    tts.speech(arr[randVal].getMessage());
+        
+                    this.setState({
+                        currentPickedMessage: arr[randVal],
+                        onPickRoulette: false
+                    });
+                }, 3);
             });
         }
         else {
@@ -581,6 +654,13 @@ class MainPage extends Component<Props, State> {
                 pickedFailMsgDlg: true
             });
         }
+    }
+
+    updateRoulette = (obj: Object) => {
+        console.log(obj);
+        this.setState({
+            currentPickedMessage: obj as Message
+        });
     }
 
     // 당첨 메시지 창 닫기
@@ -656,6 +736,12 @@ class MainPage extends Component<Props, State> {
         });
     }
 
+    scrollToBottomPick(teamnum: number) {
+        this.setState({}, function() {
+            document.getElementById("banpick-box"+teamnum)!.scrollTop = document.getElementById("banpick-box"+teamnum)!.scrollHeight;
+        });
+    }
+
     // render
     render() {
         return (
@@ -665,7 +751,9 @@ class MainPage extends Component<Props, State> {
                     tokenReset={this.tokenReset} />
                 <div className="d-flex stretch">
                     <div className="flexwidth-1">
+                        <Timer />
                         <TeamList
+                            key="team0"
                             team={this.state.team0}
                             totalPickCount={this.state.totalPickCount}
                             pickCount={this.state.pickSize}
@@ -674,8 +762,10 @@ class MainPage extends Component<Props, State> {
                             phase={this.state.currentPhase}
                             changePick={this.changeUserStatePicked}
                             changeTeamName={this.changeTeamName}
-                            getUserSelected={this.getUserSelected} />
+                            getUserSelected={this.getUserSelected}
+                            notNego={this.notNego} />
                         <TeamList
+                            key="team1"
                             team={this.state.team1}
                             totalPickCount={this.state.totalPickCount}
                             pickCount={this.state.pickSize}
@@ -684,7 +774,8 @@ class MainPage extends Component<Props, State> {
                             phase={this.state.currentPhase}
                             changePick={this.changeUserStatePicked}
                             changeTeamName={this.changeTeamName}
-                            getUserSelected={this.getUserSelected} />
+                            getUserSelected={this.getUserSelected}
+                            notNego={this.notNego} />
                     </div>
                     <div className="flexwidth-2 d-flex flex-column">
                         <PhaseIndicator
@@ -699,7 +790,8 @@ class MainPage extends Component<Props, State> {
                                     phase={this.state.currentPhase}
                                     editPick={this.editPick}
                                     removePick={this.removePick}
-                                    banPick={this.banPick} />
+                                    banPick={this.banPick}
+                                    nego={this.openNego} />
                             </div>
                             <div className="banpickbox-width">
                                 <BanPickContainer
@@ -709,7 +801,8 @@ class MainPage extends Component<Props, State> {
                                     phase={this.state.currentPhase}
                                     editPick={this.editPick}
                                     removePick={this.removePick}
-                                    banPick={this.banPick} />
+                                    banPick={this.banPick}
+                                    nego={this.openNego} />
                             </div>
                         </div>
                     </div>
@@ -734,6 +827,7 @@ class MainPage extends Component<Props, State> {
                 </div>
                 <UserDialog
                     key="userdialog"
+                    nego={this.state.currentNego}
                     team={this.currentUserTeam}
                     user={this.state.currentUser}
                     chat={this.state.currentChat}
@@ -745,6 +839,7 @@ class MainPage extends Component<Props, State> {
                     alertOpen={this.state.banDlg}
                     close={this.banAlertClose} />
                 <PickSelect
+                    onRoulette={this.state.onPickRoulette}
                     pickedMsgDlg={this.state.pickedMsgDlg}
                     pickedFailMsgDlg={this.state.pickedFailMsgDlg}
                     pickedMsg={this.state.currentPickedMessage}

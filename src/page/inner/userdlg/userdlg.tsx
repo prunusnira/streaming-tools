@@ -5,6 +5,7 @@ import User from "../../../data/user";
 import './userdlg.css';
 
 interface Props {
+    nego: boolean,
     team: number,
     user: User|null,
     chat: Array<Message>,
@@ -44,7 +45,17 @@ class UserDialog extends Component<Props> {
                     <hr/>
                     <Row className="no-wrap">
                         <Col className="no-wrap userdlg-info text-center" xs="12">
-                            ⓘ 당첨자는 '!픽 내용' 혹은 '!pick 내용'을 입력하여 픽을 진행할 수 있습니다
+                            {
+                                (function() {
+                                    if(!self.props.nego) {
+                                        return "ⓘ 당첨자는 '!픽 내용' 혹은 '!pick 내용'을 입력하여 픽을 진행할 수 있습니다";
+                                    }
+                                    else {
+                                        return "ⓘ 스트리머와 내용에 대해 협상하세요. 여기서는 !픽 / !pick 을 사용할 수 없습니다";
+                                    }
+                                })()
+                            }
+                            
                         </Col>
                     </Row>
                 </ModalHeader>
