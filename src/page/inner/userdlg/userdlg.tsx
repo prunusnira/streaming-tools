@@ -10,6 +10,8 @@ interface Props {
     user: User|null,
     chat: Array<Message>,
     display: boolean,
+    use: (msg: Message) => void,
+    skip: () => void,
     close: () => void
 }
 
@@ -75,6 +77,13 @@ class UserDialog extends Component<Props> {
                                                 {v.getMessage()}
                                             </Col>
                                         </Row>
+                                        <Row>
+                                            <Button
+                                                color="dark"
+                                                onClick={() => this.props.use(v)}>
+                                                이걸로 결정하기
+                                            </Button>
+                                        </Row>
                                     </CardBody>
                                 </Card>
                             )
@@ -82,6 +91,9 @@ class UserDialog extends Component<Props> {
                     }
                 </ModalBody>
                 <ModalFooter>
+                    <Button onClick={this.props.skip}>
+                        Skip
+                    </Button>
                     <Button onClick={this.props.close}>
                         Close
                     </Button>

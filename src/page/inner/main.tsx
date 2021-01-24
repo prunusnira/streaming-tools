@@ -99,7 +99,7 @@ class MainPage extends Component<Props, State> {
         currentChat: new Array<Message>(),
         userDlg: false,
 
-        pickSize: 5,
+        pickSize: 7,
         banInterval: 3,
         banNum: 1,
 
@@ -401,6 +401,95 @@ class MainPage extends Component<Props, State> {
         }
     }
 
+    useMessage = (msg: Message) => {
+        let nextPick = this.state.currentPickCount;
+
+        let currentTeam = 0;
+
+        const pickTeam0 = this.state.pickTeam0;
+        const pickTeam1 = this.state.pickTeam1;
+        const team0 = this.state.team0;
+        const team1 = this.state.team1;
+        let totalPick = this.state.totalPickCount;
+
+        if(team0.hasMember(msg.getUserId())) {
+            currentTeam = 1;
+            msg.setMessage(msg.getMessage());
+
+            // 팀에 소속되어있다면 해당 팀의 픽 리스트에 등록
+            pickTeam0.push(msg);
+
+            // 픽 한 유저는 리스트에서 더 사용할 수 없도록 처리함
+            team0.changePickable(msg.getUserId());
+            team0.currentPick++;
+            nextPick++;
+        }
+        if(team1.hasMember(msg.getUserId())) {
+            currentTeam = 2;
+            msg.setMessage(msg.getMessage());
+            pickTeam1.push(msg);
+            team1.changePickable(msg.getUserId());
+            team1.currentPick++;
+            nextPick++;
+        }
+
+        totalPick++;
+        console.log(msg.getUserId()+"(팀"+currentTeam+") MSG: "+msg.getMessage());
+        this.tts.speech(msg.getMessage());
+
+        // 현재 픽 수와 밴 간격을 계산하여 다음 페이즈를 결정
+        let nextPhase = 1;
+
+        if(nextPick >= this.state.banInterval * 2) {
+            nextPhase = 2;
+            nextPick = 0;
+
+            // 각 팀의 현재 pick도 초기화
+            team0.currentPick = 0;
+            team1.currentPick = 0;
+        }
+
+        console.log("PHASE LOG");
+        console.log(totalPick + " " + nextPick + " " + team0.currentPick + " " + team1.currentPick + " " + this.state.banInterval);
+        
+        this.setState({
+            userDlg: false,
+            currentUser: null,
+            currentPickCount: nextPick,
+            currentChat: new Array<Message>(),
+            currentPhase: nextPhase,
+
+            pickTeam0: pickTeam0,
+            pickTeam1: pickTeam1,
+            team0: team0,
+            team1: team1,
+            totalPickCount: totalPick
+        },
+        () => {
+            this.scrollToBottomPick(currentTeam)
+        }
+        );
+    }
+
+    // 사용자 선택을 실행하도록 하는 메소드
+    setUserRouletteStart = (team: number) => {
+        const cteam = (team == 0) ? this.state.team0 : this.state.team1;
+        switch(team) {
+            case 0:
+                cteam.rouletteInit = true;
+                this.setState({
+                    team0: cteam
+                });
+                break;
+            case 1:
+                cteam.rouletteInit = true;
+                this.setState({
+                    team1: cteam
+                });
+                break;
+        }
+    }
+
     // 랜덤으로 유저 선택하기 (callback)
     getUserSelected = (user: User, team: number) => {
         // 해당 유저의 프로필 이미지를 가져오기 위해 유저 정보 불러오기를 수행
@@ -459,6 +548,23 @@ class MainPage extends Component<Props, State> {
             userDlg: true,
             currentPhase: 1,
             currentChat: [this.currentUserLastMessage]
+        });
+    }
+
+    // 사용자 스킵
+    skipUserWindow = () => {
+        const uid = this.state.currentUser?.getUserId();
+        if(this.state.team0.hasMember(uid!)) {
+            this.state.team0.getMember(uid!)?.setPicked();
+        }
+        else if(this.state.team1.hasMember(uid!)) {
+            this.state.team1.getMember(uid!)?.setPicked();
+        }
+
+        this.setState({
+            userDlg: false,
+            currentChat: new Array<Message>(),
+            currentUser: null
         });
     }
 
@@ -820,7 +926,8 @@ class MainPage extends Component<Props, State> {
                             changeBanCount={this.changeBanCount}
                             reset={this.reset}
                             selectFromPickList={this.selectFromPickList}
-                            hideTeamList={this.switchTeamListVisible} />
+                            hideTeamList={this.switchTeamListVisible}
+                            setUserRouletteStart={this.setUserRouletteStart} />
                         <ChatPresenter
                             username={this.state.streamer.getUserId()} />
                     </div>
@@ -832,6 +939,8 @@ class MainPage extends Component<Props, State> {
                     user={this.state.currentUser}
                     chat={this.state.currentChat}
                     display={this.state.userDlg}
+                    use={this.useMessage}
+                    skip={this.skipUserWindow}
                     close={this.closeUserWindow} />
                 <BanOverAlert
                     teamName={this.state.banDlgTeamName}

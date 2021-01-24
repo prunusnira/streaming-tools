@@ -28,6 +28,11 @@ interface State {
 }
 
 class TeamList extends Component<Props> {
+    constructor(props: Props) {
+        super(props);
+        this.selectUser = this.selectUser.bind(this);
+    }
+
     state: State = {
         open: false,
         newname: "",
@@ -35,6 +40,12 @@ class TeamList extends Component<Props> {
         isRoulette: false,
         msg: "",
         rouletteInner: ""
+    }
+
+    componentDidUpdate = () => {
+        if(this.props.team.rouletteInit) {
+            this.selectUser(this.props.team.teamNum);
+        }
     }
 
     openTeamNameChanger = () => {
@@ -64,6 +75,7 @@ class TeamList extends Component<Props> {
     selectUser = (team: number) => {
         let arr = new Array<User>();
         let partPickOver = false;
+        this.props.team.rouletteInit = false;
 
         if(this.props.phase === 2) {
             this.setState({
@@ -172,12 +184,6 @@ class TeamList extends Component<Props> {
                                     color="dark"
                                     onClick={this.openTeamNameChanger}>
                                         팀명 변경
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    color="dark"
-                                    onClick={() => this.selectUser(this.props.team.teamNum)}>
-                                        이 팀에서 선택
                                 </Button>
                             </Col>
                         </Row>

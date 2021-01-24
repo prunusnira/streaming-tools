@@ -13,12 +13,23 @@ input[type=number] {
 }
 
 .config-btn {
-    width: 50%;
-    height: 40px;
+  height: 40px;
+}
+
+.config-btn-small {
+  width: 33%;
+}
+
+.config-btn-normal {
+  width: 50%;
+}
+
+.config-btn-big {
+  width: 100%;
 }
 
 .config-btn-wrap {
-  height: 80px;
+  height: 120px;
 }
 
 .selector-wrap{ 

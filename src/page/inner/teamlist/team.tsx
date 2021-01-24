@@ -6,6 +6,7 @@ class Team {
     members: Array<User>;
     currentPick: number;
     currentBan: number;
+    rouletteInit: boolean;
 
     constructor(team: number, name: string) {
         this.teamNum = team;
@@ -13,6 +14,7 @@ class Team {
         this.name = name;
         this.currentPick = 0;
         this.currentBan = 0;
+        this.rouletteInit = false;
     }
 
     addMember = (user: User) => {
