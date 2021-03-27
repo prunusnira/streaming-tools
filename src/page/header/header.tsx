@@ -1,3 +1,4 @@
+import { env } from 'process';
 import React, { Component } from 'react';
 import { Button, Card, CardBody, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import User from '../../data/user';
@@ -27,7 +28,7 @@ class Header extends Component<Props, State> {
         return (
             <header className="header d-flex align-items-center">
                 <div className="flex-fill text-center">
-                    Twitch BanPicker (Beta)
+                    Twitch BanPicker
                 </div>
                 <div className="flex-fill text-center">
                     <img
@@ -42,13 +43,13 @@ class Header extends Component<Props, State> {
                         color="warning"
                         className="reset-btn no-wrap"
                         onClick={this.showHowTo}>
-                        ☆★필독! 사용방법★☆
+                        사용방법
                     </Button>
                     <Button
                         color="danger"
                         className="reset-btn no-wrap"
                         onClick={this.props.tokenReset}>
-                        계정 토큰 리셋
+                        로그인 상태 리셋
                     </Button>
                 </div>
 
@@ -70,21 +71,22 @@ class Header extends Component<Props, State> {
                                         <h3>스트리머가 할 일</h3>
                                         <ol>
                                             <li>
-                                                먼저 전체 픽 수, 턴당 픽/밴 개수를 조절합니다
+                                                전체 픽 수, 턴당 픽/밴 수를 지정합니다 (진행 도중에 변경 가능)
                                             </li>
                                             <li>
-                                                <b>시작</b>버튼을 눌러 각 팀을 지원 받습니다<br/>
-                                                (<b>인원 그만 받기</b>/<b>더 받기</b> 버튼으로 추가 인원을 받을지를 정할 수 있습니다)
+                                                <img alt="howto" src={process.env.PUBLIC_URL+"/image/howto/01_start.png"}/>버튼을 눌러 각 팀을 지원 받습니다<br/>
+                                                (<img alt="howto" src={process.env.PUBLIC_URL+"/image/howto/05_memstop.png"}/> 혹은&nbsp;
+                                                <img alt="howto" src={process.env.PUBLIC_URL+"/image/howto/06_memadd.png"}/> 버튼으로 추가 인원을 받을지를 정할 수 있습니다)
                                             </li>
                                             <li>
-                                                왼쪽의 각 팀 목록에서 사람을 골라 픽을 받습니다
+                                                <img alt="howto" src={process.env.PUBLIC_URL+"/image/howto/02_teamselect.png"}/>를 눌러 선택할 사람을 고릅니다
                                             </li>
                                             <li>
                                                 픽 순서가 끝나면 밴을 합니다<br/>
                                                 (픽 된 것중 없었으면 하는걸 지우는 단계)
                                             </li>
                                             <li>
-                                                전체 픽이 완료될 때 까지 반복합니다
+                                                전체 픽이 완료될 때 까지 3~4를 반복합니다
                                             </li>
                                         </ol>
                                     </CardBody>
@@ -96,8 +98,8 @@ class Header extends Component<Props, State> {
                                         <h3>시청자가 할 일</h3>
                                         <ol>
                                             <li>
-                                                스트리머가 시작 버튼을 누르면 <b>!팀 1</b> 혹은 <b>!팀 2</b>를 입력하여 팀을 등록합니다.<br/>
-                                                영어로 <b>!team 1</b>, <b>!team 2</b>도 되요
+                                                스트리머가 <img alt="howto" src={process.env.PUBLIC_URL+"/image/howto/01_start.png"}/> 버튼을 누르면 <b>!팀 1</b> 혹은 <b>!팀 2</b>를 입력하여 팀을 등록합니다.<br/>
+                                                (영어로 <b>!team 1</b>, <b>!team 2</b>도 되요)
                                             </li>
                                             <li>
                                                 선택된 사용자는 스트리머와 소통하거나 <b>!픽 [내용]</b> 혹은 <b>!pick [내용]</b>으로 픽을 합니다
@@ -111,10 +113,10 @@ class Header extends Component<Props, State> {
                             <Col className="no-wrap" xs="12">
                                 <Card>
                                     <CardBody>
-                                        * (부가요소) 밴/픽이 모두 끝나면 <b>하나 고르기</b> 버튼으로 당첨 내용을 골라봅시다<br/>
+                                        * (부가요소) 밴/픽이 모두 끝나면 <img alt="howto" src={process.env.PUBLIC_URL+"/image/howto/03_pickone.png"}/> 버튼으로 당첨 내용을 골라봅시다<br/>
                                         * 팀원 목록에서 닉네임을 클릭하여 참가 가능 여부를 변경할 수 있습니다<br/>
                                         * 왼쪽 상단의 타이머는 부가적인 기능을 가지고 있지는 않습니다<br/>
-                                        &nbsp;&nbsp;시간이 0이면 올라가고 0이 아니면 내려갑니다 (입력으로 변경 가능)
+                                        &nbsp;&nbsp;시간이 0이면 올라가고 0이 아니면 내려갑니다 (입력/마우스휠로 변경 가능)
                                     </CardBody>
                                 </Card>
                             </Col>

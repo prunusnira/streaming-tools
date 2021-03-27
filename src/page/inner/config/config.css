@@ -13,7 +13,7 @@ input[type=number] {
 }
 
 .config-btn {
-  height: 40px;
+  height: 35px;
 }
 
 .config-btn-small {
@@ -29,7 +29,7 @@ input[type=number] {
 }
 
 .config-btn-wrap {
-  height: 120px;
+  height: 70px;
 }
 
 .selector-wrap{ 

@@ -22,7 +22,7 @@ import './main.css';
 import PhaseIndicator from './phase';
 import PickSelect from './pickSelect/pickSelect';
 import Team from './teamlist/team';
-import TeamList from './teamlist/teamlist';
+import TeamListContainer from './teamlist/teamlistContainer';
 import Timer from './timer/timer';
 import UserDialog from './userdlg/userdlg';
 
@@ -127,7 +127,7 @@ class MainPage extends Component<Props, State> {
         this.switchPhase = this.switchPhase.bind(this);
         this.reset = this.reset.bind(this);
         this.tokenReset = this.tokenReset.bind(this);
-        this.changeUserStatePicked = this.changeUserStatePicked.bind(this);
+        this.updateTeam = this.updateTeam.bind(this);
 
         this.observer = new Observer();
         this.irc = new IRCConnect(this.props.acctok, this.props.userid, this.msgProcess);
@@ -471,25 +471,6 @@ class MainPage extends Component<Props, State> {
         );
     }
 
-    // 사용자 선택을 실행하도록 하는 메소드
-    setUserRouletteStart = (team: number) => {
-        const cteam = (team == 0) ? this.state.team0 : this.state.team1;
-        switch(team) {
-            case 0:
-                cteam.rouletteInit = true;
-                this.setState({
-                    team0: cteam
-                });
-                break;
-            case 1:
-                cteam.rouletteInit = true;
-                this.setState({
-                    team1: cteam
-                });
-                break;
-        }
-    }
-
     // 랜덤으로 유저 선택하기 (callback)
     getUserSelected = (user: User, team: number) => {
         // 해당 유저의 프로필 이미지를 가져오기 위해 유저 정보 불러오기를 수행
@@ -710,7 +691,7 @@ class MainPage extends Component<Props, State> {
     }
 
     // 픽 내용 중 하나 선택하기
-    selectFromPickList = () => {
+    /*selectFromPickList = () => {
         const arr = new Array<Message>();
 
         // 밴 당하지 않은 모든 픽 항목 추가
@@ -760,7 +741,7 @@ class MainPage extends Component<Props, State> {
                 pickedFailMsgDlg: true
             });
         }
-    }
+    }*/
 
     updateRoulette = (obj: Object) => {
         console.log(obj);
@@ -775,40 +756,6 @@ class MainPage extends Component<Props, State> {
             currentPickedMessage: new Message('', '', ''),
             pickedMsgDlg: false,
             pickedFailMsgDlg: false
-        });
-    }
-
-    // 유저 픽 가능 유무 변경
-    changeUserStatePicked = (user: User) => {
-        const team0 = this.state.team0;
-        const team1 = this.state.team1;
-
-        if(team0.hasMember(user.getUserId())) {
-            team0.changePickable(user.getUserId());
-        }
-        if(team1.hasMember(user.getUserId())) {
-            team1.changePickable(user.getUserId());
-        }
-        this.setState({
-            team0: team0,
-            team1: team1
-        });
-    }
-
-    // 팀 이름 변경
-    changeTeamName = (team: number, title: string) => {
-        const team0 = this.state.team0;
-        const team1 = this.state.team1;
-
-        if(team === 1) {
-            team0.name = title;
-        }
-        if(team === 2) {
-            team1.name = title;
-        }
-        this.setState({
-            team0: team0,
-            team1: team1
         });
     }
 
@@ -836,29 +783,51 @@ class MainPage extends Component<Props, State> {
     }
 
     // 아래로 내리기
-    scrollToBottomChat() {
+    scrollToBottomChat = () => {
         this.setState({}, function() {
             document.getElementById("userchat")!.scrollTop = document.getElementById("userchat")!.scrollHeight;
         });
     }
 
-    scrollToBottomPick(teamnum: number) {
+    scrollToBottomPick = (teamnum: number) => {
         this.setState({}, function() {
             document.getElementById("banpick-box"+teamnum)!.scrollTop = document.getElementById("banpick-box"+teamnum)!.scrollHeight;
         });
+    }
+
+    updateTeam = (team: Team, teamNum: number) => {
+        if(teamNum == 1) {
+            this.setState({
+                team0: team
+            });
+        }
+        else if(teamNum == 2) {
+            this.setState({
+                team1: team
+            });
+        }
     }
 
     // render
     render() {
         return (
             <Fragment>
-                <Header
-                    streamer={this.state.streamer}
-                    tokenReset={this.tokenReset} />
                 <div className="d-flex stretch">
                     <div className="flexwidth-1">
-                        <Timer />
-                        <TeamList
+                        <Config
+                            pickSize={this.state.pickSize}
+                            banInterval={this.state.banInterval}
+                            banNum={this.state.banNum}
+                            start={this.state.start}
+                            getUsers={this.state.getUsers}
+                            startMethod={this.start}
+                            switchGetUser={this.switchGetUser}
+                            changePickCount={this.changePickCount}
+                            changeBanInterval={this.changeBanInterval}
+                            changeBanCount={this.changeBanCount}
+                            reset={this.reset}
+                            hideTeamList={this.switchTeamListVisible} />
+                        <TeamListContainer
                             key="team0"
                             team={this.state.team0}
                             totalPickCount={this.state.totalPickCount}
@@ -866,11 +835,10 @@ class MainPage extends Component<Props, State> {
                             banInterval={this.state.banInterval}
                             hide={this.state.hideTeamList}
                             phase={this.state.currentPhase}
-                            changePick={this.changeUserStatePicked}
-                            changeTeamName={this.changeTeamName}
                             getUserSelected={this.getUserSelected}
-                            notNego={this.notNego} />
-                        <TeamList
+                            notNego={this.notNego}
+                            updateTeam={this.updateTeam} />
+                        <TeamListContainer
                             key="team1"
                             team={this.state.team1}
                             totalPickCount={this.state.totalPickCount}
@@ -878,12 +846,14 @@ class MainPage extends Component<Props, State> {
                             banInterval={this.state.banInterval}
                             hide={this.state.hideTeamList}
                             phase={this.state.currentPhase}
-                            changePick={this.changeUserStatePicked}
-                            changeTeamName={this.changeTeamName}
                             getUserSelected={this.getUserSelected}
-                            notNego={this.notNego} />
+                            notNego={this.notNego}
+                            updateTeam={this.updateTeam} />
                     </div>
                     <div className="flexwidth-2 d-flex flex-column">
+                        <Header
+                            streamer={this.state.streamer}
+                            tokenReset={this.tokenReset} />
                         <PhaseIndicator
                             phase={this.state.currentPhase}
                             switchPhase={this.switchPhase} />
@@ -913,23 +883,10 @@ class MainPage extends Component<Props, State> {
                         </div>
                     </div>
                     <div className="flexwidth-3">
-                        <Config
-                            pickSize={this.state.pickSize}
-                            banInterval={this.state.banInterval}
-                            banNum={this.state.banNum}
-                            start={this.state.start}
-                            getUsers={this.state.getUsers}
-                            startMethod={this.start}
-                            switchGetUser={this.switchGetUser}
-                            changePickCount={this.changePickCount}
-                            changeBanInterval={this.changeBanInterval}
-                            changeBanCount={this.changeBanCount}
-                            reset={this.reset}
-                            selectFromPickList={this.selectFromPickList}
-                            hideTeamList={this.switchTeamListVisible}
-                            setUserRouletteStart={this.setUserRouletteStart} />
+                        <Timer />
                         <ChatPresenter
                             username={this.state.streamer.getUserId()} />
+                        <Footer />
                     </div>
                 </div>
                 <UserDialog
@@ -953,7 +910,6 @@ class MainPage extends Component<Props, State> {
                     pickedFailMsgDlg={this.state.pickedFailMsgDlg}
                     pickedMsg={this.state.currentPickedMessage}
                     close={this.closePickedMsgDlg} />
-                <Footer />
             </Fragment>
         );
     }

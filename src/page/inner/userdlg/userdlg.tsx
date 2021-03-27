@@ -77,13 +77,24 @@ class UserDialog extends Component<Props> {
                                                 {v.getMessage()}
                                             </Col>
                                         </Row>
-                                        <Row>
-                                            <Button
-                                                color="dark"
-                                                onClick={() => this.props.use(v)}>
-                                                이걸로 결정하기
-                                            </Button>
-                                        </Row>
+                                        {
+                                            (function() {
+                                                if(!self.props.nego) {
+                                                    return (
+                                                        <Row className="no-wrap msg-row">
+                                                            <Col className="msg-cont no-wrap" xs="12">
+                                                                <Button
+                                                                    size="sm"
+                                                                    color="dark"
+                                                                    onClick={() => self.props.use(v)}>
+                                                                    이걸로 결정하기
+                                                                </Button>
+                                                            </Col>
+                                                        </Row>
+                                                    );
+                                                }
+                                            })()
+                                        }
                                     </CardBody>
                                 </Card>
                             )
