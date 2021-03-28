@@ -66,7 +66,6 @@ const TeamList: React.FC<TeamListProps> = ({
                     <Row>
                         <Col xs="12">
                             <Button
-                                id="btnTeamNameChange"
                                 style={{width: '100%'}}
                                 size="sm"
                                 color="dark"
@@ -74,7 +73,6 @@ const TeamList: React.FC<TeamListProps> = ({
                                     팀명 변경
                             </Button>
                             <Button
-                                id="btnTeamPickUser"
                                 style={{width: '100%'}}
                                 size="sm"
                                 color="success"
@@ -181,7 +179,7 @@ const TeamList: React.FC<TeamListProps> = ({
                 <ModalHeader>
                     누구누구!?
                 </ModalHeader>
-                <ModalBody className="text-center" style={{fontSize: "2em"}}>
+                <ModalBody data-testid="selectInner" className="text-center" style={{fontSize: "2em"}}>
                     {rouletteInner}
                 </ModalBody>
             </Modal>

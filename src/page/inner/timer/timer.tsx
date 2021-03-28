@@ -1,4 +1,4 @@
-import React, { Component, Fragment, ReactEventHandler } from "react";
+import React, { Component } from "react";
 import { Row, Col, Card, CardBody, ButtonGroup, Button, Input } from "reactstrap";
 
 import './timer.css';
@@ -16,6 +16,8 @@ class Timer extends Component<{}, State> {
     timerObjectId: NodeJS.Timeout|null;
     timerUpDown: boolean;
 
+    worker: Worker;
+
     state: State = {
         min: 0,
         sec: 0,
@@ -29,99 +31,30 @@ class Timer extends Component<{}, State> {
         this.time = 0;
         this.timerObjectId = null;
         this.timerUpDown = false;
+        this.worker = new Worker(process.env.PUBLIC_URL+'/timer/timerWorker.js');
+
+        this.worker.onmessage = (ev) => {
+            // 시간 받아서 업데이트
+            const time = ev.data;
+            
+            this.setState({
+                min: time / 100 / 60,
+                sec: time / 100 % 60,
+                ms: time % 100
+            });
+        }
     }
 
     startTimer = () => {
-        if(!this.state.playing) {
-            // 위에서 내려가는 시간
-            if(this.time > 0) {
-                this.setTimeGoDown();
-                this.timerUpDown = true;
-            }
-            // 0에서 올라가는 시간
-            else {
-                this.setTimeGoUp();
-                this.timerUpDown = false;
-            }
-    
-            this.setState({
-                playing: true
-            });
-        }
-        else {
-            if(this.state.pause) {
-                // resume
-                if(this.timerUpDown) {
-                    this.setTimeGoDown();
-                }
-                else {
-                    this.setTimeGoUp();
-                }
-                this.setState({
-                    pause: false
-                });
-            }
-            else {
-                // pause
-                this.stopTimer();
-                this.setState({
-                    pause: true
-                });
-            }
-        }
-    }
-
-    setTimeGoDown = () => {
-        this.timerObjectId = setInterval(() => {this.changeTime(false)}, 10);
-    }
-
-    setTimeGoUp = () => {
-        this.timerObjectId = setInterval(() => {this.changeTime(true)}, 10);
+        this.worker.postMessage('start');
     }
 
     stopTimer = () => {
-        if(this.timerObjectId !== null) {
-            clearInterval(this.timerObjectId);
-        }
+        this.worker.postMessage('stop');
     }
 
     resetTimer = () => {
-        this.stopTimer();
-        this.timerObjectId = null;
-        this.time = 0;
-        this.updateTimer();
-
-        this.setState({
-            playing: false,
-            pause: false
-        });
-    }
-
-    changeTime = (up: boolean) => {
-        if(up) {
-            this.time += 1;
-        }
-        else {
-            this.time -= 1;
-            if(this.time <= 0) {
-                this.stopTimer();
-                this.time = 0;
-            }
-        }
-
-        this.updateTimer();
-    }
-
-    updateTimer = () => {
-        const min = this.time / 100 / 60;
-        const sec = this.time / 100 % 60;
-        const ms = this.time % 100;
-
-        this.setState({
-            min: min,
-            sec: sec,
-            ms: ms
-        });
+        this.worker.postMessage('reset');
     }
 
     editMin = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,7 +63,7 @@ class Timer extends Component<{}, State> {
         this.setState({
             min: min
         }, () => {
-            this.time = this.state.min * 60 * 100 + this.state.sec * 100 + this.state.ms;
+            this.updateTime();
         });
     }
 
@@ -140,7 +73,7 @@ class Timer extends Component<{}, State> {
         this.setState({
             sec: sec
         }, () => {
-            this.time = this.state.min * 60 * 100 + this.state.sec * 100 + this.state.ms;
+            this.updateTime();
         });
     }
 
@@ -150,8 +83,15 @@ class Timer extends Component<{}, State> {
         this.setState({
             ms: ms
         }, () => {
-            this.time = this.state.min * 60 * 100 + this.state.sec * 100 + this.state.ms;
+            this.updateTime();
         });
+    }
+
+    updateTime = () => {
+        const timeval = this.state.min * 60 * 100 +
+                        this.state.sec * 100 +
+                        this.state.ms;
+        this.worker.postMessage('change '+timeval.toString());
     }
 
     render() {
@@ -164,24 +104,21 @@ class Timer extends Component<{}, State> {
                                 <CardBody className="no-wrap timer-body">
                                     <Row className="no-wrap">
                                         <Col className="no-wrap" xs="4">
-                                            <Input min="00" max="99" type="number"
-                                                onChange={this.editMin}
+                                            <Input id='timemin' min="00" max="99" type="number" disabled
                                                 value={this.state.min < 10 ? '0'+Math.floor(this.state.min) : Math.floor(this.state.min)} />
                                         </Col>
                                         <Col className="no-wrap" xs="1">
                                             :
                                         </Col>
                                         <Col className="no-wrap" xs="3">
-                                            <Input min="00" max="59" type="number"
-                                                onChange={this.editSec}
+                                            <Input id='timesec' min="00" max="59" type="number" disabled
                                                 value={this.state.sec < 10 ? '0'+Math.floor(this.state.sec) : Math.floor(this.state.sec)} />
                                         </Col>
                                         <Col className="no-wrap" xs="1">
                                             :
                                         </Col>
                                         <Col className="no-wrap" xs="3">
-                                            <Input min="00" max="99" type="number"
-                                                onChange={this.editMs}
+                                            <Input id='timems' min="00" max="99" type="number" disabled
                                                 value={this.state.ms < 10 ? '0'+Math.floor(this.state.ms) : Math.floor(this.state.ms)} />
                                         </Col>
                                     </Row>
@@ -193,12 +130,7 @@ class Timer extends Component<{}, State> {
                         <Col className="no-wrap" xs="12">
                             <ButtonGroup className="timer-control">
                                 <Button size="sm" color="dark"
-                                    onClick={this.startTimer}>
-                                    {
-                                        this.state.playing ?
-                                            (this.state.pause ? "RESUME" : "PAUSE") : "START"
-                                    }
-                                </Button>
+                                    onClick={this.startTimer}>START</Button>
                                 <Button size="sm" color="dark"
                                     onClick={this.stopTimer}>STOP</Button>
                                 <Button size="sm" color="dark"

@@ -438,15 +438,8 @@ class MainPage extends Component<Props, State> {
         this.tts.speech(msg.getMessage());
 
         // 현재 픽 수와 밴 간격을 계산하여 다음 페이즈를 결정
-        let nextPhase = 1;
-
         if(nextPick >= this.state.banInterval * 2) {
-            nextPhase = 2;
-            nextPick = 0;
-
-            // 각 팀의 현재 pick도 초기화
-            team0.currentPick = 0;
-            team1.currentPick = 0;
+            this.phaseChange();
         }
 
         console.log("PHASE LOG");
@@ -457,7 +450,6 @@ class MainPage extends Component<Props, State> {
             currentUser: null,
             currentPickCount: nextPick,
             currentChat: new Array<Message>(),
-            currentPhase: nextPhase,
 
             pickTeam0: pickTeam0,
             pickTeam1: pickTeam1,
@@ -484,28 +476,10 @@ class MainPage extends Component<Props, State> {
             this.updateCurrentUser);
     }
 
-    // Open negotitation
-    openNego = (userid: string) => {
-        let user: User|null = null;
-        let team = 0;
-        if(this.state.team0.hasMember(userid)) {
-            user = this.state.team0.getMember(userid);
-            team = 1;
-        }
-        else if(this.state.team1.hasMember(userid)) {
-            user = this.state.team1.getMember(userid);
-            team = 2;
-        }
-
-        if(team !== 0) {
-            this.setState({
-                currentNego: true
-            },
-            () => {
-                this.getUserSelected(user!, team)
-            }
-            );
-        }
+    setNego = (callback: () => void) => {
+        this.setState({
+            currentNego: true
+        }, callback);
     }
 
     notNego = () => {
@@ -558,190 +532,53 @@ class MainPage extends Component<Props, State> {
         });
     }
 
-    // 픽 메시지 수정
-    editPick = (team: number, val: string, idx: number) => {
-        const pickTeam0 = this.state.pickTeam0;
-        const pickTeam1 = this.state.pickTeam1;
-        if(team === 1) {
-            pickTeam0[idx].setMessage(val);
-        }
-        else if(team === 2) {
-            pickTeam1[idx].setMessage(val);
-        }
-        
+    // 픽 메시지 삭제 후 카운트 1개 줄이기
+    pickCntFix = () => {
         this.setState({
-            pickTeam0: pickTeam0,
-            pickTeam1: pickTeam1
+            currentPickCount: this.state.currentPickCount-1
+        })
+    }
+
+    updateBanCount = (banCount: number) => {
+        this.setState({
+            currentBanCount: banCount
         });
     }
 
-    // 픽 메시지 삭제
-    removePick = (team: number, idx: number) => {
-        const pickTeam0 = this.state.pickTeam0;
-        const team0 = this.state.team0;
-
-        const pickTeam1 = this.state.pickTeam1;
-        const team1 = this.state.team1;
-
-        let pickCnt = this.state.currentPickCount;
-
-        if(team === 1) {
-            pickTeam0.splice(idx, 1);
-            team0.currentPick--;
-        }
-        else if(team === 2) {
-            pickTeam1.splice(idx, 1);
-            team1.currentPick--;
-        }
-        pickCnt--;
-
+    // 밴 알람 열기
+    banOverAlertOpen = (teamName: string, teamNum: number) => {
         this.setState({
-            pickTeam0: pickTeam0,
-            pickTeam1: pickTeam1,
-            team0: team0,
-            team1: team1,
-            currentPickCount: pickCnt
-        });
-    }
-
-    // 밴 하기
-    banPick = (team: number, idx: number) => {
-        let nextBan = this.state.currentBanCount;
-        let banDlg = this.state.banDlg;
-        let banDlgTeamName = "";
-        let banDlgTeamNum = 0;
-        const team0 = this.state.team0;
-        const team1 = this.state.team1;
-        const pickTeam0 = this.state.pickTeam0;
-        const pickTeam1 = this.state.pickTeam1;
-
-        if(team === 1) {
-            if(pickTeam0[idx].getBanStatus()) {
-                // 밴 취소
-                pickTeam0[idx].undoBan();
-                team0.currentBan--;
-                nextBan--;
-            }
-            else {
-                // 밴 하기 전에 현재 밴 숫자 확인
-                if(this.state.team0.currentBan >= this.state.banNum) {
-                    // 현재 턴의 밴 횟수 초과
-                    banDlg = true;
-                    banDlgTeamName = team0.name;
-                    banDlgTeamNum = 1;
-                }
-                else {
-                    pickTeam0[idx].setBan();
-                    team0.currentBan++;
-                    nextBan++;
-                }
-            }
-        }
-        else if(team === 2) {
-            if(pickTeam1[idx].getBanStatus()) {
-                // 밴 취소
-                pickTeam1[idx].undoBan();
-                team1.currentBan--;
-                nextBan--;
-            }
-            else {
-                if(this.state.team1.currentBan >= this.state.banNum) {
-                    // 현재 턴의 밴 횟수 초과
-                    banDlg = true;
-                    banDlgTeamName = team1.name;
-                    banDlgTeamNum = 2;
-                }
-                else {
-                    pickTeam1[idx].setBan();
-                    team1.currentBan++;
-                    nextBan++;
-                }
-            }
-        }
-
-        // 현재 밴 수와 밴 간격을 계산하여 다음 페이즈를 결정
-        let nextPhase = 2;
-
-        if(nextBan >= this.state.banNum * 2) {
-            nextPhase = 1;
-            nextBan = 0;
-
-            // 각 팀의 현재 pick도 초기화
-            team0.currentBan = 0;
-            team1.currentBan = 0;
-        }
-        this.setState({
-            currentBanCount: nextBan,
-            currentPhase: nextPhase,
-            pickTeam0: pickTeam0,
-            pickTeam1: pickTeam1,
-            team0: team0,
-            team1: team1,
-            banDlg: banDlg,
-            banDlgTeamName: banDlgTeamName,
-            banDlgTeamNum: banDlgTeamNum
-        });
+            banDlg: true,
+            banDlgTeamName: teamName,
+            banDlgTeamNum: teamNum
+        })
     }
 
     // 밴 알림 닫기
-    banAlertClose = () => {
+    banOverAlertClose = () => {
         this.setState({
             banDlg: false
         });
     }
 
-    // 픽 내용 중 하나 선택하기
-    /*selectFromPickList = () => {
-        const arr = new Array<Message>();
-
-        // 밴 당하지 않은 모든 픽 항목 추가
-        this.state.pickTeam0.forEach(v => {
-            if(!v.getBanStatus()) {
-                arr.push(v);
-            }
-        });
-        this.state.pickTeam1.forEach(v => {
-            if(!v.getBanStatus()) {
-                arr.push(v);
-            }
-        });
-
-        if(arr.length > 0) {
+    phaseChange = () => {
+        if(this.state.currentPhase == 1) {
+            this.state.team0.currentPick = 0;
+            this.state.team1.currentPick = 0;
             this.setState({
-                pickedMsgDlg: true,
-                onPickRoulette: true
-            },
-            () => {
-                let randVal = Math.floor(Math.random() * arr.length);
-                if(randVal == arr.length) randVal--;
-        
-                // 룰렛 선택 표기
-                const roulette = new Roulette(
-                    arr,
-                    false);
-                
-                roulette.setupPos(randVal);
-                roulette.start();
-                roulette.roulette(this.updateRoulette);
-                roulette.stop((obj: Object) => {
-                    this.updateRoulette(arr[randVal]);
-
-                    const tts = new TTSPlay();
-                    tts.speech(arr[randVal].getMessage());
-        
-                    this.setState({
-                        currentPickedMessage: arr[randVal],
-                        onPickRoulette: false
-                    });
-                }, 3);
+                currentPhase: 2,
+                currentPickCount: 0
             });
         }
-        else {
+        else if(this.state.currentPhase == 2) {
+            this.state.team0.currentBan = 0;
+            this.state.team1.currentBan = 0;
             this.setState({
-                pickedFailMsgDlg: true
+                currentPhase: 1,
+                currentBanCount: 0
             });
         }
-    }*/
+    }
 
     updateRoulette = (obj: Object) => {
         console.log(obj);
@@ -861,24 +698,32 @@ class MainPage extends Component<Props, State> {
                             <div className="banpickbox-width">
                                 <BanPickContainer
                                     picklist={this.state.pickTeam0}
-                                    teamname={this.state.team0.name}
-                                    teamnum={1}
+                                    team={this.state.team0}
                                     phase={this.state.currentPhase}
-                                    editPick={this.editPick}
-                                    removePick={this.removePick}
-                                    banPick={this.banPick}
-                                    nego={this.openNego} />
+                                    currentBanCount={this.state.currentBanCount}
+                                    banNum={this.state.banNum}
+                                    pickCntFix={this.pickCntFix}
+                                    //banPick={this.banPick}
+                                    updateBanCount={this.updateBanCount}
+                                    banOverAlertOpen={this.banOverAlertOpen}
+                                    setNego={this.setNego}
+                                    getUserSelected={this.getUserSelected}
+                                    phaseChange={this.phaseChange} />
                             </div>
                             <div className="banpickbox-width">
                                 <BanPickContainer
                                     picklist={this.state.pickTeam1}
-                                    teamname={this.state.team1.name}
-                                    teamnum={2}
+                                    team={this.state.team1}
                                     phase={this.state.currentPhase}
-                                    editPick={this.editPick}
-                                    removePick={this.removePick}
-                                    banPick={this.banPick}
-                                    nego={this.openNego} />
+                                    currentBanCount={this.state.currentBanCount}
+                                    banNum={this.state.banNum}
+                                    pickCntFix={this.pickCntFix}
+                                    //banPick={this.banPick}
+                                    updateBanCount={this.updateBanCount}
+                                    banOverAlertOpen={this.banOverAlertOpen}
+                                    setNego={this.setNego}
+                                    getUserSelected={this.getUserSelected}
+                                    phaseChange={this.phaseChange} />
                             </div>
                         </div>
                     </div>
@@ -903,7 +748,7 @@ class MainPage extends Component<Props, State> {
                     teamName={this.state.banDlgTeamName}
                     teamNum={this.state.banDlgTeamNum}
                     alertOpen={this.state.banDlg}
-                    close={this.banAlertClose} />
+                    close={this.banOverAlertClose} />
                 <PickSelect
                     onRoulette={this.state.onPickRoulette}
                     pickedMsgDlg={this.state.pickedMsgDlg}

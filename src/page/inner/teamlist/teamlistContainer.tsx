@@ -14,7 +14,6 @@ interface Props {
     phase: number,
     getUserSelected: (user: User, team: number) => void,
     notNego: () => void,
-    //summon: (user: User) => void,
     updateTeam: (team: Team, teamNum: number) => void
 }
 
@@ -93,16 +92,9 @@ class TeamListContainer extends Component<Props> {
         });
     }
 
-    /*changeTeamName = () => {
-        this.props.changeTeamName(this.props.team.teamNum, this.state.newname);
-        this.closeTeamNameChanger();
-    }*/
-
-    //selectUser = (team: number) => {
     selectUser = () => {
         let arr = new Array<User>();
         let partPickOver = false;
-        //this.props.team.rouletteInit = false;
 
         if(this.props.phase === 2) {
             this.setState({
