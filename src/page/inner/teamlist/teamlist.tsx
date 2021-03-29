@@ -51,13 +51,13 @@ const TeamList: React.FC<TeamListProps> = ({
                 <CardHeader className="text-center">
                     <Row>
                         <Col xs="12">
-                            {team.name} ({
+                            {team.getName()} ({
                                 (function() {
                                     if(hide) {
                                         return "-";
                                     }
                                     else {
-                                        return team.members.length;
+                                        return team.getMembers().length;
                                     }
                                 })()
                             } 명)
@@ -96,7 +96,7 @@ const TeamList: React.FC<TeamListProps> = ({
                         </Row>)
                         :
                         (
-                            team.members.map(v => {
+                            team.getMembers().map(v => {
                                 return (
                                     <Row>
                                         <Col xs="12">
@@ -150,7 +150,7 @@ const TeamList: React.FC<TeamListProps> = ({
                 <ModalBody>
                     <Row>
                         <Col xs="12">
-                            현재 팀 이름: {team.name}
+                            현재 팀 이름: {team.getName()}
                         </Col>
                     </Row>
                     <Row>

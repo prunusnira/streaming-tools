@@ -4,7 +4,6 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import Message from '../../data/message';
 import { Observer } from '../../data/observer/observer';
 import Parser from '../../data/parser';
-import Roulette from '../../data/roulette';
 import TTSPlay from '../../data/tts';
 import User from '../../data/user';
 import GetUserProfile from '../../data/userProfile';
@@ -45,8 +44,8 @@ interface State {
     team1: Team,
     hideTeamList: boolean,
 
-    pickTeam0: Array<Message>,
-    pickTeam1: Array<Message>,
+    //pickTeam0: Array<Message>,
+    //pickTeam1: Array<Message>,
 
     currentUser: User|null,
     currentChat: Array<Message>,
@@ -92,8 +91,8 @@ class MainPage extends Component<Props, State> {
         team1: new Team(2, "TEAM 2"),
         hideTeamList: false,
 
-        pickTeam0: new Array<Message>(),
-        pickTeam1: new Array<Message>(),
+        //pickTeam0: new Array<Message>(),
+        //pickTeam1: new Array<Message>(),
 
         currentUser: null,
         currentChat: new Array<Message>(),
@@ -147,20 +146,7 @@ class MainPage extends Component<Props, State> {
             this.props.clientId, this.updateStreamerInfo);
     }
 
-    // 동작 시작
-    start = () => {
-        this.setState({
-            start: true,
-            getUsers: true
-        });
-    }
-
-    switchGetUser = () => {
-        this.setState({
-            getUsers: !this.state.getUsers
-        });
-    }
-
+    // componentDidMount
     // 스트리머 정보 업데이트
     updateStreamerInfo = (map: Map<string, string>) => {
         const info = new User(
@@ -173,7 +159,25 @@ class MainPage extends Component<Props, State> {
         });
     }
 
-    // 기본 설정
+    // Config
+    // 동작 시작
+    start = () => {
+        this.setState({
+            start: true,
+            getUsers: true
+        });
+    }
+
+    // Config
+    // 인원 받기/그만받기 변경
+    switchGetUser = () => {
+        this.setState({
+            getUsers: !this.state.getUsers
+        });
+    }
+
+    // Config
+    // 전체 픽 수 설정
     changePickCount = (up: boolean) => {
         if(up) {
             this.setState({
@@ -188,6 +192,9 @@ class MainPage extends Component<Props, State> {
             }
         }
     }
+
+    // Config
+    // 턴 당 픽 수 설정
     changeBanInterval = (up: boolean) => {
         if(up) {
             this.setState({
@@ -202,6 +209,9 @@ class MainPage extends Component<Props, State> {
             }
         }
     }
+
+    // Config
+    // 턴 당 밴 수 설정
     changeBanCount = (up: boolean) => {
         if(up) {
             this.setState({
@@ -217,14 +227,15 @@ class MainPage extends Component<Props, State> {
         }
     }
 
-    // 데이터 리셋
+    // Config
+    // 리셋
     reset = () => {
         this.setState({start: false,
             team0: new Team(1, "TEAM 1"),
             team1: new Team(2, "TEAM 2"),
             hideTeamList: false,
-            pickTeam0: new Array<Message>(),
-            pickTeam1: new Array<Message>(),
+            //pickTeam0: new Array<Message>(),
+            //pickTeam1: new Array<Message>(),
             currentUser: null,
             currentChat: new Array<Message>(),
             userDlg: false,
@@ -241,11 +252,13 @@ class MainPage extends Component<Props, State> {
         });
     }
 
+    // Header
     // 토큰 리셋
     tokenReset = () => {
         this.props.Actions.removeUserOn();
     }
 
+    // IRC Connect
     // 메시지 처리
     msgProcess = (msg: string) => {
         if(this.state.start) {
@@ -325,8 +338,8 @@ class MainPage extends Component<Props, State> {
         
                         let currentTeam = 0;
 
-                        const pickTeam0 = this.state.pickTeam0;
-                        const pickTeam1 = this.state.pickTeam1;
+                        //const pickTeam0 = this.state.pickTeam0;
+                        //const pickTeam1 = this.state.pickTeam1;
                         const team0 = this.state.team0;
                         const team1 = this.state.team1;
                         let totalPick = this.state.totalPickCount;
@@ -336,19 +349,21 @@ class MainPage extends Component<Props, State> {
                             msg.setMessage(pickMsg);
     
                             // 팀에 소속되어있다면 해당 팀의 픽 리스트에 등록
-                            pickTeam0.push(msg);
+                            //pickTeam0.push(msg);
+                            team0.addToPickList(msg);
     
                             // 픽 한 유저는 리스트에서 더 사용할 수 없도록 처리함
                             team0.changePickable(msg.getUserId());
-                            team0.currentPick++;
+                            team0.addCurrentPick();
                             nextPick++;
                         }
                         if(team1.hasMember(msg.getUserId())) {
                             currentTeam = 2;
                             msg.setMessage(pickMsg);
-                            pickTeam1.push(msg);
+                            //pickTeam1.push(msg);
+                            team1.addToPickList(msg);
                             team1.changePickable(msg.getUserId());
-                            team1.currentPick++;
+                            team1.addCurrentPick();
                             nextPick++;
                         }
         
@@ -364,12 +379,12 @@ class MainPage extends Component<Props, State> {
                             nextPick = 0;
 
                             // 각 팀의 현재 pick도 초기화
-                            team0.currentPick = 0;
-                            team1.currentPick = 0;
+                            team0.resetCurrentPick();
+                            team1.resetCurrentPick();
                         }
 
                         console.log("PHASE LOG");
-                        console.log(totalPick + " " + nextPick + " " + team0.currentPick + " " + team1.currentPick + " " + this.state.banInterval);
+                        console.log(totalPick + " " + nextPick + " " + team0.getCurrentPick() + " " + team1.getCurrentPick() + " " + this.state.banInterval);
                         
                         this.setState({
                             userDlg: false,
@@ -378,8 +393,8 @@ class MainPage extends Component<Props, State> {
                             currentChat: new Array<Message>(),
                             currentPhase: nextPhase,
 
-                            pickTeam0: pickTeam0,
-                            pickTeam1: pickTeam1,
+                            //pickTeam0: pickTeam0,
+                            //pickTeam1: pickTeam1,
                             team0: team0,
                             team1: team1,
                             totalPickCount: totalPick
@@ -401,13 +416,15 @@ class MainPage extends Component<Props, State> {
         }
     }
 
+    // UserDialog
+    // 해당 메시지를 Pick으로 선택하기
     useMessage = (msg: Message) => {
         let nextPick = this.state.currentPickCount;
 
         let currentTeam = 0;
 
-        const pickTeam0 = this.state.pickTeam0;
-        const pickTeam1 = this.state.pickTeam1;
+        //const pickTeam0 = this.state.pickTeam0;
+        //const pickTeam1 = this.state.pickTeam1;
         const team0 = this.state.team0;
         const team1 = this.state.team1;
         let totalPick = this.state.totalPickCount;
@@ -417,19 +434,21 @@ class MainPage extends Component<Props, State> {
             msg.setMessage(msg.getMessage());
 
             // 팀에 소속되어있다면 해당 팀의 픽 리스트에 등록
-            pickTeam0.push(msg);
+            //pickTeam0.push(msg);
+            team0.addToPickList(msg);
 
             // 픽 한 유저는 리스트에서 더 사용할 수 없도록 처리함
             team0.changePickable(msg.getUserId());
-            team0.currentPick++;
+            team0.addCurrentPick();
             nextPick++;
         }
         if(team1.hasMember(msg.getUserId())) {
             currentTeam = 2;
             msg.setMessage(msg.getMessage());
-            pickTeam1.push(msg);
+            //pickTeam1.push(msg);
+            team1.addToPickList(msg);
             team1.changePickable(msg.getUserId());
-            team1.currentPick++;
+            team1.addCurrentPick();
             nextPick++;
         }
 
@@ -443,7 +462,7 @@ class MainPage extends Component<Props, State> {
         }
 
         console.log("PHASE LOG");
-        console.log(totalPick + " " + nextPick + " " + team0.currentPick + " " + team1.currentPick + " " + this.state.banInterval);
+        console.log(totalPick + " " + nextPick + " " + team0.getCurrentPick() + " " + team1.getCurrentPick() + " " + this.state.banInterval);
         
         this.setState({
             userDlg: false,
@@ -451,8 +470,8 @@ class MainPage extends Component<Props, State> {
             currentPickCount: nextPick,
             currentChat: new Array<Message>(),
 
-            pickTeam0: pickTeam0,
-            pickTeam1: pickTeam1,
+            //pickTeam0: pickTeam0,
+            //pickTeam1: pickTeam1,
             team0: team0,
             team1: team1,
             totalPickCount: totalPick
@@ -563,16 +582,16 @@ class MainPage extends Component<Props, State> {
 
     phaseChange = () => {
         if(this.state.currentPhase == 1) {
-            this.state.team0.currentPick = 0;
-            this.state.team1.currentPick = 0;
+            this.state.team0.resetCurrentPick();
+            this.state.team1.resetCurrentPick();
             this.setState({
                 currentPhase: 2,
                 currentPickCount: 0
             });
         }
         else if(this.state.currentPhase == 2) {
-            this.state.team0.currentBan = 0;
-            this.state.team1.currentBan = 0;
+            this.state.team0.resetCurrentBan();
+            this.state.team1.resetCurrentBan();
             this.setState({
                 currentPhase: 1,
                 currentBanCount: 0
@@ -587,6 +606,7 @@ class MainPage extends Component<Props, State> {
         });
     }
 
+    // PickSelect
     // 당첨 메시지 창 닫기
     closePickedMsgDlg = () => {
         this.setState({
@@ -596,6 +616,7 @@ class MainPage extends Component<Props, State> {
         });
     }
 
+    // Phase Indicator
     // 강제 페이즈 변경
     switchPhase = () => {
         if(this.state.currentPhase === 1) {
@@ -632,6 +653,8 @@ class MainPage extends Component<Props, State> {
         });
     }
 
+    // TeamListContainer
+    // 강제로 state 변경
     updateTeam = (team: Team, teamNum: number) => {
         if(teamNum == 1) {
             this.setState({
@@ -697,7 +720,6 @@ class MainPage extends Component<Props, State> {
                         <div className="d-flex banpickbox-height">
                             <div className="banpickbox-width">
                                 <BanPickContainer
-                                    picklist={this.state.pickTeam0}
                                     team={this.state.team0}
                                     phase={this.state.currentPhase}
                                     currentBanCount={this.state.currentBanCount}
@@ -712,7 +734,6 @@ class MainPage extends Component<Props, State> {
                             </div>
                             <div className="banpickbox-width">
                                 <BanPickContainer
-                                    picklist={this.state.pickTeam1}
                                     team={this.state.team1}
                                     phase={this.state.currentPhase}
                                     currentBanCount={this.state.currentBanCount}

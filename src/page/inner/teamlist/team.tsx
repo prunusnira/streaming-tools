@@ -1,18 +1,37 @@
+import Message from "../../../data/message";
 import User from "../../../data/user";
 
 class Team {
-    teamNum: number;
-    name: string;
-    members: Array<User>;
-    currentPick: number;
-    currentBan: number;
+    private teamNum: number;
+    private name: string;
+    private members: Array<User>;
+    private picklist: Array<Message>;
+    private currentPick: number;
+    private currentBan: number;
 
     constructor(team: number, name: string) {
         this.teamNum = team;
         this.members = new Array<User>();
+        this.picklist = new Array<Message>();
         this.name = name;
         this.currentPick = 0;
         this.currentBan = 0;
+    }
+
+    setTeamNum = (teamNum: number) => {
+        this.teamNum = teamNum;
+    }
+
+    getTeamNum = (): number => {
+        return this.teamNum;
+    }
+
+    setName = (name: string) => {
+        this.name = name;
+    }
+
+    getName = (): string => {
+        return this.name;
     }
 
     addMember = (user: User) => {
@@ -28,7 +47,7 @@ class Team {
         return null;
     }
 
-    getMembers = () => {
+    getMembers = (): User[] => {
         return this.members;
     }
 
@@ -47,8 +66,60 @@ class Team {
             this.members.splice(num, 1);
     }
 
+    checkPickable = (id: string) => {
+        return this.getMember(id)?.isPicked();
+    }
+
     changePickable = (id: string) => {
         this.getMember(id)?.setPicked();
+    }
+
+    getPickList = (): Message[] => {
+        return this.picklist;
+    }
+
+    getOnePick = (idx: number): Message => {
+        return this.picklist[idx];
+    }
+
+    addToPickList = (msg: Message) => {
+        this.picklist.push(msg);
+    }
+
+    removeFromPickList = (idx: number) => {
+        this.picklist.splice(idx, 1);
+    }
+
+    getCurrentPick = (): number => {
+        return this.currentPick;
+    }
+
+    addCurrentPick = () => {
+        this.currentPick++;
+    }
+
+    removeCurrentPick = () => {
+        this.currentPick--;
+    }
+
+    resetCurrentPick = () => {
+        this.currentPick = 0;
+    }
+
+    getCurrentBan = () => {
+        return this.currentBan;
+    }
+    
+    addCurrentBan = () => {
+        this.currentBan++;
+    }
+
+    removeCurrentBan = () => {
+        this.currentPick--;
+    }
+
+    resetCurrentBan = () => {
+        this.currentBan = 0;
     }
 }
 

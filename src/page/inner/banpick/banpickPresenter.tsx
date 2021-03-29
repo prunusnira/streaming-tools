@@ -6,8 +6,6 @@ import Team from "../teamlist/team";
 import './banpick.css';
 
 interface Props {
-    picklist: Array<Message>,
-    size: number,
     team: Team,
     phase: number,
     edit: (msg: Message, idx: number) => void,
@@ -22,11 +20,11 @@ class BanPickPresenter extends Component<Props> {
         return (
             <Card className="banpicklist">
                 <CardHeader className="text-center">
-                    {this.props.team.name} (팀 {this.props.team.teamNum})
+                    {this.props.team.getName()} (팀 {this.props.team.getTeamNum()})
                 </CardHeader>
-                <CardBody id={"banpick-box"+this.props.team.teamNum} className="banpicklist-body">
+                <CardBody id={"banpick-box"+this.props.team.getTeamNum()} className="banpicklist-body">
                     {
-                        this.props.picklist.map((v, i) => {
+                        this.props.team.getPickList().map((v, i) => {
                             return (
                                 <Card>
                                     <CardBody className="banpick-box">

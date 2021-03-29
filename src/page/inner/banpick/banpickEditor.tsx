@@ -5,11 +5,10 @@ import Message from "../../../data/message";
 import Team from "../teamlist/team";
 
 interface Props {
-    picklist: Array<Message>,
+    team: Team,
     msg: Message,
     display: boolean,
     idx: number,
-    team: Team,
     close: () => void
 }
 
@@ -28,8 +27,8 @@ class BanPickEditor extends Component<Props, State> {
         });
     }
 
-    updateText = (team: number, text: string, idx: number) => {
-        this.editPick(team, text, idx);
+    updateText = (text: string, idx: number) => {
+        this.editPick(text, idx);
         this.setState({
             editText: ''
         });
@@ -37,8 +36,8 @@ class BanPickEditor extends Component<Props, State> {
     }
 
     // 픽 메시지 수정
-    editPick = (team: number, val: string, idx: number) => {
-        this.props.picklist[idx].setMessage(val);
+    editPick = (val: string, idx: number) => {
+        this.props.team.getOnePick(idx).setMessage(val);
     }
 
     render() {
@@ -52,7 +51,7 @@ class BanPickEditor extends Component<Props, State> {
                     <Input type='text' value={this.state.editText} onChange={this.valueChange} />
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={() => this.updateText(this.props.team.teamNum, this.state.editText, this.props.idx)}>수정</Button>
+                    <Button onClick={() => this.updateText(this.state.editText, this.props.idx)}>수정</Button>
                     <Button onClick={this.props.close}>취소</Button>
                 </ModalFooter>
             </Modal>

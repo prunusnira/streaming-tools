@@ -63,12 +63,6 @@ class Config extends Component<Props> {
                             onClick={this.props.reset}>
                                 리셋
                         </Button>
-                        {/*<Button
-                            className="config-btn config-btn-normal"
-                            color="danger"
-                            onClick={this.props.selectFromPickList}>
-                                하나 고르기
-                        </Button>*/}
                         <Button
                             className="config-btn config-btn-normal"
                             size="sm"

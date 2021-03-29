@@ -6,13 +6,11 @@ import BanPickEditor from "./banpickEditor";
 import BanPickPresenter from "./banpickPresenter";
 
 interface Props {
-    picklist: Array<Message>,
     team: Team,
     phase: number,
     currentBanCount: number,
     banNum: number,
     pickCntFix: () => void,
-    //banPick: (teamNum: number, idx: number) => void,
     updateBanCount: (banCount: number) => void,
     banOverAlertOpen: (teamName: string, teamNum: number) => void,
     setNego: (callback: () => void) => void,
@@ -49,8 +47,8 @@ class BanPickContainer extends Component<Props, State> {
 
     // 픽 메시지 삭제
     removePick = (idx: number) => {
-        this.props.picklist.splice(idx, 1);
-        this.props.team.currentPick--;
+        this.props.team.removeFromPickList(idx);
+        this.props.team.removeCurrentPick();
         this.props.pickCntFix();
     }
 
@@ -60,7 +58,7 @@ class BanPickContainer extends Component<Props, State> {
             this.props.setNego(() => {
                 this.props.getUserSelected(
                     this.props.team.getMember(userid)!!,
-                    this.props.team.teamNum
+                    this.props.team.getTeamNum()
                 )
             });
         }
@@ -69,24 +67,24 @@ class BanPickContainer extends Component<Props, State> {
     // 밴 or 언밴 하기
     banPick = (idx: number) => {
         let nextBan = this.props.currentBanCount;
-        if(this.props.picklist[idx].getBanStatus()) {
-            this.props.picklist[idx].undoBan();
-            this.props.team.currentBan--;
+        if(this.props.team.getOnePick(idx).getBanStatus()) {
+            this.props.team.getOnePick(idx).undoBan();
+            this.props.team.removeCurrentBan();
             nextBan--;
             this.props.updateBanCount(nextBan);
         }
         else {
             // 밴 하기 전에 현재 밴 수 확인
-            if(this.props.team.currentBan >= this.props.banNum) {
+            if(this.props.team.getCurrentBan() >= this.props.banNum) {
                 // 밴 횟수 초과 상태
                 this.props.banOverAlertOpen(
-                    this.props.team.name,
-                    this.props.team.teamNum
+                    this.props.team.getName(),
+                    this.props.team.getTeamNum()
                 );
             }
             else {
-                this.props.picklist[idx].setBan();
-                this.props.team.currentBan++;
+                this.props.team.getOnePick(idx).setBan();
+                this.props.team.addCurrentBan();
                 nextBan++;
                 this.props.updateBanCount(nextBan);
             }
@@ -103,8 +101,6 @@ class BanPickContainer extends Component<Props, State> {
         return (
             <Fragment>
                 <BanPickPresenter
-                    picklist={this.props.picklist}
-                    size={this.props.picklist.length}
                     team={this.props.team}
                     phase={this.props.phase}
                     edit={this.setEditMsg}
@@ -112,11 +108,10 @@ class BanPickContainer extends Component<Props, State> {
                     ban={this.banPick}
                     nego={this.openNego} />
                 <BanPickEditor
-                    picklist={this.props.picklist}
+                    team={this.props.team}
                     msg={this.state.editMsg}
                     display={this.state.editDlg}
                     idx={this.state.editIdx}
-                    team={this.props.team}
                     close={this.closeEdit} />
             </Fragment>
         );

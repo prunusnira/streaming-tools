@@ -55,20 +55,20 @@ class TeamListContainer extends Component<Props> {
             team.changePickable(user.getUserId());
         }
         
-        this.props.updateTeam(team, team.teamNum);
+        this.props.updateTeam(team, team.getTeamNum());
     }
 
     // 팀 이름 변경
     changeTeamName = (title: string) => {
         const team = this.props.team;
-        team.name = title;
-        this.props.updateTeam(team, team.teamNum);
+        team.setName(title);
+        this.props.updateTeam(team, team.getTeamNum());
         this.closeTeamNameChanger();
     }
 
     // 유저 강제 소환
     summonUser = (user: User) => {
-        this.props.getUserSelected(user, this.props.team.teamNum);
+        this.props.getUserSelected(user, this.props.team.getTeamNum());
     }
 
 
@@ -111,11 +111,11 @@ class TeamListContainer extends Component<Props> {
             });
         }
         else {
-            if(this.props.team.currentPick >= this.props.banInterval) {
+            if(this.props.team.getCurrentPick() >= this.props.banInterval) {
                 partPickOver = true;
             }
             else {
-                this.props.team.members.map(v => {
+                this.props.team.getMembers().map(v => {
                     if(!v.isPicked()) {
                         arr.push(v);
                     }
@@ -143,7 +143,7 @@ class TeamListContainer extends Component<Props> {
                         this.updateRoulette(arr[randVal]);
 
                         this.props.notNego();
-                        this.props.getUserSelected(arr[randVal], this.props.team.teamNum);
+                        this.props.getUserSelected(arr[randVal], this.props.team.getTeamNum());
                         setTimeout(this.closeRoulette, 1000);
                     }, 3);
                 });
