@@ -9,7 +9,7 @@ interface Props {
     team: Team,
     phase: number,
     edit: (msg: Message, idx: number) => void,
-    remove: (idx: number) => void,
+    openRemove: (idx: number) => void,
     ban: (idx: number) => void,
     nego: (userid: string) => void
 }
@@ -71,7 +71,7 @@ class BanPickPresenter extends Component<Props> {
                                                                 className="banpick-btn"
                                                                 size="sm"
                                                                 color="dark"
-                                                                onClick={() => this.props.remove(i)}>삭제</Button>
+                                                                onClick={() => this.props.openRemove(i)}>삭제</Button>
                                                             {
                                                                 (function() {
                                                                     if(self.props.phase === 1 && v.getBanStatus()) {

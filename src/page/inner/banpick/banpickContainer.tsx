@@ -4,14 +4,12 @@ import User from "../../../data/user";
 import Team from "../teamlist/team";
 import BanPickEditor from "./banpickEditor";
 import BanPickPresenter from "./banpickPresenter";
+import { BanPickRemoveModal } from "./banpickRemoveModal";
 
 interface Props {
     team: Team,
     phase: number,
-    currentBanCount: number,
     banNum: number,
-    pickCntFix: () => void,
-    updateBanCount: (banCount: number) => void,
     banOverAlertOpen: (teamName: string, teamNum: number) => void,
     setNego: (callback: () => void) => void,
     getUserSelected: (user: User, teamNum: number) => void,
@@ -21,14 +19,18 @@ interface Props {
 interface State {
     editDlg: boolean,
     editMsg: Message,
-    editIdx: number
+    editIdx: number,
+    removeDlg: boolean,
+    removeIdx: number
 }
 
 class BanPickContainer extends Component<Props, State> {
     state: State = {
         editDlg: false,
         editMsg: new Message("", "", ""),
-        editIdx: 0
+        editIdx: 0,
+        removeDlg: false,
+        removeIdx: -1
     }
 
     setEditMsg = (msg: Message, idx: number) => {
@@ -48,8 +50,21 @@ class BanPickContainer extends Component<Props, State> {
     // 픽 메시지 삭제
     removePick = (idx: number) => {
         this.props.team.removeFromPickList(idx);
-        this.props.team.removeCurrentPick();
-        this.props.pickCntFix();
+        this.closeRemove();
+    }
+
+    openRemovalPickModal = (idx: number) => {
+        this.setState({
+            removeDlg: true,
+            removeIdx: idx
+        });
+    }
+
+    closeRemove = () => {
+        this.setState({
+            removeDlg: false,
+            removeIdx: -1
+        });
     }
 
     // 협상테이블 열기
@@ -66,12 +81,9 @@ class BanPickContainer extends Component<Props, State> {
 
     // 밴 or 언밴 하기
     banPick = (idx: number) => {
-        let nextBan = this.props.currentBanCount;
         if(this.props.team.getOnePick(idx).getBanStatus()) {
             this.props.team.getOnePick(idx).undoBan();
             this.props.team.removeCurrentBan();
-            nextBan--;
-            this.props.updateBanCount(nextBan);
         }
         else {
             // 밴 하기 전에 현재 밴 수 확인
@@ -85,16 +97,11 @@ class BanPickContainer extends Component<Props, State> {
             else {
                 this.props.team.getOnePick(idx).setBan();
                 this.props.team.addCurrentBan();
-                nextBan++;
-                this.props.updateBanCount(nextBan);
             }
         }
 
-        // 다음 밴 페이즈 결정
-        if(nextBan >= this.props.banNum * 2) {
-            // 페이즈를 바꾸고 각 팀의 픽을 초기화
-            this.props.phaseChange();
-        }
+        // 다음 페이즈 결정
+        this.props.phaseChange();
     }
 
     render() {
@@ -104,7 +111,7 @@ class BanPickContainer extends Component<Props, State> {
                     team={this.props.team}
                     phase={this.props.phase}
                     edit={this.setEditMsg}
-                    remove={this.removePick}
+                    openRemove={this.openRemovalPickModal}
                     ban={this.banPick}
                     nego={this.openNego} />
                 <BanPickEditor
@@ -113,6 +120,11 @@ class BanPickContainer extends Component<Props, State> {
                     display={this.state.editDlg}
                     idx={this.state.editIdx}
                     close={this.closeEdit} />
+                <BanPickRemoveModal
+                    removeDlg={this.state.removeDlg}
+                    selected={this.state.removeIdx}
+                    removePick={this.removePick}
+                    close={this.closeRemove} />
             </Fragment>
         );
     }

@@ -1,3 +1,4 @@
+import { ENAMETOOLONG } from "constants";
 import User from "../../../data/user";
 import Team from "./team";
 
@@ -51,5 +52,25 @@ describe('팀원 선택유무 검사', () => {
     it('선택여부 변경 후 확인', () => {
         team.getMember('testuserid')?.setPicked();
         expect(team.checkPickable('testuserid')).toBe(true);
+    });
+});
+
+describe('픽/밴 개수 변경 검사', () => {
+    const team = new Team(1, 'Test Team');
+
+    it('픽 수 검사', () => {
+        expect(team.getCurrentPick()).toBe(0);
+        team.addCurrentPick();
+        expect(team.getCurrentPick()).toBe(1);
+        team.removeCurrentPick();
+        expect(team.getCurrentPick()).toBe(0);
+    });
+
+    it('밴 수 검사', () => {
+        expect(team.getCurrentBan()).toBe(0);
+        team.addCurrentBan();
+        expect(team.getCurrentBan()).toBe(1);
+        team.removeCurrentBan();
+        expect(team.getCurrentBan()).toBe(0);
     });
 });

@@ -20,7 +20,6 @@
 
 .banpicklist-body {
     overflow-y: auto;
-    height: calc(100% - 200px);
 }
 
 .banpick-btn {

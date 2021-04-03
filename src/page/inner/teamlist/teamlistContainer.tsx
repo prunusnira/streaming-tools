@@ -41,12 +41,6 @@ class TeamListContainer extends Component<Props> {
         rouletteInner: ""
     }
 
-    componentDidUpdate = () => {
-        /*if(this.props.team.rouletteInit) {
-            this.selectUser(this.props.team.teamNum);
-        }*/
-    }
-
     // 유저 픽 가능 유무 변경
     changeUserStatePicked = (user: User) => {
         const team = this.props.team;

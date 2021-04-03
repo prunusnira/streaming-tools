@@ -88,6 +88,7 @@ class Team {
 
     removeFromPickList = (idx: number) => {
         this.picklist.splice(idx, 1);
+        this.currentPick--;
     }
 
     getCurrentPick = (): number => {
@@ -115,7 +116,7 @@ class Team {
     }
 
     removeCurrentBan = () => {
-        this.currentPick--;
+        this.currentBan--;
     }
 
     resetCurrentBan = () => {

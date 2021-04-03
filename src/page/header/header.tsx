@@ -1,4 +1,3 @@
-import { env } from 'process';
 import React, { Component } from 'react';
 import { Button, Card, CardBody, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import User from '../../data/user';
