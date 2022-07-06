@@ -3,7 +3,7 @@ let timerHandle = null;
 let isRunning = false;
 
 const runTimer = () => {
-    if(!isRunning) {
+    if (!isRunning) {
         isRunning = true;
         timerHandle = setInterval(() => {
             time++;
@@ -11,29 +11,28 @@ const runTimer = () => {
             postMessage(time);
         }, 10);
     }
-}
+};
 
 const stopTimer = () => {
-    if(timerHandle !== null) {
+    if (timerHandle !== null) {
         clearInterval(timerHandle);
         isRunning = false;
     }
-}
+};
 
 const resetTimer = () => {
     stopTimer();
     time = 0;
     postMessage(time);
-}
+};
 
 onmessage = (ev) => {
-    if(ev.data === 'start') {
+    console.log(ev.data);
+    if (ev.data === "start") {
         runTimer();
-    }
-    else if(ev.data === 'stop') {
+    } else if (ev.data === "stop") {
         stopTimer();
-    }
-    else if(ev.data === 'reset') {
+    } else if (ev.data === "reset") {
         resetTimer();
     }
-}
+};

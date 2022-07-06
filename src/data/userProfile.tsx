@@ -1,19 +1,22 @@
 import axios from "axios";
-import Ref from "./reference";
 
-class GetUserProfile {
-    requestUserProfile = (
-        userid: string, acctok: string,
-        clientId: string, callback: (map: Map<string, string>) => void) => {
-        axios.get(Ref.URL_PROFILE+"?login="+userid, {
+const requestUserProfile = (
+    loginName: string,
+    acctok: string,
+    clientId: string,
+    callback: (map: Map<string, string>) => void
+) => {
+    axios
+        .get(process.env.REACT_APP_URL_PROFILE + "?login=" + loginName, {
             headers: {
-                "Authorization": "Bearer "+acctok,
-                "Client-Id": clientId
-            }
+                Authorization: "Bearer " + acctok,
+                "Client-Id": clientId,
+            },
         })
         .then((res) => {
+            console.log(res);
             const data = res.data;
-            if(data !== null || data !== undefined) {
+            if (data !== null || data !== undefined) {
                 // map으로 만듦
                 const map = new Map<string, string>();
                 const dataset = data.data[0];
@@ -23,7 +26,6 @@ class GetUserProfile {
                 callback(map);
             }
         });
-    }
-}
+};
 
-export default GetUserProfile;
+export default requestUserProfile;

@@ -1,5 +1,3 @@
-import { forEachChild } from "typescript";
-
 class Parser {
     static parse = (msg: string): Map<string, string> => {
         const map = new Map<string, string>();
@@ -11,37 +9,36 @@ class Parser {
         // parsed[3] = #채널명
         // parsed[4+] = :채팅내용
 
-        if(parsed[2] === "PRIVMSG") {
+        if (parsed[2] === "PRIVMSG") {
             const userinfo = parsed[0].split(";");
-            userinfo.forEach(s => {
+            userinfo.forEach((s) => {
                 const keypair = s.split("=");
                 map.set(keypair[0], keypair[1]);
             });
-    
+
             let id = parsed[1].split("!")[0];
             map.set("userid", id.substring(1, id.length));
-    
+
             // 채팅 내용
             let chat = "";
-            for(let i = 4; i < parsed.length; i++) {
-                if(i == 4) {
+            for (let i = 4; i < parsed.length; i++) {
+                if (i == 4) {
                     const splited = parsed[i].split(":");
-                    for(let i = 1; i < splited.length; i++) {
+                    for (let i = 1; i < splited.length; i++) {
                         chat += splited[i];
-                        if(i !== splited.length - 1) {
+                        if (i !== splited.length - 1) {
                             chat += ":";
                         }
                     }
-                }
-                else {
+                } else {
                     chat += parsed[i];
                 }
-                if(i < parsed.length - 1) chat += " ";
+                if (i < parsed.length - 1) chat += " ";
             }
             map.set("msg", chat);
         }
         return map;
-    }
+    };
 }
 
 export default Parser;
