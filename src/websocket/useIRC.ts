@@ -6,19 +6,25 @@ import { Observer, Subject } from "../data/observer/observer";
 import Parser from "../data/parser";
 import User from "../data/user";
 import requestUserProfile from "../data/userProfile";
+import { IBanpickData } from "../modules/main/useBanpickData";
 import Team from "../modules/teamlist/team";
 import { RootState } from "../redux/reducer";
 import useTTS from "../tts/useTTS";
 
-const useIRC = (team1: Team, team2: Team, updateTeam: (t: Team, tn: number) => void) => {
+type Props = {
+    team1: Team;
+    team2: Team;
+    banpickData: IBanpickData;
+    updateTeam: (t: Team) => void;
+};
+
+const useIRC = ({ team1, team2, banpickData, updateTeam }: Props) => {
     const [selectedUser, setSelectedUser] = useState<User>(new User("", "", false));
 
     const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
     const subject = useRef<Subject>(new Subject(processMessage));
     const { acctok, loginName, clientId } = useSelector((state: RootState) => state.user);
-    const { allPick, turnPick, turnBan, isStarted, gettingUsers, isNego } = useSelector(
-        (state: RootState) => state.banpick
-    );
+    const { allPick, turnPick, turnBan, isStarted, isEntering, isNegoMode, phase } = banpickData;
 
     const { speech } = useTTS();
 
@@ -53,6 +59,7 @@ const useIRC = (team1: Team, team2: Team, updateTeam: (t: Team, tn: number) => v
     };
 
     const onMsgReceived = (ev: MessageEvent) => {
+        console.log(`messge get ${ev.data}`);
         if (ev.data !== undefined) {
             const msg: string = ev.data;
 
@@ -82,18 +89,18 @@ const useIRC = (team1: Team, team2: Team, updateTeam: (t: Team, tn: number) => v
     };
 
     async function processMessage(msg: string) {
+        console.log(`process message`);
         if (!isStarted) return;
 
         const msgParsed = Parser.parse(msg);
-        const map = new Map<string, string>();
+        console.log(msgParsed);
 
         if (msgParsed.size > 0) {
-            Array.from(msgParsed.keys()).forEach((s) => {
-                map.set(s, msgParsed.get(s)!);
-            });
+            // 메시지와 사용자 판별
+            let user = new User("", "", false);
 
             // 뱃지 검사해서 subscriber 확인
-            const badges = map.get("badges")!.split(",");
+            const badges = msgParsed.get("badges")!.split(",");
             let isSub = false;
             badges.forEach((v) => {
                 if (v.startsWith("subscriber")) {
@@ -101,58 +108,66 @@ const useIRC = (team1: Team, team2: Team, updateTeam: (t: Team, tn: number) => v
                 }
             });
 
-            let user: User | null = null;
-
-            const msg = new Message(map.get("userid")!, map.get("display-name")!, map.get("msg")!);
+            const msg = new Message(
+                msgParsed.get("userid")!,
+                msgParsed.get("display-name")!,
+                msgParsed.get("msg")!
+            );
 
             if (team1.hasMember(msg.getUserId())) {
                 user = team1.getMember(msg.getUserId());
             } else if (team2.hasMember(msg.getUserId())) {
                 user = team2.getMember(msg.getUserId());
             } else {
-                user = new User(map.get("userid")!, map.get("display-name")!, isSub);
+                user = new User(msgParsed.get("userid")!, msgParsed.get("display-name")!, isSub);
             }
-            user!.updateLastMessage(msg);
-            if (user!.getProfileUrl() === "") {
+            user.updateLastMessage(msg);
+            if (user.getProfileUrl() === "") {
                 await requestUserProfile(user!.getUserId(), acctok, clientId, (map) => {
-                    user!.setProfileUrl(map.get("profile_image_url")!);
+                    user.setProfileUrl(map.get("profile_image_url")!);
                 });
             }
 
             // 팀 등록
             if (
-                gettingUsers &&
+                isEntering &&
                 (msg.getMessage().startsWith("!team ") || msg.getMessage().startsWith("!팀 "))
             ) {
                 const teamNum = msg.getMessage().split(" ")[1].split("\r\n")[0];
 
                 // 이미 다른 팀에 들어가있다면 삭제함
+                console.log(msg.getUserId());
+                console.log(team1.hasMember(msg.getUserId()));
+                console.log(team2.hasMember(msg.getUserId()));
                 if (team1.hasMember(msg.getUserId())) {
+                    console.log("중복 삭제 1");
                     team1.removeMember(msg.getUserId());
                 }
                 if (team2.hasMember(msg.getUserId())) {
+                    console.log("중복 삭제 2");
                     team2.removeMember(msg.getUserId());
                 }
 
                 if (teamNum === "1") {
                     console.log(msg.getUserId() + "가 팀 " + teamNum + "으로 등록");
-                    team1.addMember(user!);
+                    team1.addMember(user);
                 } else if (teamNum === "2") {
                     console.log(msg.getUserId() + "가 팀 " + teamNum + "으로 등록");
-                    team2.addMember(user!);
+                    team2.addMember(user);
                 }
 
-                updateTeam(team1, 1);
-                updateTeam(team2, 2);
+                console.log(team1);
+                console.log(team2);
+                updateTeam(team1);
+                updateTeam(team2);
             }
 
-            console.log(`selected user`);
-            console.log(selectedUser);
+            console.log(`selected user ${selectedUser.getUserId()}`);
             // 픽 등록
             // 검사항목: 현재 유저가 선택된 유저인가
             if (selectedUser.getUserId() !== "" && msg.getUserId() === selectedUser.getUserId()) {
                 if (
-                    !isNego &&
+                    !isNegoMode &&
                     (msg.getMessage().startsWith("!pick ") || msg.getMessage().startsWith("!픽 "))
                 ) {
                     let nextPick = team1.getCurrentPick() + team2.getCurrentPick();

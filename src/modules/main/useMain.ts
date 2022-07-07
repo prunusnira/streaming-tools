@@ -16,9 +16,11 @@ const useMain = () => {
     const currentUserSubscribed = useRef<boolean>(false);
     const currentUserTeam = useRef<number>(0);
 
-    const updateTeam = (team: Team, teamNum: number) => {
-        teamNum === 1 && setTeam1(team);
-        teamNum === 2 && setTeam2(team);
+    const updateTeam = (team: Team) => {
+        console.log("team to be updated");
+        console.log(team);
+        team.getTeamNum() === 1 && setTeam1(team);
+        team.getTeamNum() === 2 && setTeam2(team);
     };
 
     return {

@@ -39,12 +39,8 @@ class Team {
     };
 
     getMember = (id: string): User => {
-        for (let i = 0; i < this.members.length; i++) {
-            if (this.members[i].getUserId() === id) {
-                return this.members[i];
-            }
-        }
-        return new User("", "", false);
+        const check = this.members.filter((x) => x.getUserId() === id);
+        return check.length > 0 ? check[0] : new User("", "", false);
     };
 
     getMembers = (): User[] => {
@@ -52,7 +48,7 @@ class Team {
     };
 
     hasMember = (id: string) => {
-        return this.getMember(id) === null ? false : true;
+        return this.getMember(id).getUserId() === "" ? false : true;
     };
 
     removeMember = (id: string) => {

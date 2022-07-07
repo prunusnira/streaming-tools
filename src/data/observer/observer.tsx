@@ -20,8 +20,10 @@ export class Subject implements ISubject {
     }
 
     attach = (observer: Observer) => {
+        console.log("attach trial");
         if (!this.observers.includes(observer)) {
             this.observers.push(observer);
+            console.log("attached");
         }
     };
 
@@ -38,6 +40,7 @@ export class Subject implements ISubject {
     };
 
     updateMessage = (msg: string) => {
+        console.log("update message");
         this.msg = msg;
     };
 }

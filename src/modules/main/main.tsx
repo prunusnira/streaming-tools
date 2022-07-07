@@ -19,8 +19,11 @@ import ChatPresenter from "../chat/chatPresenter";
 import PickSelect from "../pickSelect/pickSelect";
 import BanOverAlert from "../banoverAlert";
 import UserDialog from "../dialog/userDialog/userdlg";
+import useBanpickData from "./useBanpickData";
 
 const MainPage = () => {
+    const { banpickData } = useBanpickData();
+
     const {
         pageMode,
         setPageMode,
@@ -33,13 +36,19 @@ const MainPage = () => {
         setSelectedUser,
     } = useMain();
 
-    const { registerObserver, changeSelectedUser } = useIRC(team1, team2, updateTeam);
+    const { registerObserver, changeSelectedUser } = useIRC({
+        team1,
+        team2,
+        banpickData,
+        updateTeam,
+    });
     const observer = useRef<Observer>(new Observer());
     const { speech } = useTTS();
 
     const { user } = useSelector((state: RootState) => state);
 
     useEffect(() => {
+        console.log("register observer");
         registerObserver(observer.current);
     }, []);
 
@@ -47,7 +56,7 @@ const MainPage = () => {
         <>
             <MainContainer>
                 <Header />
-                <Config />
+                <Config banpickData={banpickData} />
                 <MainLayout>
                     <TabLayout>
                         <TabButton

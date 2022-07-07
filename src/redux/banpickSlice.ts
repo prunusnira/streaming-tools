@@ -7,11 +7,11 @@ export type BanPickType = {
     turnBan: number;
 
     isStarted: boolean;
-    gettingUsers: boolean;
+    isEntering: boolean;
     showUsers: boolean;
     isNego: boolean;
 
-    phase: Phase;
+    phase: number;
 };
 
 const initialState: BanPickType = {
@@ -20,7 +20,7 @@ const initialState: BanPickType = {
     turnBan: 1,
 
     isStarted: false,
-    gettingUsers: false,
+    isEntering: false,
     showUsers: true,
     isNego: false,
 
@@ -59,20 +59,17 @@ const banpickSlice = createSlice({
         getTeam: (state, action: PayloadAction<boolean>) => {
             return {
                 ...state,
-                gettingUsers: action.payload,
+                isEntering: action.payload,
             };
         },
-        changePhase: (state, action: PayloadAction<Phase>) => {
+        changePhase: (state, action: PayloadAction<number>) => {
             return {
                 ...state,
                 phase: action.payload,
             };
         },
-        reset: (state) => {
-            return {
-                ...state,
-                initialState,
-            };
+        reset: () => {
+            return initialState;
         },
         setShowUsers: (state, action: PayloadAction<boolean>) => {
             return {

@@ -11,3 +11,5 @@ export const TeamListWrapper = styled.div`
 export const TeamListHeader = styled.div``;
 
 export const TeamListBody = styled.div``;
+
+export const TLRow = styled.div``;

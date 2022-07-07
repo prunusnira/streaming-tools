@@ -1,11 +1,13 @@
 import styled, { createGlobalStyle } from "styled-components";
-import { BGGray, Black, Dark, Orange, White } from "./color";
-import { FontReg16 } from "./font";
+import { BGDark, BGGray, Black, Dark, Orange, White } from "./color";
+import { FontReg14, FontReg16 } from "./font";
 
 export const GlobalStyle = createGlobalStyle`
     html, body, #root {
     height: 100%;
     font-size: 95%;
+    background-color: ${BGDark};
+    color: ${White};
     }
 
     body {
@@ -21,13 +23,41 @@ export const GlobalStyle = createGlobalStyle`
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
     }
+
+    a {
+        text-decoration: none;
+        color: ${White};
+        &:hover {
+            color: ${White};
+            text-decoration: underline;
+        }
+    }
 `;
 
-export const BPButton = styled.button<{ bgColor?: string; color?: string; reversed?: boolean }>`
+export const BPButton = styled.button<{
+    bgColor?: string;
+    color?: string;
+    reversed?: boolean;
+    disabled?: boolean;
+}>`
     ${FontReg16}
     color: ${(props) => (props.color ? props.color : Dark)};
-    background-color: ${(props) => (props.bgColor ? props.bgColor : Orange)};
+    background-color: ${(props) =>
+        props.disabled ? BGGray : props.bgColor ? props.bgColor : Orange};
     border: none;
     padding: 10px 24px;
     border-radius: 10px;
+    width: 100%;
+`;
+
+export const BtnWrapper = styled.div<{ width: number }>`
+    width: ${(props) => props.width}px;
+`;
+
+export const MiniButton = styled.button`
+    ${FontReg14}
+    color: ${Dark};
+    background-color: ${Orange};
+    border: none;
+    width: 100%;
 `;

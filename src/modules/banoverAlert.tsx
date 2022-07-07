@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { BPButton } from "../commonStyle/global.style";
+import Popup from "../component/popup";
 
 interface Props {
     teamName: string;
@@ -8,18 +9,21 @@ interface Props {
     close: () => void;
 }
 
-const BanOverAlert = (props: Props) => {
+const BanOverAlert = ({ teamName, teamNum, alertOpen, close }: Props) => {
     return (
-        <Modal isOpen={props.alertOpen}>
-            <ModalHeader>밴 횟수 초과</ModalHeader>
-            <ModalBody>
-                이번 턴에서 {props.teamName} (팀 {props.teamNum})에 대해 수행할 수 있는 밴 횟수를
-                초과했습니다
-            </ModalBody>
-            <ModalFooter>
-                <Button onClick={props.close}>닫기</Button>
-            </ModalFooter>
-        </Modal>
+        <Popup
+            width={"90%"}
+            maxWidth={360}
+            active={alertOpen}
+            header={"밴 횟수 초과"}
+            body={
+                <>
+                    이번 턴에서 {teamName} (팀 {teamNum})에 대해 수행할 수 있는 밴 횟수를
+                    초과했습니다
+                </>
+            }
+            footer={<BPButton onClick={close}>닫기</BPButton>}
+        />
     );
 };
 

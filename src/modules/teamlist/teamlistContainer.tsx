@@ -3,6 +3,7 @@ import Message from "../../data/message";
 import User from "../../data/user";
 import UserDialog from "../dialog/userDialog/userdlg";
 import useUserDlg from "../dialog/userDialog/useUserDlg";
+import { IBanpickData } from "../main/useBanpickData";
 import Team from "./team";
 import TeamList from "./teamlist";
 import "./teamlist.css";
