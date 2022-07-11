@@ -2,7 +2,7 @@ import React from "react";
 import { Component } from "react";
 import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Message from "../../data/message";
-import Team from "../teamlist/team";
+import Team from "../../data/team";
 
 interface Props {
     team: Team;
@@ -37,7 +37,7 @@ class BanPickEditor extends Component<Props, State> {
 
     // 픽 메시지 수정
     editPick = (val: string, idx: number) => {
-        this.props.team.getOnePick(idx).setMessage(val);
+        this.props.team.pickList[idx].msg = val;
     };
 
     render() {
@@ -45,7 +45,7 @@ class BanPickEditor extends Component<Props, State> {
             <Modal isOpen={this.props.display}>
                 <ModalHeader>내용 수정</ModalHeader>
                 <ModalBody className="wordwrap">
-                    현재 내용: {this.props.msg.getMessage()}
+                    현재 내용: {this.props.msg.msg}
                     <br />
                     <Input type="text" value={this.state.editText} onChange={this.valueChange} />
                 </ModalBody>

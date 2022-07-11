@@ -38,17 +38,17 @@ const BanPickPresenter = ({ pickList, teamName, teamNum, edit, openRemove, ban, 
                                         <Row>
                                             <Col className="banpick-content" xs="12">
                                                 {(function () {
-                                                    if (v.getBanStatus()) {
-                                                        return <del>{v.getMessage()}</del>;
+                                                    if (v.ban) {
+                                                        return <del>{v.msg}</del>;
                                                     } else {
-                                                        return v.getMessage();
+                                                        return v.msg;
                                                     }
                                                 })()}
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col xs="12">
-                                                {v.getTime()} by {v.getUserName()} ({v.getUserId()})
+                                                {v.time} by {v.name} ({v.id})
                                             </Col>
                                         </Row>
                                     </Col>
@@ -73,7 +73,7 @@ const BanPickPresenter = ({ pickList, teamName, teamNum, edit, openRemove, ban, 
                                                         삭제
                                                     </Button>
                                                     {(function () {
-                                                        if (phase === 1 && v.getBanStatus()) {
+                                                        if (phase === 1 && v.ban) {
                                                             return (
                                                                 <Button
                                                                     className="banpick-btn"
@@ -84,10 +84,7 @@ const BanPickPresenter = ({ pickList, teamName, teamNum, edit, openRemove, ban, 
                                                                     언밴
                                                                 </Button>
                                                             );
-                                                        } else if (
-                                                            phase === 1 &&
-                                                            !v.getBanStatus()
-                                                        ) {
+                                                        } else if (phase === 1 && !v.ban) {
                                                             return (
                                                                 <Button
                                                                     className="banpick-btn"
@@ -98,10 +95,7 @@ const BanPickPresenter = ({ pickList, teamName, teamNum, edit, openRemove, ban, 
                                                                     밴
                                                                 </Button>
                                                             );
-                                                        } else if (
-                                                            phase === 2 &&
-                                                            v.getBanStatus()
-                                                        ) {
+                                                        } else if (phase === 2 && v.ban) {
                                                             return (
                                                                 <Button
                                                                     className="banpick-btn"
@@ -112,10 +106,7 @@ const BanPickPresenter = ({ pickList, teamName, teamNum, edit, openRemove, ban, 
                                                                     언밴
                                                                 </Button>
                                                             );
-                                                        } else if (
-                                                            phase === 2 &&
-                                                            !v.getBanStatus()
-                                                        ) {
+                                                        } else if (phase === 2 && !v.ban) {
                                                             return (
                                                                 <Button
                                                                     className="banpick-btn"
@@ -132,7 +123,7 @@ const BanPickPresenter = ({ pickList, teamName, teamNum, edit, openRemove, ban, 
                                                         className="banpick-btn"
                                                         size="sm"
                                                         color="dark"
-                                                        onClick={() => nego(v.getUserId())}
+                                                        onClick={() => nego(v.id)}
                                                     >
                                                         협테
                                                     </Button>

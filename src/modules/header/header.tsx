@@ -26,9 +26,9 @@ const Header = () => {
             <HeaderWrapper>
                 <HeaderTitle>Twitch BanPicker</HeaderTitle>
                 <HeaderUser>
-                    <UserIcon alt="profimg" src={streamer.getProfileUrl()} />
-                    <UserName>{streamer.getUserName()}</UserName>
-                    <UserId>({streamer.getUserId()})</UserId>
+                    <UserIcon alt="profimg" src={streamer.profileUrl} />
+                    <UserName>{streamer.name}</UserName>
+                    <UserId>({streamer.id})</UserId>
                 </HeaderUser>
                 <HeaderButton>
                     <BPButton color="warning" className="reset-btn no-wrap" onClick={showHowTo}>

@@ -9,8 +9,8 @@ type TeamListProps = {
     teamListDisplay: boolean;
     summonUser: (user: User) => void;
     setDlgTeamName: (b: boolean) => void;
-    runRoulette: () => void;
-    changeUserStatePicked: (user: User) => void;
+    // runRoulette: () => void;
+    // changeUserStatePicked: (user: User) => void;
 };
 
 const TeamList = ({
@@ -19,9 +19,9 @@ const TeamList = ({
     teamListDisplay,
     summonUser,
     setDlgTeamName,
-    runRoulette,
-    changeUserStatePicked,
-}: TeamListProps) => {
+}: // runRoulette,
+// changeUserStatePicked,
+TeamListProps) => {
     return (
         <>
             <TeamListWrapper>
@@ -39,7 +39,13 @@ const TeamList = ({
                     </TLRow>
                     <TLRow>
                         <BPButton onClick={() => setDlgTeamName(true)}>팀명 변경</BPButton>
-                        <BPButton onClick={() => runRoulette()}>이 팀에서 1명 선택</BPButton>
+                        <BPButton
+                            onClick={() => {
+                                /*runRoulette()*/
+                            }}
+                        >
+                            이 팀에서 1명 선택
+                        </BPButton>
                     </TLRow>
                     <TLRow id="rTargetTest"></TLRow>
                 </TeamListHeader>
@@ -49,32 +55,34 @@ const TeamList = ({
                     ) : (
                         teamList.map((v) => {
                             return (
-                                <TLRow>
+                                <TLRow key={`team_${v.id}`}>
                                     <a
                                         href="#none"
                                         onMouseOver={(ev) => {
-                                            document.getElementById(
-                                                "sum" + v.getUserId()
-                                            )!.style.display = "block";
+                                            document.getElementById("sum" + v.id)!.style.display =
+                                                "block";
                                         }}
                                         onMouseOut={(ev) => {
-                                            document.getElementById(
-                                                "sum" + v.getUserId()
-                                            )!.style.display = "none";
+                                            document.getElementById("sum" + v.id)!.style.display =
+                                                "none";
                                         }}
                                     >
-                                        <span onClick={() => changeUserStatePicked(v)}>
+                                        <span
+                                            onClick={() => {
+                                                /*changeUserStatePicked(v)*/
+                                            }}
+                                        >
                                             {(function () {
-                                                if (v.isPicked()) {
-                                                    return <del>{v.getUserName()}</del>;
+                                                if (v.picked) {
+                                                    return <del>{v.name}</del>;
                                                 } else {
-                                                    return v.getUserName();
+                                                    return v.name;
                                                 }
                                             })()}
                                         </span>
                                         <BPButton
                                             style={{ display: "none" }}
-                                            id={"sum" + v.getUserId()}
+                                            id={"sum" + v.id}
                                             onClick={() => summonUser(v)}
                                         >
                                             강제소환

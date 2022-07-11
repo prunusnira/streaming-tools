@@ -8,6 +8,8 @@ export const DialogOuter = styled.section<{ active: boolean }>`
     background-color: ${BGGray};
 
     position: absolute;
+    top: 0;
+    left: 0;
 
     display: flex;
     flex-direction: row;

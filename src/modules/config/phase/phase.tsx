@@ -1,9 +1,6 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { BPButton } from "../../../commonStyle/global.style";
 import { Phase } from "../../../data/phase";
-import { changePhase } from "../../../redux/banpickSlice";
-import { RootState } from "../../../redux/reducer";
 import { IBanpickData } from "../../main/useBanpickData";
 import { PhaseWrapper, Row } from "./phase.style";
 
@@ -12,8 +9,7 @@ type Props = {
 };
 
 const PhaseIndicator = ({ banpickData }: Props) => {
-    const { phase } = banpickData;
-    const dispatch = useDispatch();
+    const { phase, setPhase } = banpickData;
 
     return (
         <PhaseWrapper>
@@ -27,10 +23,7 @@ const PhaseIndicator = ({ banpickData }: Props) => {
                             <BPButton
                                 color="dark"
                                 onClick={() =>
-                                    dispatch({
-                                        type: changePhase,
-                                        payload: phase === Phase.PICK ? Phase.BAN : Phase.PICK,
-                                    })
+                                    setPhase(phase === Phase.PICK ? Phase.BAN : Phase.PICK)
                                 }
                             >
                                 강제 페이즈 변경

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Roulette from "../../data/roulette";
-import User from "../../data/user";
+import User, { emptyUser } from "../../data/user";
 
 type Params<T> = {
     list: Array<T>;
@@ -10,7 +10,7 @@ type Params<T> = {
 const useRoulette = ({ list, openUserDialog }: Params<User>) => {
     const [isRouletteRunning, setRouletteRunning] = useState(false);
     const [rouletteArray, setRouletteArray] = useState<Array<User>>([]);
-    const [rouletteUser, setRouletteUser] = useState(new User("", "", false));
+    const [rouletteUser, setRouletteUser] = useState(emptyUser);
     const [isActive, setActive] = useState(false);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const useRoulette = ({ list, openUserDialog }: Params<User>) => {
 
     const closeRoulette = () => {
         setRouletteArray([]);
-        setRouletteUser(new User("", "", false));
+        setRouletteUser(emptyUser);
         setActive(false);
     };
 

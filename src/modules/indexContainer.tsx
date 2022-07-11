@@ -9,11 +9,6 @@ import ValidContainer from "./login/validContainer";
 const IndexContainer = () => {
     const { user } = useSelector((state: RootState) => state);
 
-    useEffect(() => {
-        console.log("start");
-        console.log(user.acctok);
-    }, []);
-
     // redux의 시간 데이터 확인
     if (user.acctok !== "") {
         return <MainPage />;

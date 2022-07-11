@@ -21,7 +21,7 @@ class PickSelect extends Component<Props> {
                     <ModalBody>
                         <Row>
                             <Col className="picked-msg text-center" xs="12">
-                                {this.props.pickedMsg.getMessage()}
+                                {this.props.pickedMsg.msg}
                             </Col>
                         </Row>
                         {this.props.onRoulette ? (
@@ -30,13 +30,12 @@ class PickSelect extends Component<Props> {
                             <Fragment>
                                 <Row>
                                     <Col className="text-center" xs="12">
-                                        by {this.props.pickedMsg.getUserName()} (
-                                        {this.props.pickedMsg.getUserId()})
+                                        by {this.props.pickedMsg.name} ({this.props.pickedMsg.id})
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col className="text-center" xs="12">
-                                        at {this.props.pickedMsg.getTime()}
+                                        at {this.props.pickedMsg.time}
                                     </Col>
                                 </Row>
                             </Fragment>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Modal, ModalHeader, ModalBody, Row, Col, Input, ModalFooter, Button } from "reactstrap";
+import { BPButton } from "../../../commonStyle/global.style";
+import Popup from "../../../component/popup";
+import { TNCurrent, TNInput, TNWrapper } from "./teamNameChange.style";
 
 interface Props {
     display: boolean;
@@ -11,27 +13,28 @@ interface Props {
 const TeamNameChangeDlg = ({ display, teamName, changeTeamName, close }: Props) => {
     const [newName, setNewName] = useState("");
     return (
-        <Modal isOpen={display}>
-            <ModalHeader>팀 이름 변경</ModalHeader>
-            <ModalBody>
-                <Row>
-                    <Col xs="12">현재 팀 이름: {teamName}</Col>
-                </Row>
-                <Row>
-                    <Col xs="12">
-                        <Input
-                            type="text"
-                            value={newName}
-                            onChange={(e) => setNewName(e.target.value)}
-                        />
-                    </Col>
-                </Row>
-            </ModalBody>
-            <ModalFooter>
-                <Button onClick={() => changeTeamName(newName)}>변경</Button>
-                <Button onClick={() => close()}>취소</Button>
-            </ModalFooter>
-        </Modal>
+        <Popup
+            width={"90%"}
+            maxWidth={480}
+            active={display}
+            header={"팀 이름 변경"}
+            body={
+                <TNWrapper>
+                    <TNCurrent>현재 팀 이름: {teamName}</TNCurrent>
+                    <TNInput
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                    />
+                </TNWrapper>
+            }
+            footer={
+                <>
+                    <BPButton onClick={() => changeTeamName(newName)}>변경</BPButton>
+                    <BPButton onClick={() => close()}>취소</BPButton>
+                </>
+            }
+        />
     );
 };
 

@@ -16,7 +16,7 @@ class IRCConnect {
 
         this.acctok = acctok;
         this.loginName = loginName;
-        this.subject = new Subject(updateFunction);
+        this.subject = new Subject();
     }
 
     onMsgReceived = (ev: MessageEvent) => {

@@ -1,9 +1,9 @@
 import React from "react";
-import Team from "./team";
+import Team from "../../data/team";
 import TeamListContainer from "./teamlistContainer";
 
 describe("팀 인원 추가 후 1명 선택 테스트", () => {
-    const team = new Team(1, "Test Team");
+    // const team = new Team(1, "Test Team");
     // const teamlist = render(
     //     <TeamListContainer
     //         key="teamtest"
@@ -18,12 +18,10 @@ describe("팀 인원 추가 후 1명 선택 테스트", () => {
     //         updateTeam={() => {}}
     //     />
     // );
-
     // it('인원 추가 테스트', () => {
     //     team.addMember(new User('testuserid', 'Test User', false));
     //     expect(team.members.length).toBe(1);
     // });
-
     // it('인원 삭제(이동) 테스트', () => {
     //     team.removeMember('testuserid');
     //     expect(team.members.length).toBe(0);

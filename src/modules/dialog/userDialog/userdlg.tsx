@@ -26,7 +26,7 @@ interface Props {
 }
 
 const UserDialog = ({ team, user, nego, chat, display, use, skip, close }: Props) => {
-    if (user.getUserId() === "") return;
+    if (user.id === "") return;
     return (
         <Modal isOpen={display}>
             <ModalHeader>
@@ -35,12 +35,12 @@ const UserDialog = ({ team, user, nego, chat, display, use, skip, close }: Props
                         <img
                             alt="user-profileimg"
                             className="profile-image"
-                            src={user.getProfileUrl()}
+                            src={user.profileUrl}
                         />
                         &nbsp;
-                        <b>{user.getUserName()}</b> ({user.getUserId()}) &nbsp;
+                        <b>{user.name}</b> ({user.id}) &nbsp;
                         {(function () {
-                            if (user.isSubscriber()) return "[구독자]";
+                            if (user.subs) return "[구독자]";
                             else return "";
                         })()}
                     </Col>
@@ -65,12 +65,12 @@ const UserDialog = ({ team, user, nego, chat, display, use, skip, close }: Props
                             <CardBody>
                                 <Row className="no-wrap">
                                     <Col className="msg-time no-wrap" xs="12">
-                                        {v.getTime()}
+                                        {v.time}
                                     </Col>
                                 </Row>
                                 <Row className="no-wrap msg-row">
                                     <Col className="msg-cont no-wrap" xs="12">
-                                        {v.getMessage()}
+                                        {v.msg}
                                     </Col>
                                 </Row>
                                 {(function () {

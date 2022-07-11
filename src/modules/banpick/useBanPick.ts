@@ -1,18 +1,23 @@
 import { useState } from "react";
-import Message from "../../data/message";
-import User from "../../data/user";
-import Team from "../teamlist/team";
+import Message, { emptyMessage } from "../../data/message";
+import User, { emptyUser } from "../../data/user";
+import Team from "../../data/team";
 
-const useBanPick = (team: Team) => {
+type Props = {
+    team: Team;
+    getMember: (teamNum: number, id: string) => User;
+};
+
+const useBanPick = ({ team, getMember }: Props) => {
     const [pickList, setPickList] = useState<Array<Message>>([]);
     const [editDlg, setEditDlg] = useState(false);
-    const [editMsg, setEditMsg] = useState(new Message("", "", ""));
+    const [editMsg, setEditMsg] = useState(emptyMessage);
     const [editIdx, setEditIdx] = useState(0);
     const [removeDlg, setRemoveDlg] = useState(false);
     const [removeIdx, setRemoveIdx] = useState(-1);
     const [negoDlg, setNegoDlg] = useState(false);
-    const [negoUser, setNegoUser] = useState(new User("", "", false));
-    const [negoMessage, setNegoMessage] = useState(new Message("", "", ""));
+    const [negoUser, setNegoUser] = useState(emptyUser);
+    const [negoMessage, setNegoMessage] = useState(emptyMessage);
 
     const addNewPick = (message: Message) => {
         setPickList([...pickList, message]);
@@ -41,8 +46,8 @@ const useBanPick = (team: Team) => {
         setRemoveIdx(-1);
     };
 
-    const openNego = (message: Message) => {
-        setNegoUser(team.getMember(message.getUserId()));
+    const openNego = (teamNum: number, message: Message) => {
+        setNegoUser(getMember(teamNum, message.id));
         setNegoMessage(message);
         setNegoDlg(true);
     };

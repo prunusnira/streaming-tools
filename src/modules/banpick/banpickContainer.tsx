@@ -3,7 +3,7 @@ import { useState } from "react";
 import Message from "../../data/message";
 import User from "../../data/user";
 import UserDialog from "../dialog/userDialog/userdlg";
-import Team from "../teamlist/team";
+import Team from "../../data/team";
 import BanPickEditor from "./banpickEditor";
 import BanPickPresenter from "./banpickPresenter";
 import { BanPickRemoveModal } from "./banpickRemoveModal";
@@ -11,9 +11,10 @@ import useBanPick from "./useBanPick";
 
 interface Props {
     team: Team;
+    getMember: (teamNum: number, id: string) => User;
 }
 
-const BanPickContainer = ({ team }: Props) => {
+const BanPickContainer = ({ team, getMember }: Props) => {
     const {
         pickList,
         addNewPick,
@@ -28,13 +29,13 @@ const BanPickContainer = ({ team }: Props) => {
         negoMessage,
         openNego,
         closeNego,
-    } = useBanPick(team);
+    } = useBanPick({ team, getMember });
 
     // 밴 or 언밴 하기
     const banPick = (idx: number) => {
-        if (team.getOnePick(idx).getBanStatus()) {
-            team.getOnePick(idx).undoBan();
-            team.removeCurrentBan();
+        if (team.pickList[idx].ban) {
+            team.pickList[idx].ban = false;
+            team.cban--;
         } else {
             // 밴 하기 전에 현재 밴 수 확인
             // if (team.getCurrentBan() >= banNum) {

@@ -15,15 +15,17 @@ export class Subject implements ISubject {
     public observers: Observer[] = [];
     public updateFunction: (msg: string) => void;
 
-    constructor(updateFunction: (msg: string) => void) {
-        this.updateFunction = updateFunction;
+    constructor() {
+        this.updateFunction = (msg: string) => {};
     }
 
+    setFunction = (updateFunction: (msg: string) => void) => {
+        this.updateFunction = updateFunction;
+    };
+
     attach = (observer: Observer) => {
-        console.log("attach trial");
         if (!this.observers.includes(observer)) {
             this.observers.push(observer);
-            console.log("attached");
         }
     };
 

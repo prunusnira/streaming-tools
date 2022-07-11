@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Message from "../../data/message";
 import User from "../../data/user";
+import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
 import UserDialog from "../dialog/userDialog/userdlg";
 import useUserDlg from "../dialog/userDialog/useUserDlg";
 import { IBanpickData } from "../main/useBanpickData";
-import Team from "./team";
+import Team from "../../data/team";
 import TeamList from "./teamlist";
 import "./teamlist.css";
 import useTeamList from "./useTeamList";
@@ -12,17 +13,29 @@ import useUserPick from "./useUserPick";
 
 interface Props {
     team: Team;
+    setTeam: (t: Team) => void;
+    teamNum: number;
+    getTeamName: (teamNum: number) => string;
+    getMemberList: (teamNum: number) => User[];
+    changeTeamName: (teamNum: number, title: string) => void;
     teamListDisplay: boolean;
-    updateTeam: (team: Team, teamNum: number) => void;
 }
 
-const TeamListContainer = ({ team, teamListDisplay, updateTeam }: Props) => {
+const TeamListContainer = ({
+    team,
+    setTeam,
+    teamNum,
+    getTeamName,
+    getMemberList,
+    changeTeamName,
+    teamListDisplay,
+}: Props) => {
     const [dlgTeamName, setDlgTeamName] = useState(false);
 
-    const { teamList, runRoulette, changeTeamName, changeUserStatePicked } = useTeamList({
-        team,
-        updateTeam,
-    });
+    // const { runRoulette, changeUserStatePicked } = useTeamList({
+    //     team,
+    //     updateTeam,
+    // });
 
     const { pickedUser, setPickedUser, chatLog, setChatLog } = useUserPick();
     const { display, isNego, setNego, skip, close } = useUserDlg();
@@ -74,13 +87,25 @@ const TeamListContainer = ({ team, teamListDisplay, updateTeam }: Props) => {
     return (
         <>
             <TeamList
-                teamName={team.getName()}
-                teamList={teamList}
+                teamName={team.teamName}
+                teamList={team.members}
                 teamListDisplay={teamListDisplay}
                 summonUser={summonUser}
                 setDlgTeamName={setDlgTeamName}
-                runRoulette={runRoulette}
-                changeUserStatePicked={changeUserStatePicked}
+                // runRoulette={runRoulette}
+                // changeUserStatePicked={changeUserStatePicked}
+            />
+
+            <TeamNameChangeDlg
+                display={dlgTeamName}
+                teamName={team.teamName}
+                changeTeamName={(name: string) => {
+                    setTeam({ ...team, teamName: name });
+                    setDlgTeamName(false);
+                }}
+                close={() => {
+                    setDlgTeamName(false);
+                }}
             />
 
             {/* <UserDialog

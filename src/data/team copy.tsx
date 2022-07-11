@@ -1,13 +1,13 @@
-import Message from "../../data/message";
-import User from "../../data/user";
+import Message from "./message";
+import User, { emptyUser } from "./user";
 
-class Team {
-    private teamNum: number;
-    private name: string;
-    private members: Array<User>;
-    private picklist: Array<Message>;
-    private currentPick: number;
-    private currentBan: number;
+class TeamCP {
+    teamNum: number;
+    name: string;
+    members: Array<User>;
+    picklist: Array<Message>;
+    currentPick: number;
+    currentBan: number;
 
     constructor(team: number, name: string) {
         this.teamNum = team;
@@ -39,8 +39,8 @@ class Team {
     };
 
     getMember = (id: string): User => {
-        const check = this.members.filter((x) => x.getUserId() === id);
-        return check.length > 0 ? check[0] : new User("", "", false);
+        const check = this.members.filter((x) => x.id === id);
+        return check.length > 0 ? check[0] : emptyUser;
     };
 
     getMembers = (): User[] => {
@@ -48,13 +48,13 @@ class Team {
     };
 
     hasMember = (id: string) => {
-        return this.getMember(id).getUserId() === "" ? false : true;
+        return this.getMember(id).id === "" ? false : true;
     };
 
     removeMember = (id: string) => {
         let num = -1;
         for (let i = 0; i < this.members.length; i++) {
-            if (this.members[i].getUserId() === id) {
+            if (this.members[i].id === id) {
                 num = i;
             }
         }
@@ -62,11 +62,11 @@ class Team {
     };
 
     checkPickable = (id: string) => {
-        return this.getMember(id)?.isPicked();
+        return this.getMember(id)?.picked;
     };
 
     changePickable = (id: string) => {
-        this.getMember(id)?.setPicked();
+        // this.getMember(id)?.picked = true;
     };
 
     getPickList = (): Message[] => {
@@ -119,4 +119,4 @@ class Team {
     };
 }
 
-export default Team;
+export default TeamCP;

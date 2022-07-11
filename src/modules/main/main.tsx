@@ -27,20 +27,41 @@ const MainPage = () => {
     const {
         pageMode,
         setPageMode,
-        team1,
-        team2,
-        updateTeam,
         hideTeamList,
         setHideTeamList,
         selectedUser,
         setSelectedUser,
+        team1,
+        team2,
+        setTeam1,
+        setTeam2,
+        addMember,
+        getMember,
+        getMemberList,
+        hasMember,
+        removeMember,
+        addPick,
+        removePick,
+        getNextPick,
+        reset,
+        resetPick,
+        changeTeamName,
+        getTeamName,
     } = useMain();
 
     const { registerObserver, changeSelectedUser } = useIRC({
+        banpickData,
         team1,
         team2,
-        banpickData,
-        updateTeam,
+        setTeam1,
+        setTeam2,
+        addMember,
+        getMember,
+        hasMember,
+        removeMember,
+        addPick,
+        getNextPick,
+        resetPick,
     });
     const observer = useRef<Observer>(new Observer());
     const { speech } = useTTS();
@@ -48,7 +69,6 @@ const MainPage = () => {
     const { user } = useSelector((state: RootState) => state);
 
     useEffect(() => {
-        console.log("register observer");
         registerObserver(observer.current);
     }, []);
 
@@ -79,11 +99,16 @@ const MainPage = () => {
                                     <TeamListContainer
                                         key="team1"
                                         team={team1}
-                                        updateTeam={updateTeam}
+                                        setTeam={setTeam1}
+                                        teamNum={1}
+                                        getTeamName={getTeamName}
+                                        getMemberList={getMemberList}
+                                        changeTeamName={changeTeamName}
                                         teamListDisplay={hideTeamList}
                                     />
                                 ) : (
-                                    <BanPickContainer team={team1} />
+                                    <></>
+                                    // <BanPickContainer team={team1} getMember={getMember} />
                                 )
                             }
                         />
@@ -93,11 +118,16 @@ const MainPage = () => {
                                     <TeamListContainer
                                         key="team2"
                                         team={team2}
-                                        updateTeam={updateTeam}
+                                        setTeam={setTeam2}
+                                        teamNum={2}
+                                        getTeamName={getTeamName}
+                                        getMemberList={getMemberList}
+                                        changeTeamName={changeTeamName}
                                         teamListDisplay={hideTeamList}
                                     />
                                 ) : (
-                                    <BanPickContainer team={team2} />
+                                    <></>
+                                    // <BanPickContainer team={team2} getMember={getMember} />
                                 )
                             }
                         />

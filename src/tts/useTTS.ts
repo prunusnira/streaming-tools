@@ -14,6 +14,7 @@ const useTTS = () => {
 
     const speech = (txt: string) => {
         if (!window.speechSynthesis) {
+            console.log("no speech api");
             return;
         }
 
@@ -32,7 +33,7 @@ const useTTS = () => {
         for (let i = 0; i < voices.length; i++) {
             if (
                 voices[i].lang.indexOf(lang) >= 0 ||
-                voices[i].lang.indexOf(lang.replace("-", "_")) >= 0
+                voices[i].lang.indexOf(lang.replace("_", "-")) >= 0
             ) {
                 utterThis.voice = voices[i];
                 voiceFound = true;
@@ -40,6 +41,7 @@ const useTTS = () => {
         }
 
         if (!voiceFound) {
+            console.log("voice not found");
             return;
         }
 
