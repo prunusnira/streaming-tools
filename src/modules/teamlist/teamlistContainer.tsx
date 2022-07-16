@@ -4,41 +4,36 @@ import User from "../../data/user";
 import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
 import UserDialog from "../dialog/userDialog/userdlg";
 import useUserDlg from "../dialog/userDialog/useUserDlg";
-import { IBanpickData } from "../main/useBanpickData";
-import Team from "../../data/team";
+import Team, { emptyTeam } from "../../data/team";
 import TeamList from "./teamlist";
 import "./teamlist.css";
 import useTeamList from "./useTeamList";
-import useUserPick from "./useUserPick";
+import RouletteDialog from "../roulette/rouletteDialog";
+import useRoulette from "../roulette/useRoulette";
 
 interface Props {
     team: Team;
-    setTeam: (t: Team) => void;
-    teamNum: number;
-    getTeamName: (teamNum: number) => string;
-    getMemberList: (teamNum: number) => User[];
-    changeTeamName: (teamNum: number, title: string) => void;
+    teamList: Array<User>;
     teamListDisplay: boolean;
+    setTeamInfo: (teamNum: number, team: Team) => Promise<void>;
+    selectedUser: User | null;
+    setSelectedUser: (u: User) => void;
 }
 
-const TeamListContainer = ({
-    team,
-    setTeam,
-    teamNum,
-    getTeamName,
-    getMemberList,
-    changeTeamName,
-    teamListDisplay,
-}: Props) => {
-    const [dlgTeamName, setDlgTeamName] = useState(false);
+const TeamListContainer = ({ team, teamList, teamListDisplay, setTeamInfo }: Props) => {
+    const { teamName, changeTeamName, dialogTNChange, setTNChange } = useTeamList({
+        team,
+        teamList,
+        setTeamInfo,
+    });
 
-    // const { runRoulette, changeUserStatePicked } = useTeamList({
-    //     team,
-    //     updateTeam,
-    // });
+    const { dlgRoulette, setDlgRoulette, pickedUser, runRoulette } = useRoulette({
+        members: teamList,
+    });
 
-    const { pickedUser, setPickedUser, chatLog, setChatLog } = useUserPick();
-    const { display, isNego, setNego, skip, close } = useUserDlg();
+    const { dlgUser, isNego, setNego, chatLog, skipUser, openUserDlg, closeUserDlg } = useUserDlg({
+        selectedUser: pickedUser,
+    });
 
     // 유저 강제 소환
     const summonUser = (user: User) => {
@@ -88,36 +83,41 @@ const TeamListContainer = ({
         <>
             <TeamList
                 teamName={team.teamName}
-                teamList={team.members}
+                teamList={teamList}
                 teamListDisplay={teamListDisplay}
                 summonUser={summonUser}
-                setDlgTeamName={setDlgTeamName}
-                // runRoulette={runRoulette}
-                // changeUserStatePicked={changeUserStatePicked}
+                setDlgTN={setTNChange}
+                runRoulette={runRoulette}
             />
 
             <TeamNameChangeDlg
-                display={dlgTeamName}
-                teamName={team.teamName}
+                display={dialogTNChange}
+                teamName={teamName}
                 changeTeamName={(name: string) => {
-                    setTeam({ ...team, teamName: name });
-                    setDlgTeamName(false);
+                    changeTeamName(name);
+                    setTNChange(false);
                 }}
                 close={() => {
-                    setDlgTeamName(false);
+                    setTNChange(false);
                 }}
             />
 
-            {/* <UserDialog
+            <RouletteDialog
+                display={dlgRoulette}
+                pickedUser={pickedUser}
+                onClose={() => openUserDlg()}
+            />
+
+            <UserDialog
                 nego={isNego}
-                team={team.getTeamNum()}
-                user={pickedUser!}
+                team={team.teamNum}
+                user={pickedUser}
                 chat={chatLog}
-                display={display}
+                display={dlgUser}
                 use={(msg: Message) => {}}
-                skip={skip}
-                close={close}
-            /> */}
+                skip={skipUser}
+                close={closeUserDlg}
+            />
         </>
     );
 };

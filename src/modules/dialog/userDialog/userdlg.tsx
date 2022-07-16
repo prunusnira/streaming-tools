@@ -1,23 +1,30 @@
 import React from "react";
-import {
-    Button,
-    Card,
-    CardBody,
-    Col,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-} from "reactstrap";
+import { BPButton, MiniButton } from "../../../commonStyle/global.style";
+import Popup from "../../../component/popup";
 import Message from "../../../data/message";
 import User from "../../../data/user";
-import "./userdlg.css";
+import {
+    Title,
+    TitleIcon,
+    TitleUserName,
+    TitleUserId,
+    TitleSub,
+    TitleDesc,
+    TitleWrapper,
+    ChatBox,
+    ChatMsg,
+    ChatTime,
+    ChatWrapper,
+    ChatBtn,
+    DlgFooter,
+    ChatBoxLeft,
+    ChatTimeWrapper,
+} from "./userDlg.style";
 
 interface Props {
     nego: boolean;
     team: number;
-    user: User;
+    user: User | null;
     chat: Array<Message>;
     display: boolean;
     use: (msg: Message) => void;
@@ -26,81 +33,60 @@ interface Props {
 }
 
 const UserDialog = ({ team, user, nego, chat, display, use, skip, close }: Props) => {
-    if (user.id === "") return;
-    return (
-        <Modal isOpen={display}>
-            <ModalHeader>
-                <Row className="no-wrap">
-                    <Col className="no-wrap" xs="12">
-                        <img
-                            alt="user-profileimg"
-                            className="profile-image"
-                            src={user.profileUrl}
-                        />
-                        &nbsp;
-                        <b>{user.name}</b> ({user.id}) &nbsp;
-                        {(function () {
-                            if (user.subs) return "[구독자]";
-                            else return "";
-                        })()}
-                    </Col>
-                </Row>
-                <hr />
-                <Row className="no-wrap">
-                    <Col className="no-wrap userdlg-info text-center" xs="12">
-                        {(function () {
-                            if (!nego) {
-                                return "ⓘ 당첨자는 '!픽 내용' 혹은 '!pick 내용'을 입력하여 픽을 진행할 수 있습니다";
-                            } else {
-                                return "ⓘ 스트리머와 내용에 대해 협상하세요. 여기서는 !픽 / !pick 을 사용할 수 없습니다";
-                            }
-                        })()}
-                    </Col>
-                </Row>
-            </ModalHeader>
-            <ModalBody id="userchat" className="modelbody-userchat">
-                {chat.map((v) => {
-                    return (
-                        <Card>
-                            <CardBody>
-                                <Row className="no-wrap">
-                                    <Col className="msg-time no-wrap" xs="12">
-                                        {v.time}
-                                    </Col>
-                                </Row>
-                                <Row className="no-wrap msg-row">
-                                    <Col className="msg-cont no-wrap" xs="12">
-                                        {v.msg}
-                                    </Col>
-                                </Row>
-                                {(function () {
-                                    if (!nego) {
-                                        return (
-                                            <Row className="no-wrap msg-row">
-                                                <Col className="msg-cont no-wrap" xs="12">
-                                                    <Button
-                                                        size="sm"
-                                                        color="dark"
-                                                        onClick={() => use(v)}
-                                                    >
-                                                        이걸로 결정하기
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        );
-                                    }
-                                })()}
-                            </CardBody>
-                        </Card>
-                    );
-                })}
-            </ModalBody>
-            <ModalFooter>
-                <Button onClick={() => skip(user)}>Skip</Button>
-                <Button onClick={() => close()}>Close</Button>
-            </ModalFooter>
-        </Modal>
-    );
+    if (!user) return <></>;
+    else
+        return (
+            <Popup
+                width={"90%"}
+                maxWidth={1000}
+                active={display}
+                header={
+                    <TitleWrapper>
+                        <Title>
+                            <TitleIcon src={user.profileUrl} />
+                            <TitleUserName>{user.name}</TitleUserName>
+                            <TitleUserId>{`(${user.id})`}</TitleUserId>
+                            <TitleSub>{user.subs && "[구독자]"}</TitleSub>
+                        </Title>
+                        <TitleDesc>
+                            {nego
+                                ? "ⓘ 스트리머와 내용에 대해 협상하세요. 여기서는 !픽 / !pick 을 사용할 수 없습니다"
+                                : "ⓘ 당첨자는 '!픽 내용' 혹은 '!pick 내용'을 입력하여 픽을 진행할 수 있습니다"}
+                        </TitleDesc>
+                    </TitleWrapper>
+                }
+                body={
+                    <ChatWrapper>
+                        {chat.map((v, i) => {
+                            return (
+                                <ChatBox key={`chat_${v.id}_${i}`}>
+                                    <ChatBoxLeft>
+                                        <ChatTimeWrapper>
+                                            <ChatTime>from {v.timeInTxt}</ChatTime>
+                                            <ChatTime>now {Date.now() - v.time}</ChatTime>
+                                        </ChatTimeWrapper>
+                                        <ChatMsg>{v.msg}</ChatMsg>
+                                    </ChatBoxLeft>
+                                    {!nego && (
+                                        <ChatBtn>
+                                            <MiniButton onClick={() => use(v)}>
+                                                이걸로 결정하기
+                                            </MiniButton>
+                                        </ChatBtn>
+                                    )}
+                                </ChatBox>
+                            );
+                        })}
+                    </ChatWrapper>
+                }
+                footer={
+                    <DlgFooter>
+                        <BPButton onClick={() => skip(user)}>넘기기</BPButton>
+                        <BPButton onClick={() => close()}>닫기</BPButton>
+                    </DlgFooter>
+                }
+            />
+        );
 };
 
 export default UserDialog;

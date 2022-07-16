@@ -1,13 +1,19 @@
 import Message from "./message";
-import User from "./user";
 
 type Team = {
     teamNum: number;
     teamName: string;
-    members: Array<User>;
     pickList: Array<Message>;
     cpick: number;
     cban: number;
+};
+
+export const emptyTeam: Team = {
+    teamNum: 0,
+    teamName: "",
+    pickList: [],
+    cpick: 0,
+    cban: 0,
 };
 
 export default Team;

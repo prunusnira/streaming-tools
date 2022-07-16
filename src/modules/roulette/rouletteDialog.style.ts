@@ -1,3 +1,5 @@
 import styled from "styled-components";
 
-export const RDlgContainer = styled.section``;
+export const RBody = styled.section``;
+
+export const RFooter = styled.section``;

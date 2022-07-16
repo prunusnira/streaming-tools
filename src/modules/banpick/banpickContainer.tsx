@@ -1,12 +1,7 @@
 import React from "react";
-import { useState } from "react";
-import Message from "../../data/message";
 import User from "../../data/user";
-import UserDialog from "../dialog/userDialog/userdlg";
 import Team from "../../data/team";
 import BanPickEditor from "./banpickEditor";
-import BanPickPresenter from "./banpickPresenter";
-import { BanPickRemoveModal } from "./banpickRemoveModal";
 import useBanPick from "./useBanPick";
 
 interface Props {

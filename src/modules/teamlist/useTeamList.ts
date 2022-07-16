@@ -4,26 +4,27 @@ import Team from "../../data/team";
 
 type TeamList = {
     team: Team;
-    updateTeam: (t: Team) => void;
+    teamList: Array<User>;
+    setTeamInfo: (teamNum: number, team: Team) => Promise<void>;
 };
 
-const useTeamList = ({ team, updateTeam }: TeamList) => {
-    const [rouletteRun, setRouletteRun] = useState(false);
+const useTeamList = ({ team, teamList, setTeamInfo }: TeamList) => {
+    const [teamName, setTeamName] = useState(team.teamName);
+    const [dialogTNChange, setTNChange] = useState(false);
 
-    const runRoulette = () => {
-        setRouletteRun(true);
+    const changeTeamName = (newName: string) => {
+        team.teamName = newName;
+        setTeamInfo(team.teamNum, team);
+        setTeamName(newName);
     };
 
-    // 유저 픽 가능 유무 변경
-    // const changeUserStatePicked = (user: User) => {
-    //     if (hasMember(team, user.getUserId())) {
-    //         getMember(team, user.getUserId()).setPicked();
-    //     }
+    return {
+        teamName,
+        changeTeamName,
 
-    //     updateTeam(team);
-    // };
-
-    return { runRoulette }; //, changeUserStatePicked };
+        dialogTNChange,
+        setTNChange,
+    };
 };
 
 export default useTeamList;

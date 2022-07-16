@@ -8,9 +8,9 @@ type TeamListProps = {
     teamList: Array<User>;
     teamListDisplay: boolean;
     summonUser: (user: User) => void;
-    setDlgTeamName: (b: boolean) => void;
-    // runRoulette: () => void;
-    // changeUserStatePicked: (user: User) => void;
+
+    setDlgTN: (b: boolean) => void;
+    runRoulette: () => void;
 };
 
 const TeamList = ({
@@ -18,10 +18,10 @@ const TeamList = ({
     teamList,
     teamListDisplay,
     summonUser,
-    setDlgTeamName,
-}: // runRoulette,
-// changeUserStatePicked,
-TeamListProps) => {
+
+    setDlgTN,
+    runRoulette,
+}: TeamListProps) => {
     return (
         <>
             <TeamListWrapper>
@@ -38,10 +38,10 @@ TeamListProps) => {
                         명)
                     </TLRow>
                     <TLRow>
-                        <BPButton onClick={() => setDlgTeamName(true)}>팀명 변경</BPButton>
+                        <BPButton onClick={() => setDlgTN(true)}>팀명 변경</BPButton>
                         <BPButton
                             onClick={() => {
-                                /*runRoulette()*/
+                                runRoulette();
                             }}
                         >
                             이 팀에서 1명 선택
@@ -69,7 +69,8 @@ TeamListProps) => {
                                     >
                                         <span
                                             onClick={() => {
-                                                /*changeUserStatePicked(v)*/
+                                                // changeUserStatePicked(v);
+                                                v.picked = !v.picked;
                                             }}
                                         >
                                             {(function () {

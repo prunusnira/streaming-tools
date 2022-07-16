@@ -2,11 +2,13 @@ type Message = {
     id: string;
     name: string;
     msg: string;
-    time: string;
+    time: number;
+    timeInTxt: string;
     ban: boolean;
 };
 
-export const getFormatDate = (date: Date) => {
+export const getFormatDate = (time: number) => {
+    const date = new Date(time);
     const year = date.getFullYear().toString(); //yyyy
     const monthInNum = 1 + date.getMonth(); //M
     const month = monthInNum >= 10 ? monthInNum.toString() : "0" + monthInNum.toString(); //month 두자리로 저장
@@ -26,7 +28,8 @@ export const emptyMessage: Message = {
     id: "",
     name: "",
     msg: "",
-    time: "",
+    time: 0,
+    timeInTxt: "",
     ban: false,
 };
 

@@ -1,8 +1,32 @@
-import React from "react";
-import { RDlgContainer } from "./rouletteDialog.style";
+import React, { useEffect } from "react";
+import Popup from "../../component/popup";
+import User from "../../data/user";
+import { RBody, RFooter } from "./rouletteDialog.style";
+import useRoulette from "./useRoulette";
 
-const RouletteDialog = () => {
-    return <RDlgContainer></RDlgContainer>;
+type Props = {
+    display: boolean;
+    pickedUser: User;
+    onClose: () => void;
+};
+
+const RouletteDialog = ({ display, pickedUser, onClose }: Props) => {
+    useEffect(() => {
+        if (!display) {
+            onClose();
+        }
+    }, [display]);
+
+    return (
+        <Popup
+            width={"90%"}
+            maxWidth={480}
+            active={display}
+            header={"사용자 룰렛"}
+            body={<RBody>{pickedUser.name}</RBody>}
+            footer={<RFooter></RFooter>}
+        />
+    );
 };
 
 export default RouletteDialog;

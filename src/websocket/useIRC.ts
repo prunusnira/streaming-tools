@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-import Message, { emptyMessage } from "../data/message";
+import Message, { emptyMessage, getFormatDate } from "../data/message";
 import { Observer, Subject } from "../data/observer/observer";
 import Parser from "../data/parser";
 import User, { emptyUser } from "../data/user";
@@ -10,38 +10,37 @@ import { IBanpickData } from "../modules/main/useBanpickData";
 import Team from "../data/team";
 import { RootState } from "../redux/reducer";
 import useTTS from "../tts/useTTS";
+import useStorage from "../db/useStorage";
 
 type Props = {
     banpickData: IBanpickData;
-    team1: Team;
-    team2: Team;
-    setTeam1: (t: Team) => void;
-    setTeam2: (t: Team) => void;
-    addMember: (teamNum: number, user: User) => void;
-    getMember: (teamNum: number, id: string) => User;
-    hasMember: (teamNum: number, userId: string) => boolean;
-    removeMember: (teamNum: number, id: string) => void;
-    addPick: (teamNum: number, msg: Message) => void;
-    getNextPick: () => number;
-    resetPick: () => void;
+    hasUser: (teamNum: number, user: User) => Promise<boolean>;
+    hasUserById: (teamNum: number, id: string) => Promise<boolean>;
+    getUserById: (teamNum: number, id: string) => Promise<User>;
+    removeUser: (teamNum: number, user: User) => Promise<void>;
+    addUser: (teamNum: number, user: User) => Promise<void>;
+    getTeamInfo: (teamNum: number) => Promise<Team>;
+
+    selectedUser: User | null;
+    setSelectedUser: (u: User) => void;
+    selectedChatLog: Array<Message>;
+    setChatLog: (l: Array<Message>) => void;
 };
 
 const useIRC = ({
     banpickData,
-    team1,
-    team2,
-    setTeam1,
-    setTeam2,
-}: // addMember,
-// getMember,
-// hasMember,
-// removeMember,
-// addPick,
-// getNextPick,
-// resetPick,
-Props) => {
-    const [selectedUser, setSelectedUser] = useState<User>(emptyUser);
+    hasUser,
+    hasUserById,
+    getUserById,
+    removeUser,
+    addUser,
+    getTeamInfo,
 
+    selectedUser,
+    setSelectedUser,
+    selectedChatLog,
+    setChatLog,
+}: Props) => {
     const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
     const subject = useRef<Subject>(new Subject());
     const { acctok, loginName, clientId } = useSelector((state: RootState) => state.user);
@@ -59,13 +58,11 @@ Props) => {
     }, []);
 
     useEffect(() => {
-        console.log(`re render check ${isStarted}`);
-
         subject.current.setFunction(processMessage);
     }, [isStarted]);
 
     useEffect(() => {
-        console.log(`user updated to ${selectedUser.id}`);
+        console.log(`user updated to ${selectedUser?.id}`);
     }, [selectedUser]);
 
     const changeSelectedUser = (user: User) => {
@@ -122,6 +119,7 @@ Props) => {
         if (!isStarted) return;
 
         const msgParsed = Parser.parse(msg);
+        console.log("// parsed message");
         console.log(msgParsed);
 
         if (msgParsed.size > 0) {
@@ -142,21 +140,17 @@ Props) => {
                 name: msgParsed.get("display-name")!,
                 msg: msgParsed.get("msg")!,
                 ban: false,
-                time: "",
+                time: Date.now(),
+                timeInTxt: getFormatDate(Date.now()),
             };
 
-            console.log("// speech test");
-            speech(msg.msg);
+            console.log(msg);
 
-            if (team1.members.filter((x) => (x.id = msg.id)).length > 0) {
-                user = team1.members.filter((x) => (x.id = msg.id))[0];
-            } else if (team2.members.filter((x) => (x.id = msg.id)).length > 0) {
-                user = team2.members.filter((x) => (x.id = msg.id))[0];
-
-                // if (hasMember(1, msg.id)) {
-                //     user = getMember(1, msg.id);
-                // } else if (hasMember(2, msg.id)) {
-                //     user = getMember(2, msg.id);
+            // 소속 팀 유무 확인
+            if (await hasUserById(1, msg.id)) {
+                user = await getUserById(1, msg.id);
+            } else if (await hasUserById(2, msg.id)) {
+                user = await getUserById(2, msg.id);
             } else {
                 user = {
                     id: msgParsed.get("userid")!,
@@ -164,78 +158,44 @@ Props) => {
                     subs: isSub,
                     profileUrl: "",
                     picked: false,
-                    lastChat: msg,
+                    lastChat: emptyMessage,
                 };
             }
+
+            // 프로필 이미지 가져오기 (없을 때)
             if (user.profileUrl === "") {
                 await requestUserProfile(user!.id, acctok, clientId, (map) => {
                     user.profileUrl = map.get("profile_image_url")!;
                 });
             }
 
+            // 해당 유저의 최종 채팅 변경
+            user.lastChat = msg;
+
             // 팀 등록
             if (isEntering && (msg.msg.startsWith("!team ") || msg.msg.startsWith("!팀 "))) {
                 const teamNum = msg.msg.split(" ")[1].split("\r\n")[0];
 
                 // 이미 다른 팀에 들어가있다면 삭제함
-                console.log(msg.id);
-                console.log(team1.members.filter((x) => (x.id = msg.id)).length > 0);
-                console.log(team2.members.filter((x) => (x.id = msg.id)).length > 0);
-                // console.log(hasMember(1, msg.id));
-                // console.log(hasMember(2, msg.id));
-                // if (hasMember(1, msg.id)) {
-                if (team1.members.filter((x) => (x.id = msg.id)).length > 0) {
-                    console.log("중복 삭제 1");
-                    // removeMember(1, msg.id);
-                    let num = -1;
-                    for (let i = 0; i < team1.members.length; i++) {
-                        if (team1.members[i].id === msg.id) {
-                            num = i;
-                        }
-                    }
-                    if (num !== -1) team1.members.splice(num, 1);
-                }
-                // if (hasMember(2, msg.id)) {
-                if (team2.members.filter((x) => (x.id = msg.id)).length > 0) {
-                    console.log("중복 삭제 2");
-                    // removeMember(2, msg.id);
-                    let num = -1;
-                    for (let i = 0; i < team2.members.length; i++) {
-                        if (team2.members[i].id === msg.id) {
-                            num = i;
-                        }
-                    }
-                    if (num !== -1) team2.members.splice(num, 1);
-                }
+                teamNum === "1" && removeUser(2, user);
+                teamNum === "2" && removeUser(1, user);
 
                 if (teamNum === "1") {
                     console.log(msg.id + "가 팀 " + teamNum + "으로 등록");
-                    team1.members.push(user);
+                    addUser(1, user);
                 } else if (teamNum === "2") {
                     console.log(msg.id + "가 팀 " + teamNum + "으로 등록");
-                    team2.members.push(user);
+                    addUser(2, user);
                 }
-
-                const updateTeam1 = {
-                    ...team1,
-                    members: [...team1.members],
-                    pickList: [...team1.pickList],
-                };
-                const updateTeam2 = {
-                    ...team2,
-                    members: [...team2.members],
-                    pickList: [...team2.pickList],
-                };
-                setTeam1(updateTeam1);
-                setTeam2(updateTeam2);
             }
 
-            console.log(`selected user ${selectedUser.id}`);
             // 픽 등록
             // 검사항목: 현재 유저가 선택된 유저인가
-            if (selectedUser.id !== "" && msg.id === selectedUser.id) {
+            if (selectedUser?.id !== "" && msg.id === selectedUser?.id) {
                 if (!isNegoMode && (msg.msg.startsWith("!pick ") || msg.msg.startsWith("!픽 "))) {
-                    let nextPick = team1.cpick + team2.cpick;
+                    const team1 = await getTeamInfo(1);
+                    const team2 = await getTeamInfo(2);
+                    let nextPick = (team1 ? team1.cpick : 0) + (team2 ? team2.cpick : 0);
 
                     const pickSplited = msg.msg.split(" ");
                     let pickMsg = "";
@@ -243,33 +203,20 @@ Props) => {
                         pickMsg += pickSplited[i];
                         if (i !== pickSplited.length - 1) pickMsg += " ";
                     }
+                    msg.msg = pickMsg;
+                    nextPick++;
 
-                    let currentTeam = 0;
+                    user.picked = true;
 
-                    if (team1.members.filter((x) => (x.id = msg.id)).length > 0) {
-                        currentTeam = 1;
-                        msg.msg = pickMsg;
-
-                        // 팀에 소속되어있다면 해당 팀의 픽 리스트에 등록
-                        // addPick(1, msg);
-                        team1.pickList.push(msg);
-
-                        // 픽 한 유저는 리스트에서 더 사용할 수 없도록 처리함
-                        // getMember(1, msg.id).picked = true;
-                        team1.members.filter((x) => x.id === msg.id)[0].picked = true;
-                        nextPick++;
+                    if (await hasUser(1, user)) {
+                        const team = await getTeamInfo(1);
+                        team && team.pickList.push(msg);
                     }
-                    if (team2.members.filter((x) => (x.id = msg.id)).length > 0) {
-                        currentTeam = 2;
-                        msg.msg = pickMsg;
-                        // addPick(2, msg);
-                        team2.pickList.push(msg);
-                        // getMember(2, msg.id).picked = true;
-                        team2.members.filter((x) => x.id === msg.id)[0].picked = true;
-                        nextPick++;
+                    if (await hasUser(2, user)) {
+                        const team = await getTeamInfo(2);
+                        team && team.pickList.push(msg);
                     }
 
-                    console.log(msg.id + "(팀" + currentTeam + ") MSG: " + pickMsg);
                     speech(pickMsg);
 
                     // 현재 픽 수와 밴 간격을 계산하여 다음 페이즈를 결정
@@ -281,8 +228,8 @@ Props) => {
 
                         // 각 팀의 현재 pick도 초기화
                         // resetPick();
-                        setTeam1({ ...team1, cpick: 0 });
-                        setTeam2({ ...team2, cpick: 0 });
+                        // setTeam1({ ...team1, cpick: 0 });
+                        // setTeam2({ ...team2, cpick: 0 });
                     }
 
                     // setUserDlg(false);
@@ -294,6 +241,7 @@ Props) => {
                     // state 변경 이후 실행되어야 함
                     // scrollToBottomPick(currentTeam);
                 } else {
+                    console.log("// display");
                     console.log(msg);
                     // 메시지 받아서 디스플레이 되도록 추가
                     // currentChat.push(msg);

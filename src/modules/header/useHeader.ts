@@ -24,7 +24,8 @@ const useHeader = () => {
                 id: "",
                 name: "",
                 msg: "",
-                time: "",
+                time: 0,
+                timeInTxt: "",
                 ban: false,
             },
         };

@@ -16,10 +16,8 @@ import InnerPresenter from "../presenter/innerPresenter";
 import TeamListContainer from "../teamlist/teamlistContainer";
 import BanPickContainer from "../banpick/banpickContainer";
 import ChatPresenter from "../chat/chatPresenter";
-import PickSelect from "../pickSelect/pickSelect";
-import BanOverAlert from "../banoverAlert";
-import UserDialog from "../dialog/userDialog/userdlg";
 import useBanpickData from "./useBanpickData";
+import useStorage from "../../db/useStorage";
 
 const MainPage = () => {
     const { banpickData } = useBanpickData();
@@ -31,38 +29,41 @@ const MainPage = () => {
         setHideTeamList,
         selectedUser,
         setSelectedUser,
+        selectedChatLog,
+        setChatLog,
+    } = useMain();
+
+    const {
         team1,
         team2,
-        setTeam1,
-        setTeam2,
-        addMember,
-        getMember,
-        getMemberList,
-        hasMember,
-        removeMember,
-        addPick,
-        removePick,
-        getNextPick,
-        reset,
-        resetPick,
-        changeTeamName,
-        getTeamName,
-    } = useMain();
+        team1list,
+        team2list,
+        addUser,
+        getUser,
+        getUserById,
+        removeUser,
+        hasUser,
+        hasUserById,
+        getTeamList,
+        getTeamInfo,
+        setTeamInfo,
+    } = useStorage();
 
     const { registerObserver, changeSelectedUser } = useIRC({
         banpickData,
-        team1,
-        team2,
-        setTeam1,
-        setTeam2,
-        addMember,
-        getMember,
-        hasMember,
-        removeMember,
-        addPick,
-        getNextPick,
-        resetPick,
+        hasUser,
+        hasUserById,
+        getUserById,
+        removeUser,
+        addUser,
+        getTeamInfo,
+
+        selectedUser,
+        setSelectedUser,
+        selectedChatLog,
+        setChatLog,
     });
+
     const observer = useRef<Observer>(new Observer());
     const { speech } = useTTS();
 
@@ -99,12 +100,11 @@ const MainPage = () => {
                                     <TeamListContainer
                                         key="team1"
                                         team={team1}
-                                        setTeam={setTeam1}
-                                        teamNum={1}
-                                        getTeamName={getTeamName}
-                                        getMemberList={getMemberList}
-                                        changeTeamName={changeTeamName}
+                                        teamList={team1list}
                                         teamListDisplay={hideTeamList}
+                                        setTeamInfo={setTeamInfo}
+                                        selectedUser={selectedUser}
+                                        setSelectedUser={setSelectedUser}
                                     />
                                 ) : (
                                     <></>
@@ -118,12 +118,11 @@ const MainPage = () => {
                                     <TeamListContainer
                                         key="team2"
                                         team={team2}
-                                        setTeam={setTeam2}
-                                        teamNum={2}
-                                        getTeamName={getTeamName}
-                                        getMemberList={getMemberList}
-                                        changeTeamName={changeTeamName}
+                                        teamList={team2list}
                                         teamListDisplay={hideTeamList}
+                                        setTeamInfo={setTeamInfo}
+                                        selectedUser={selectedUser}
+                                        setSelectedUser={setSelectedUser}
                                     />
                                 ) : (
                                     <></>
