@@ -1,19 +1,34 @@
 import { useState } from "react";
+import Message from "../../data/message";
 import Roulette from "../../data/roulette";
-import User, { emptyUser } from "../../data/user";
+import User from "../../data/user";
 
 type Params<T> = {
-    members: Array<T>;
+    userList: Array<User>;
+    team1list: Array<string>;
+    team2list: Array<string>;
+    setPicked: (u: User) => void;
+    setDlgUser: (b: boolean) => void;
+    setChatList: (c: Array<Message>) => void;
 };
 
-const useRoulette = ({ members }: Params<User>) => {
+const useRoulette = ({
+    userList,
+    team1list,
+    team2list,
+    setPicked,
+    setDlgUser,
+    setChatList,
+}: Params<User>) => {
     // 룰렛
     const [dlgRoulette, setDlgRoulette] = useState(false);
-    const [pickedUser, setPickedUser] = useState<User>(emptyUser);
 
-    const runRoulette = () => {
+    const runRoulette = (teamNum: number) => {
         // 이미 선택된 유저 제외
-        const users = members.filter((x) => !x.picked);
+        const users =
+            teamNum === 1
+                ? team1list.filter((x) => userList.filter((u) => u.id === x && !u.picked))
+                : team2list.filter((x) => userList.filter((u) => u.id === x && !u.picked));
 
         // 사용자 수 검사
         if (users.length > 0) {
@@ -32,6 +47,7 @@ const useRoulette = ({ members }: Params<User>) => {
             roulette.roulette(updateRoulette);
             roulette.stop((obj: Object) => {
                 updateRoulette(users[randVal]);
+                setChatList([userList.filter((x) => x.id === users[randVal])[0].lastChat]);
                 setTimeout(closeRoulette, 1000);
             }, 3);
         } else {
@@ -41,17 +57,18 @@ const useRoulette = ({ members }: Params<User>) => {
     };
 
     const updateRoulette = (obj: Object) => {
-        setPickedUser(obj as User);
+        const user = userList.filter((x) => x.id === (obj as string))[0];
+        setPicked(user);
     };
 
     const closeRoulette = () => {
         setDlgRoulette(false);
+        setDlgUser(true);
     };
 
     return {
         dlgRoulette,
         setDlgRoulette,
-        pickedUser,
         runRoulette,
     };
 };

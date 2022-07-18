@@ -6,7 +6,7 @@ import useRoulette from "./useRoulette";
 
 type Props = {
     display: boolean;
-    pickedUser: User;
+    pickedUser: User | null;
     onClose: () => void;
 };
 
@@ -17,7 +17,7 @@ const RouletteDialog = ({ display, pickedUser, onClose }: Props) => {
         }
     }, [display]);
 
-    return (
+    return pickedUser ? (
         <Popup
             width={"90%"}
             maxWidth={480}
@@ -26,6 +26,8 @@ const RouletteDialog = ({ display, pickedUser, onClose }: Props) => {
             body={<RBody>{pickedUser.name}</RBody>}
             footer={<RFooter></RFooter>}
         />
+    ) : (
+        <></>
     );
 };
 

@@ -10,36 +10,33 @@ import { IBanpickData } from "../modules/main/useBanpickData";
 import Team from "../data/team";
 import { RootState } from "../redux/reducer";
 import useTTS from "../tts/useTTS";
-import useStorage from "../db/useStorage";
 
 type Props = {
     banpickData: IBanpickData;
-    hasUser: (teamNum: number, user: User) => Promise<boolean>;
-    hasUserById: (teamNum: number, id: string) => Promise<boolean>;
-    getUserById: (teamNum: number, id: string) => Promise<User>;
-    removeUser: (teamNum: number, user: User) => Promise<void>;
+    hasUser: (teamNum: number, id: string) => Promise<boolean>;
+    removeUser: (teamNum: number, id: string) => Promise<void>;
     addUser: (teamNum: number, user: User) => Promise<void>;
+    getUser: (teamNum: number, id: string) => Promise<User>;
+    updateUser: (user: User) => Promise<void>;
     getTeamInfo: (teamNum: number) => Promise<Team>;
 
-    selectedUser: User | null;
-    setSelectedUser: (u: User) => void;
-    selectedChatLog: Array<Message>;
-    setChatLog: (l: Array<Message>) => void;
+    picked: User;
+    chatList: Array<Message>;
+    setChatList: (l: Array<Message>) => void;
 };
 
 const useIRC = ({
     banpickData,
     hasUser,
-    hasUserById,
-    getUserById,
     removeUser,
     addUser,
+    getUser,
+    updateUser,
     getTeamInfo,
 
-    selectedUser,
-    setSelectedUser,
-    selectedChatLog,
-    setChatLog,
+    picked,
+    chatList,
+    setChatList,
 }: Props) => {
     const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
     const subject = useRef<Subject>(new Subject());
@@ -58,17 +55,12 @@ const useIRC = ({
     }, []);
 
     useEffect(() => {
-        subject.current.setFunction(processMessage);
-    }, [isStarted]);
+        console.log(picked.id);
+    }, [picked]);
 
     useEffect(() => {
-        console.log(`user updated to ${selectedUser?.id}`);
-    }, [selectedUser]);
-
-    const changeSelectedUser = (user: User) => {
-        console.log(`change user ${user.id}`);
-        setSelectedUser(user);
-    };
+        subject.current.setFunction(processMessage);
+    }, [isStarted, picked, chatList]);
 
     const onSocketOpen = (ev: Event) => {
         console.log("IRC Connected " + ev.returnValue);
@@ -76,8 +68,6 @@ const useIRC = ({
     };
 
     const connect = () => {
-        console.log("Connected to chat");
-
         socket.current.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
         socket.current.send("PASS oauth:" + acctok);
         socket.current.send("NICK " + loginName.toLowerCase());
@@ -115,12 +105,9 @@ const useIRC = ({
     };
 
     const processMessage = async (msg: string) => {
-        console.log(`process message ${isStarted}`);
         if (!isStarted) return;
 
         const msgParsed = Parser.parse(msg);
-        console.log("// parsed message");
-        console.log(msgParsed);
 
         if (msgParsed.size > 0) {
             // 메시지와 사용자 판별
@@ -144,13 +131,11 @@ const useIRC = ({
                 timeInTxt: getFormatDate(Date.now()),
             };
 
-            console.log(msg);
-
             // 소속 팀 유무 확인
-            if (await hasUserById(1, msg.id)) {
-                user = await getUserById(1, msg.id);
-            } else if (await hasUserById(2, msg.id)) {
-                user = await getUserById(2, msg.id);
+            if (await hasUser(1, msg.id)) {
+                user = await getUser(1, msg.id);
+            } else if (await hasUser(2, msg.id)) {
+                user = await getUser(2, msg.id);
             } else {
                 user = {
                     id: msgParsed.get("userid")!,
@@ -177,8 +162,8 @@ const useIRC = ({
                 const teamNum = msg.msg.split(" ")[1].split("\r\n")[0];
 
                 // 이미 다른 팀에 들어가있다면 삭제함
-                teamNum === "1" && removeUser(2, user);
-                teamNum === "2" && removeUser(1, user);
+                teamNum === "1" && removeUser(2, msg.id);
+                teamNum === "2" && removeUser(1, msg.id);
 
                 if (teamNum === "1") {
                     console.log(msg.id + "가 팀 " + teamNum + "으로 등록");
@@ -189,9 +174,8 @@ const useIRC = ({
                 }
             }
 
-            // 픽 등록
-            // 검사항목: 현재 유저가 선택된 유저인가
-            if (selectedUser?.id !== "" && msg.id === selectedUser?.id) {
+            // 선택된 사용자의 채팅 입력 처리
+            if (picked.id !== "" && msg.id === picked.id) {
                 if (!isNegoMode && (msg.msg.startsWith("!pick ") || msg.msg.startsWith("!픽 "))) {
                     const team1 = await getTeamInfo(1);
                     const team2 = await getTeamInfo(2);
@@ -208,11 +192,11 @@ const useIRC = ({
 
                     user.picked = true;
 
-                    if (await hasUser(1, user)) {
+                    if (await hasUser(1, user.id)) {
                         const team = await getTeamInfo(1);
                         team && team.pickList.push(msg);
                     }
-                    if (await hasUser(2, user)) {
+                    if (await hasUser(2, user.id)) {
                         const team = await getTeamInfo(2);
                         team && team.pickList.push(msg);
                     }
@@ -242,17 +226,18 @@ const useIRC = ({
                     // scrollToBottomPick(currentTeam);
                 } else {
                     console.log("// display");
-                    console.log(msg);
-                    // 메시지 받아서 디스플레이 되도록 추가
-                    // currentChat.push(msg);
-                    // setCurrentChat(currentChat);
-                    // scrollToBottomChat();
+                    // chatList.push(msg);
+                    // console.log(msg);
+                    console.log([...chatList, msg]);
+                    setChatList([...chatList, msg]);
                     speech(msg.msg);
                 }
             }
+
+            // 사용자 업데이트
+            updateUser(user);
         }
     };
-
     // 해당 메시지를 Pick으로 선택하기
     // const useMessage = (msg: Message) => {
     //     let nextPick = getNextPick();
@@ -290,7 +275,7 @@ const useIRC = ({
     //     // scrollToBottomPick(currentTeam);
     // };
 
-    return { registerObserver, changeSelectedUser };
+    return { registerObserver };
 };
 
 export default useIRC;

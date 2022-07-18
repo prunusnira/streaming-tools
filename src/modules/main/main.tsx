@@ -18,50 +18,60 @@ import BanPickContainer from "../banpick/banpickContainer";
 import ChatPresenter from "../chat/chatPresenter";
 import useBanpickData from "./useBanpickData";
 import useStorage from "../../db/useStorage";
+import UserDialog from "../dialog/userDialog/userdlg";
+import BanOverAlert from "../banoverAlert";
+import PickSelect from "../pickSelect/pickSelect";
+import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
+import useUserDlg from "../dialog/userDialog/useUserDlg";
+import Message from "../../data/message";
+import User from "../../data/user";
+import RouletteDialog from "../roulette/rouletteDialog";
+import useRoulette from "../roulette/useRoulette";
 
 const MainPage = () => {
     const { banpickData } = useBanpickData();
 
-    const {
-        pageMode,
-        setPageMode,
-        hideTeamList,
-        setHideTeamList,
-        selectedUser,
-        setSelectedUser,
-        selectedChatLog,
-        setChatLog,
-    } = useMain();
+    const { pageMode, setPageMode } = useMain();
+
+    const { dlgUser, setDlgUser, picked, setPicked, isNego, setNego, chatList, setChatList } =
+        useUserDlg();
 
     const {
+        userList,
         team1,
         team2,
         team1list,
         team2list,
         addUser,
-        getUser,
-        getUserById,
         removeUser,
         hasUser,
-        hasUserById,
-        getTeamList,
+        getUser,
+        updateUser,
         getTeamInfo,
         setTeamInfo,
     } = useStorage();
 
-    const { registerObserver, changeSelectedUser } = useIRC({
+    const { dlgRoulette, setDlgRoulette, runRoulette } = useRoulette({
+        userList,
+        team1list,
+        team2list,
+        setPicked,
+        setDlgUser,
+        setChatList,
+    });
+
+    const { registerObserver } = useIRC({
         banpickData,
         hasUser,
-        hasUserById,
-        getUserById,
         removeUser,
         addUser,
+        getUser,
+        updateUser,
         getTeamInfo,
 
-        selectedUser,
-        setSelectedUser,
-        selectedChatLog,
-        setChatLog,
+        picked,
+        chatList,
+        setChatList,
     });
 
     const observer = useRef<Observer>(new Observer());
@@ -99,12 +109,13 @@ const MainPage = () => {
                                 pageMode === PageMode.UserList ? (
                                     <TeamListContainer
                                         key="team1"
+                                        userList={userList}
                                         team={team1}
                                         teamList={team1list}
-                                        teamListDisplay={hideTeamList}
+                                        teamListDisplay={banpickData.showUsers}
                                         setTeamInfo={setTeamInfo}
-                                        selectedUser={selectedUser}
-                                        setSelectedUser={setSelectedUser}
+                                        runRoulette={runRoulette}
+                                        updateUser={updateUser}
                                     />
                                 ) : (
                                     <></>
@@ -117,12 +128,13 @@ const MainPage = () => {
                                 pageMode === PageMode.UserList ? (
                                     <TeamListContainer
                                         key="team2"
+                                        userList={userList}
                                         team={team2}
                                         teamList={team2list}
-                                        teamListDisplay={hideTeamList}
+                                        teamListDisplay={banpickData.showUsers}
                                         setTeamInfo={setTeamInfo}
-                                        selectedUser={selectedUser}
-                                        setSelectedUser={setSelectedUser}
+                                        runRoulette={runRoulette}
+                                        updateUser={updateUser}
                                     />
                                 ) : (
                                     <></>
@@ -136,18 +148,23 @@ const MainPage = () => {
                 <Footer />
             </MainContainer>
 
-            {/* <UserDialog
-                key="userdialog"
-                nego={currentNego}
-                team={currentUserTeam.current}
-                user={currentUser}
-                chat={currentChat}
-                display={userDlg}
-                use={useMessage}
-                skip={skipUserWindow}
-                close={closeUserWindow}
+            <UserDialog
+                key={"userdialog"}
+                nego={isNego}
+                user={picked}
+                chat={chatList}
+                display={dlgUser}
+                use={(m: Message) => {}}
+                skip={(u: User) => {}}
+                close={() => setDlgUser(false)}
             />
-            <BanOverAlert
+            <RouletteDialog
+                key={"roulette"}
+                display={dlgRoulette}
+                pickedUser={picked}
+                onClose={() => setDlgRoulette(false)}
+            />
+            {/* <BanOverAlert
                 teamName={banDlgTeamName}
                 teamNum={banDlgTeamNum}
                 alertOpen={banDlg}

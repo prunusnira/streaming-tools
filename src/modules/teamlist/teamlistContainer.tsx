@@ -1,93 +1,55 @@
-import React, { useState } from "react";
-import Message from "../../data/message";
+import React from "react";
 import User from "../../data/user";
-import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
-import UserDialog from "../dialog/userDialog/userdlg";
-import useUserDlg from "../dialog/userDialog/useUserDlg";
-import Team, { emptyTeam } from "../../data/team";
+import Team from "../../data/team";
 import TeamList from "./teamlist";
 import "./teamlist.css";
 import useTeamList from "./useTeamList";
-import RouletteDialog from "../roulette/rouletteDialog";
-import useRoulette from "../roulette/useRoulette";
+import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
 
 interface Props {
+    userList: Array<User>;
     team: Team;
-    teamList: Array<User>;
+    teamList: Array<string>;
     teamListDisplay: boolean;
     setTeamInfo: (teamNum: number, team: Team) => Promise<void>;
-    selectedUser: User | null;
-    setSelectedUser: (u: User) => void;
+    runRoulette: (tn: number) => void;
+    updateUser: (u: User) => void;
 }
 
-const TeamListContainer = ({ team, teamList, teamListDisplay, setTeamInfo }: Props) => {
-    const { teamName, changeTeamName, dialogTNChange, setTNChange } = useTeamList({
+const TeamListContainer = ({
+    userList,
+    team,
+    teamList,
+    teamListDisplay,
+    setTeamInfo,
+    runRoulette,
+    updateUser,
+}: Props) => {
+    const { teamName, changeTeamName, dialogTNChange, setTNChange, isPicked } = useTeamList({
         team,
+        userList,
         teamList,
         setTeamInfo,
     });
 
-    const { dlgRoulette, setDlgRoulette, pickedUser, runRoulette } = useRoulette({
-        members: teamList,
-    });
-
-    const { dlgUser, isNego, setNego, chatLog, skipUser, openUserDlg, closeUserDlg } = useUserDlg({
-        selectedUser: pickedUser,
-    });
-
     // 유저 강제 소환
-    const summonUser = (user: User) => {
+    const summonUser = (user: string) => {
         // 다이얼로그 열기
     };
-
-    // const selectUser = () => {
-    //     let arr = new Array<User>();
-    //     let partPickOver = false;
-
-    //     if (props.phase === 2) {
-    //         setRouletteDlg(true);
-    //         setMsg("밴 페이즈가 진행중입니다. 밴을 수행하거나 강제 페이즈 변경을 해주세요");
-    //         return;
-    //     }
-
-    //     if (props.totalPickCount >= props.pickCount * 2) {
-    //         setRouletteDlg(true);
-    //         setMsg("전체 픽 페이즈가 종료되었습니다. 결과를 확인해주세요.");
-    //     } else {
-    //         if (props.team.getCurrentPick() >= props.banInterval) {
-    //             partPickOver = true;
-    //         } else {
-    //             props.team.getMembers().map((v) => {
-    //                 if (!v.isPicked()) {
-    //                     arr.push(v);
-    //                 }
-    //             });
-    //         }
-
-    //         if (arr.length > 0) {
-    //             // 룰렛 array 저장
-    //             setRouletteArray(arr);
-    //             setRoutletteRun(true);
-    //         } else {
-    //             setRouletteDlg(true);
-    //             setMsg(
-    //                 partPickOver
-    //                     ? "팀의 현재 페이즈에서 선택 제한을 넘겼습니다"
-    //                     : "팀에 선택할 수 있는 시청자가 없습니다"
-    //             );
-    //         }
-    //     }
-    // };
 
     return (
         <>
             <TeamList
+                userList={userList}
+                teamNum={team.teamNum}
                 teamName={team.teamName}
                 teamList={teamList}
                 teamListDisplay={teamListDisplay}
                 summonUser={summonUser}
                 setDlgTN={setTNChange}
                 runRoulette={runRoulette}
+                isPicked={isPicked}
+                updateUser={updateUser}
             />
 
             <TeamNameChangeDlg
@@ -100,23 +62,6 @@ const TeamListContainer = ({ team, teamList, teamListDisplay, setTeamInfo }: Pro
                 close={() => {
                     setTNChange(false);
                 }}
-            />
-
-            <RouletteDialog
-                display={dlgRoulette}
-                pickedUser={pickedUser}
-                onClose={() => openUserDlg()}
-            />
-
-            <UserDialog
-                nego={isNego}
-                team={team.teamNum}
-                user={pickedUser}
-                chat={chatLog}
-                display={dlgUser}
-                use={(msg: Message) => {}}
-                skip={skipUser}
-                close={closeUserDlg}
             />
         </>
     );

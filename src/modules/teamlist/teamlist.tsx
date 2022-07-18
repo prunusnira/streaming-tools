@@ -4,23 +4,31 @@ import User from "../../data/user";
 import { TeamListBody, TeamListHeader, TeamListWrapper, TLRow } from "./teamlist.style";
 
 type TeamListProps = {
+    userList: Array<User>;
+    teamNum: number;
     teamName: string;
-    teamList: Array<User>;
+    teamList: Array<string>;
     teamListDisplay: boolean;
-    summonUser: (user: User) => void;
 
     setDlgTN: (b: boolean) => void;
-    runRoulette: () => void;
+    runRoulette: (tn: number) => void;
+    isPicked: (id: string) => boolean;
+    updateUser: (u: User) => void;
+    summonUser: (id: string) => void;
 };
 
 const TeamList = ({
+    userList,
+    teamNum,
     teamName,
     teamList,
     teamListDisplay,
-    summonUser,
 
     setDlgTN,
     runRoulette,
+    isPicked,
+    updateUser,
+    summonUser,
 }: TeamListProps) => {
     return (
         <>
@@ -41,7 +49,7 @@ const TeamList = ({
                         <BPButton onClick={() => setDlgTN(true)}>팀명 변경</BPButton>
                         <BPButton
                             onClick={() => {
-                                runRoulette();
+                                runRoulette(teamNum);
                             }}
                         >
                             이 팀에서 1명 선택
@@ -55,35 +63,36 @@ const TeamList = ({
                     ) : (
                         teamList.map((v) => {
                             return (
-                                <TLRow key={`team_${v.id}`}>
+                                <TLRow key={`team_${v}`}>
                                     <a
                                         href="#none"
                                         onMouseOver={(ev) => {
-                                            document.getElementById("sum" + v.id)!.style.display =
+                                            document.getElementById("sum" + v)!.style.display =
                                                 "block";
                                         }}
                                         onMouseOut={(ev) => {
-                                            document.getElementById("sum" + v.id)!.style.display =
+                                            document.getElementById("sum" + v)!.style.display =
                                                 "none";
                                         }}
                                     >
                                         <span
                                             onClick={() => {
-                                                // changeUserStatePicked(v);
-                                                v.picked = !v.picked;
+                                                const user = userList.filter((x) => x.id === v)[0];
+                                                user.picked = !user.picked;
+                                                updateUser(user);
                                             }}
                                         >
                                             {(function () {
-                                                if (v.picked) {
-                                                    return <del>{v.name}</del>;
+                                                if (isPicked(v)) {
+                                                    return <del>{v}</del>;
                                                 } else {
-                                                    return v.name;
+                                                    return v;
                                                 }
                                             })()}
                                         </span>
                                         <BPButton
                                             style={{ display: "none" }}
-                                            id={"sum" + v.id}
+                                            id={"sum" + v}
                                             onClick={() => summonUser(v)}
                                         >
                                             강제소환
