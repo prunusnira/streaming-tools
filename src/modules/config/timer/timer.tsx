@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Row, Col, Card, CardBody, ButtonGroup, Button, Input } from "reactstrap";
+import { MiniButton } from "../../../commonStyle/global.style";
 import { TimerRow, TimerValue, TimerWrapper } from "./timer.style";
 
 const Timer = () => {
@@ -72,20 +72,10 @@ const Timer = () => {
                 <TimerValue>{ms < 10 ? "0" + Math.floor(ms) : Math.floor(ms)}</TimerValue>
             </TimerRow>
             <TimerRow>
-                <ButtonGroup className="timer-control">
-                    <Button size="sm" color="dark" onClick={startTimer}>
-                        START
-                    </Button>
-                    <Button size="sm" color="dark" onClick={stopTimer}>
-                        STOP
-                    </Button>
-                    <Button size="sm" color="dark" onClick={resetTimer}>
-                        RESET
-                    </Button>
-                    <Button size="sm" color="dark" onClick={resetTimer}>
-                        SET
-                    </Button>
-                </ButtonGroup>
+                <MiniButton onClick={startTimer}>START</MiniButton>
+                <MiniButton onClick={stopTimer}>STOP</MiniButton>
+                <MiniButton onClick={resetTimer}>RESET</MiniButton>
+                <MiniButton onClick={resetTimer}>SET</MiniButton>
             </TimerRow>
         </TimerWrapper>
     );

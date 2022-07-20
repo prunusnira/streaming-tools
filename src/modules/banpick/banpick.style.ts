@@ -61,3 +61,9 @@ export const BPButtonWrapper = styled.div`
     display: flex;
     flex-direction: column;
 `;
+
+export const BPEditTxt = styled.div``;
+
+export const BPEditInput = styled.input.attrs({ type: "text" })`
+    width: 100%;
+`;

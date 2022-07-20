@@ -20,7 +20,6 @@ import useBanpickData from "./useBanpickData";
 import useStorage from "../../db/useStorage";
 import UserDialog from "../dialog/userDialog/userdlg";
 import BanOverAlert from "../banoverAlert";
-import PickSelect from "../pickSelect/pickSelect";
 import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
 import useUserDlg from "../dialog/userDialog/useUserDlg";
 import Message from "../../data/message";
