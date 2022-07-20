@@ -110,19 +110,21 @@ const useStorage = () => {
 
     const hasUser = async (teamNum: number, id: string) => {
         try {
-            const userlist = await localforage.getItem<Array<User>>(`team${teamNum}list`);
-
+            console.log(`${teamNum} ${id}`);
+            const userlist = await localforage.getItem<Array<string>>(`team${teamNum}list`);
+            console.log(userlist);
             if (!userlist) return false;
-            return userlist.filter((x) => x.id === id).length > 0 ? true : false;
+            console.log(userlist.filter((x) => x === id));
+            return userlist.filter((x) => x === id).length > 0 ? true : false;
         } catch (e) {
             console.log(e);
             return false;
         }
     };
 
-    const getUser = async (teamNum: number, id: string) => {
+    const getUser = async (id: string) => {
         try {
-            const userlist = await localforage.getItem<Array<User>>(`team${teamNum}list`);
+            const userlist = await localforage.getItem<Array<User>>(`userlist`);
 
             if (!userlist) return emptyUser;
             return userlist.filter((x) => x.id === id)[0];

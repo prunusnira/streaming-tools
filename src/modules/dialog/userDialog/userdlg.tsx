@@ -32,7 +32,7 @@ interface Props {
 }
 
 const UserDialog = ({ user, nego, chat, display, use, skip, close }: Props) => {
-    return (
+    return user ? (
         <Popup
             width={"90%"}
             maxWidth={1000}
@@ -83,6 +83,8 @@ const UserDialog = ({ user, nego, chat, display, use, skip, close }: Props) => {
                 </DlgFooter>
             }
         />
+    ) : (
+        <></>
     );
 };
 

@@ -8,10 +8,6 @@ const useUserDlg = () => {
     const [isNego, setNego] = useState(false);
     const [chatList, setChatList] = useState<Array<Message>>([]);
 
-    useEffect(() => {
-        console.log(picked.id);
-    }, [picked]);
-
     return {
         dlgUser,
         setDlgUser,

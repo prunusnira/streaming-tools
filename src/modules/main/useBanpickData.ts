@@ -28,7 +28,7 @@ const useBanpickData = () => {
 
     const [isStarted, setStart] = useState(false);
     const [isEntering, setEnter] = useState(false);
-    const [showUsers, setShow] = useState(true);
+    const [showUsers, setShow] = useState(false);
     const [isNegoMode, setNegoMode] = useState(false);
 
     const [phase, setPhase] = useState(Phase.READY);

@@ -17,6 +17,10 @@ const RouletteDialog = ({ display, pickedUser, onClose }: Props) => {
         }
     }, [display]);
 
+    useEffect(() => {
+        pickedUser ? console.log("pu") : console.log("npu");
+    }, [pickedUser]);
+
     return pickedUser ? (
         <Popup
             width={"90%"}

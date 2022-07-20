@@ -3,28 +3,33 @@ import User from "../../data/user";
 import Team from "../../data/team";
 import BanPickEditor from "./banpickEditor";
 import useBanPick from "./useBanPick";
+import useBanpickData, { IBanpickData } from "../main/useBanpickData";
+import { BanPickRemoveModal } from "./banpickRemoveModal";
+import BanPickPresenter from "./banpickPresenter";
 
 interface Props {
     team: Team;
-    getMember: (teamNum: number, id: string) => User;
+    banpickData: IBanpickData;
 }
 
-const BanPickContainer = ({ team, getMember }: Props) => {
+const BanPickContainer = ({ team, banpickData }: Props) => {
     const {
         pickList,
-        addNewPick,
-        getMessage,
         editMessage,
         closeEdit,
         removeMessage,
+        openRemove,
+        closeRemove,
         editDlg,
         editMsg,
         editIdx,
+        removeDlg,
+        removeIdx,
         negoUser,
         negoMessage,
         openNego,
         closeNego,
-    } = useBanPick({ team, getMember });
+    } = useBanPick({ team });
 
     // 밴 or 언밴 하기
     const banPick = (idx: number) => {
@@ -33,13 +38,13 @@ const BanPickContainer = ({ team, getMember }: Props) => {
             team.cban--;
         } else {
             // 밴 하기 전에 현재 밴 수 확인
-            // if (team.getCurrentBan() >= banNum) {
-            //     // 밴 횟수 초과 상태
-            //     banOverAlertOpen(team.getName(), team.getTeamNum());
-            // } else {
-            //     team.getOnePick(idx).setBan();
-            //     team.addCurrentBan();
-            // }
+            if (team.cban >= banpickData.turnBan) {
+                // 밴 횟수 초과 상태 알림
+                // banOverAlertOpen(team.teamName, team.teamNum);
+            } else {
+                team.pickList[idx].ban = true;
+                team.cban++;
+            }
         }
 
         // 다음 페이즈 결정
@@ -60,15 +65,15 @@ const BanPickContainer = ({ team, getMember }: Props) => {
 
     return (
         <>
-            {/* <BanPickPresenter
+            <BanPickPresenter
                 pickList={pickList}
-                teamName={team.getName()}
-                teamNum={team.getTeamNum()}
-                edit={changeEditMsg}
-                openRemove={openRemovalPickModal}
+                teamName={team.teamName}
+                teamNum={team.teamNum}
+                edit={editMessage}
+                openRemove={openRemove}
                 ban={banPick}
                 nego={openNego}
-            /> */}
+            />
             <BanPickEditor
                 team={team}
                 msg={editMsg}
@@ -76,20 +81,12 @@ const BanPickContainer = ({ team, getMember }: Props) => {
                 idx={editIdx}
                 close={closeEdit}
             />
-            {/* <BanPickRemoveModal
+            <BanPickRemoveModal
                 removeDlg={removeDlg}
                 selected={removeIdx}
-                removePick={removePick}
+                removePick={removeMessage}
                 close={closeRemove}
             />
-            <UserDialog
-                nego={true}
-                team={team.getTeamNum()}
-                user={negoUser}
-                chat={[negoMessage]}
-                display={false}
-                use={() => {}}
-            /> */}
         </>
     );
 };

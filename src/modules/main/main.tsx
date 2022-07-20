@@ -68,10 +68,12 @@ const MainPage = () => {
         getUser,
         updateUser,
         getTeamInfo,
+        setTeamInfo,
 
         picked,
         chatList,
         setChatList,
+        setDlgUser,
     });
 
     const observer = useRef<Observer>(new Observer());
@@ -118,8 +120,7 @@ const MainPage = () => {
                                         updateUser={updateUser}
                                     />
                                 ) : (
-                                    <></>
-                                    // <BanPickContainer team={team1} getMember={getMember} />
+                                    <BanPickContainer team={team1} banpickData={banpickData} />
                                 )
                             }
                         />
@@ -137,8 +138,7 @@ const MainPage = () => {
                                         updateUser={updateUser}
                                     />
                                 ) : (
-                                    <></>
-                                    // <BanPickContainer team={team2} getMember={getMember} />
+                                    <BanPickContainer team={team2} banpickData={banpickData} />
                                 )
                             }
                         />

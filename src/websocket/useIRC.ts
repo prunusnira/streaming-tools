@@ -16,13 +16,15 @@ type Props = {
     hasUser: (teamNum: number, id: string) => Promise<boolean>;
     removeUser: (teamNum: number, id: string) => Promise<void>;
     addUser: (teamNum: number, user: User) => Promise<void>;
-    getUser: (teamNum: number, id: string) => Promise<User>;
+    getUser: (id: string) => Promise<User>;
     updateUser: (user: User) => Promise<void>;
     getTeamInfo: (teamNum: number) => Promise<Team>;
+    setTeamInfo: (teamNum: number, team: Team) => void;
 
     picked: User;
     chatList: Array<Message>;
     setChatList: (l: Array<Message>) => void;
+    setDlgUser: (b: boolean) => void;
 };
 
 const useIRC = ({
@@ -33,10 +35,12 @@ const useIRC = ({
     getUser,
     updateUser,
     getTeamInfo,
+    setTeamInfo,
 
     picked,
     chatList,
     setChatList,
+    setDlgUser,
 }: Props) => {
     const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
     const subject = useRef<Subject>(new Subject());
@@ -50,13 +54,7 @@ const useIRC = ({
         socket.current.onmessage = onMsgReceived;
         socket.current.onerror = onError;
         socket.current.onclose = onSocketClose;
-
-        // subject.current.setFunction(processMessage);
     }, []);
-
-    useEffect(() => {
-        console.log(picked.id);
-    }, [picked]);
 
     useEffect(() => {
         subject.current.setFunction(processMessage);
@@ -110,9 +108,6 @@ const useIRC = ({
         const msgParsed = Parser.parse(msg);
 
         if (msgParsed.size > 0) {
-            // 메시지와 사용자 판별
-            let user = emptyUser;
-
             // 뱃지 검사해서 subscriber 확인
             const badges = msgParsed.get("badges")!.split(",");
             let isSub = false;
@@ -131,12 +126,10 @@ const useIRC = ({
                 timeInTxt: getFormatDate(Date.now()),
             };
 
+            let user = await getUser(msg.id);
             // 소속 팀 유무 확인
-            if (await hasUser(1, msg.id)) {
-                user = await getUser(1, msg.id);
-            } else if (await hasUser(2, msg.id)) {
-                user = await getUser(2, msg.id);
-            } else {
+            if (user.id === "") {
+                console.log("// new user");
                 user = {
                     id: msgParsed.get("userid")!,
                     name: msgParsed.get("display-name")!,
@@ -193,12 +186,13 @@ const useIRC = ({
                     user.picked = true;
 
                     if (await hasUser(1, user.id)) {
-                        const team = await getTeamInfo(1);
-                        team && team.pickList.push(msg);
-                    }
-                    if (await hasUser(2, user.id)) {
-                        const team = await getTeamInfo(2);
-                        team && team.pickList.push(msg);
+                        console.log("// team 1에 있음");
+                        setTeamInfo(1, { ...team1, pickList: [...team1.pickList, msg] });
+                    } else if (await hasUser(2, user.id)) {
+                        console.log("// team 2에 있음");
+                        setTeamInfo(2, { ...team2, pickList: [...team2.pickList, msg] });
+                    } else {
+                        console.log("// 아무 팀에도 없음");
                     }
 
                     speech(pickMsg);
@@ -212,11 +206,9 @@ const useIRC = ({
 
                         // 각 팀의 현재 pick도 초기화
                         // resetPick();
-                        // setTeam1({ ...team1, cpick: 0 });
-                        // setTeam2({ ...team2, cpick: 0 });
                     }
 
-                    // setUserDlg(false);
+                    setDlgUser(false);
                     // setCurrentUser(new User("", "", false));
                     // setCurrentChat(new Array<Message>());
                     // setPhase(nextPhase);
@@ -226,9 +218,6 @@ const useIRC = ({
                     // scrollToBottomPick(currentTeam);
                 } else {
                     console.log("// display");
-                    // chatList.push(msg);
-                    // console.log(msg);
-                    console.log([...chatList, msg]);
                     setChatList([...chatList, msg]);
                     speech(msg.msg);
                 }
