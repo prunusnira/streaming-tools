@@ -2,6 +2,7 @@ import { useState } from "react";
 import Message from "../../data/message";
 import Roulette from "../../data/roulette";
 import User from "../../data/user";
+import { IAlertDialog } from "../dialog/alertDialog/useAlertDialog";
 
 type Params<T> = {
     userList: Array<User>;
@@ -10,6 +11,8 @@ type Params<T> = {
     setPicked: (u: User) => void;
     setDlgUser: (b: boolean) => void;
     setChatList: (c: Array<Message>) => void;
+    setAlertDisplay: (b: boolean) => void;
+    setupAlertDialog: ({ title, body, btnOK }: IAlertDialog) => void;
 };
 
 const useRoulette = ({
@@ -19,6 +22,8 @@ const useRoulette = ({
     setPicked,
     setDlgUser,
     setChatList,
+    setAlertDisplay,
+    setupAlertDialog,
 }: Params<User>) => {
     // 룰렛
     const [dlgRoulette, setDlgRoulette] = useState(false);
@@ -64,7 +69,12 @@ const useRoulette = ({
             }, 3);
         } else {
             // alert 표기
-            console.log("이용 가능한 인원 없음");
+            setupAlertDialog({
+                title: "ⓘ 사용자 룰렛 알림",
+                body: "이 팀에 이용 가능한 인원이 없습니다",
+                btnOK: "확인",
+            });
+            setAlertDisplay(true);
         }
     };
 

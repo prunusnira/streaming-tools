@@ -26,8 +26,8 @@ interface Props {
     user: User;
     chat: Array<Message>;
     display: boolean;
-    use: (msg: Message) => void;
-    skip: (user: User) => void;
+    use: (idx: number) => void;
+    skip: () => void;
     close: () => void;
 }
 
@@ -66,7 +66,7 @@ const UserDialog = ({ user, nego, chat, display, use, skip, close }: Props) => {
                                 </ChatBoxLeft>
                                 {!nego && (
                                     <ChatBtn>
-                                        <MiniButton onClick={() => use(v)}>
+                                        <MiniButton onClick={() => use(i)}>
                                             이걸로 결정하기
                                         </MiniButton>
                                     </ChatBtn>
@@ -78,7 +78,7 @@ const UserDialog = ({ user, nego, chat, display, use, skip, close }: Props) => {
             }
             footer={
                 <DlgFooter>
-                    <BPButton onClick={() => skip(user)}>넘기기</BPButton>
+                    <BPButton onClick={() => skip()}>넘기기</BPButton>
                     <BPButton onClick={() => close()}>닫기</BPButton>
                 </DlgFooter>
             }

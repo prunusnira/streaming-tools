@@ -1,12 +1,67 @@
 import { useEffect, useState } from "react";
 import Message from "../../../data/message";
+import Team from "../../../data/team";
 import User, { emptyUser } from "../../../data/user";
 
-const useUserDlg = () => {
+type Props = {
+    team1: Team;
+    team2: Team;
+    team1list: Array<string>;
+    team2list: Array<string>;
+    userList: Array<User>;
+    setTeamInfo: (tn: number, t: Team) => void;
+    updateUser: (user: User) => void;
+};
+
+const useUserDlg = ({
+    team1,
+    team2,
+    team1list,
+    team2list,
+    userList,
+    setTeamInfo,
+    updateUser,
+}: Props) => {
     const [dlgUser, setDlgUser] = useState(false);
     const [picked, setPicked] = useState<User>(emptyUser);
     const [isNego, setNego] = useState(false);
     const [chatList, setChatList] = useState<Array<Message>>([]);
+
+    const useMessage = (idx: number) => {
+        if (picked) {
+            // 어디 포함되었는지 확인 한 후 해당 팀 picklist에 추가
+            const msg = chatList[idx];
+            const team = checkTeam(msg.id);
+            if (team === 1) {
+                team1.pickList.push(msg);
+                setTeamInfo(1, team1);
+            } else if (team === 2) {
+                team2.pickList.push(msg);
+                setTeamInfo(2, team2);
+            }
+            const user = userList.filter((x) => x.id === msg.id)[0];
+            user.picked = true;
+            updateUser(user);
+            setDlgUser(false);
+        }
+    };
+
+    const skipMessage = () => {
+        if (picked) {
+            const user = userList.filter((x) => x.id === picked.id)[0];
+            user.picked = true;
+            updateUser(user);
+            setDlgUser(false);
+        }
+    };
+
+    const checkTeam = (id: string) => {
+        return team1list.filter((x) => x === id).length > 0
+            ? 1
+            : team2list.filter((x) => x === id).length > 0
+            ? 2
+            : 0;
+    };
 
     return {
         dlgUser,
@@ -17,6 +72,9 @@ const useUserDlg = () => {
         setNego,
         chatList,
         setChatList,
+
+        useMessage,
+        skipMessage,
     };
 };
 

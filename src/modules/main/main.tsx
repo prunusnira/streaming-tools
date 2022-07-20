@@ -27,14 +27,13 @@ import Message from "../../data/message";
 import User from "../../data/user";
 import RouletteDialog from "../roulette/rouletteDialog";
 import useRoulette from "../roulette/useRoulette";
+import AlertDialog from "../dialog/alertDialog/alertDialog";
+import useAlertDialog from "../dialog/alertDialog/useAlertDialog";
 
 const MainPage = () => {
     const { banpickData } = useBanpickData();
 
     const { pageMode, setPageMode } = useMain();
-
-    const { dlgUser, setDlgUser, picked, setPicked, isNego, setNego, chatList, setChatList } =
-        useUserDlg();
 
     const {
         userList,
@@ -51,6 +50,30 @@ const MainPage = () => {
         setTeamInfo,
     } = useStorage();
 
+    const { alertDisplay, alertTitle, alertBody, alertBtn, setAlertDisplay, setupAlertDialog } =
+        useAlertDialog();
+
+    const {
+        dlgUser,
+        setDlgUser,
+        picked,
+        setPicked,
+        isNego,
+        setNego,
+        chatList,
+        setChatList,
+        useMessage,
+        skipMessage,
+    } = useUserDlg({
+        team1,
+        team2,
+        team1list,
+        team2list,
+        userList,
+        setTeamInfo,
+        updateUser,
+    });
+
     const { dlgRoulette, setDlgRoulette, runRoulette } = useRoulette({
         userList,
         team1list,
@@ -58,6 +81,8 @@ const MainPage = () => {
         setPicked,
         setDlgUser,
         setChatList,
+        setAlertDisplay,
+        setupAlertDialog,
     });
 
     const { registerObserver } = useIRC({
@@ -154,8 +179,8 @@ const MainPage = () => {
                 user={picked}
                 chat={chatList}
                 display={dlgUser}
-                use={(m: Message) => {}}
-                skip={(u: User) => {}}
+                use={useMessage}
+                skip={skipMessage}
                 close={() => setDlgUser(false)}
             />
             <RouletteDialog
@@ -163,6 +188,13 @@ const MainPage = () => {
                 display={dlgRoulette}
                 pickedUser={picked}
                 onClose={() => setDlgRoulette(false)}
+            />
+            <AlertDialog
+                display={alertDisplay}
+                title={alertTitle}
+                body={alertBody}
+                btnOK={alertBtn}
+                setAlertDisplay={setAlertDisplay}
             />
             {/* <BanOverAlert
                 teamName={banDlgTeamName}
