@@ -127,7 +127,9 @@ const useStorage = () => {
             const userlist = await localforage.getItem<Array<User>>(`userlist`);
 
             if (!userlist) return emptyUser;
-            return userlist.filter((x) => x.id === id)[0];
+            return userlist.filter((x) => x.id === id).length === 0
+                ? emptyUser
+                : userlist.filter((x) => x.id === id)[0];
         } catch (e) {
             console.log(e);
             return emptyUser;

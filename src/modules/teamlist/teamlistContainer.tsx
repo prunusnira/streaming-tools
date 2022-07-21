@@ -2,7 +2,6 @@ import React from "react";
 import User from "../../data/user";
 import Team from "../../data/team";
 import TeamList from "./teamlist";
-import "./teamlist.css";
 import useTeamList from "./useTeamList";
 import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
 

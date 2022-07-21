@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MiniButton } from "../../../commonStyle/global.style";
 import { TimerRow, TimerValue, TimerWrapper } from "./timer.style";
+import TimerWorkerScript from "./timer.worker";
 
 const Timer = () => {
     const [min, setMin] = useState(0);
@@ -12,17 +13,18 @@ const Timer = () => {
     const [time, setTime] = useState(0);
     const [timerObjectId, setObjectId] = useState<NodeJS.Timeout | null>(null);
     const [timerUpDown, setTimerUpDown] = useState(false);
-    const worker = useRef<Worker>(
-        new Worker(`${process.env.REACT_APP_PUBLIC_URL}/timer/timerWorker.js`)
-    );
+    // const worker = useRef<Worker>(
+    //     new Worker(`${process.env.REACT_APP_PUBLIC_URL}/worker/timer.worker.js`)
+    // );
+    const worker = useRef<Worker>(new Worker(TimerWorkerScript));
 
     useEffect(() => {
         worker.current.onmessage = (ev) => {
             // 시간 받아서 업데이트
             const time = ev.data;
-            setMin(time / 100 / 60);
-            setSec((time / 100) % 60);
-            setMs(time % 100);
+            setMin(time / 60);
+            setSec(time % 60);
+            // setMs(time % 10);
         };
     }, []);
 
@@ -58,8 +60,8 @@ const Timer = () => {
     };
 
     const updateTime = () => {
-        const timeval = min * 60 * 100 + sec * 100 + ms;
-        worker.current.postMessage("change " + timeval.toString());
+        const timeval = min * 60 + sec; // + ms;
+        // worker.current.postMessage("change " + timeval.toString());
     };
 
     return (
@@ -68,14 +70,13 @@ const Timer = () => {
                 <TimerValue>{min < 10 ? "0" + Math.floor(min) : Math.floor(min)}</TimerValue>
                 <TimerValue>:</TimerValue>
                 <TimerValue>{sec < 10 ? "0" + Math.floor(sec) : Math.floor(sec)}</TimerValue>
-                <TimerValue>:</TimerValue>
-                <TimerValue>{ms < 10 ? "0" + Math.floor(ms) : Math.floor(ms)}</TimerValue>
+                {/* <TimerValue>.</TimerValue>
+                <TimerValue>{Math.floor(ms)}</TimerValue> */}
             </TimerRow>
             <TimerRow>
                 <MiniButton onClick={startTimer}>START</MiniButton>
                 <MiniButton onClick={stopTimer}>STOP</MiniButton>
                 <MiniButton onClick={resetTimer}>RESET</MiniButton>
-                <MiniButton onClick={resetTimer}>SET</MiniButton>
             </TimerRow>
         </TimerWrapper>
     );

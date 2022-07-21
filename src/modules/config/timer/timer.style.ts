@@ -4,6 +4,8 @@ export const TimerWrapper = styled.section`
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 70px;
 `;
 

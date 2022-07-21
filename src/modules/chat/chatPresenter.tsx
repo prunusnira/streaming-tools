@@ -1,6 +1,4 @@
 import React from "react";
-
-import "./chat.css";
 import { ChatContainer } from "./chat.style";
 
 interface Props {

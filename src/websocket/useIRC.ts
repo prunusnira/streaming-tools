@@ -127,6 +127,8 @@ const useIRC = ({
             };
 
             let user = await getUser(msg.id);
+            console.log(msg.id);
+            console.log(user);
             // 소속 팀 유무 확인
             if (user.id === "") {
                 console.log("// new user");
