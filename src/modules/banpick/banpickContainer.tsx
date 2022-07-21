@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import User from "../../data/user";
 import Team from "../../data/team";
 import BanPickEditor from "./banpickEditor";
@@ -38,6 +38,7 @@ const BanPickContainer = ({
     setupAlertDialog,
     runRoulette,
 }: Props) => {
+    const [_, forceUpdate] = useState(0);
     const {
         editMessage,
         closeEdit,
@@ -53,10 +54,11 @@ const BanPickContainer = ({
 
     // 밴 or 언밴 하기
     const banPick = (idx: number) => {
+        const cteam = team;
         if (team.pickList[idx].ban) {
-            team.pickList[idx].ban = false;
-            team.cban--;
-            setTeamInfo(team.teamNum, team);
+            cteam.pickList[idx].ban = false;
+            cteam.cban--;
+            setTeamInfo(team.teamNum, cteam);
         } else {
             // 밴 하기 전에 현재 밴 수 확인
             if (team.cban >= banpickData.turnBan) {
@@ -68,11 +70,12 @@ const BanPickContainer = ({
                 });
                 setAlertDisplay(true);
             } else {
-                team.pickList[idx].ban = true;
-                team.cban++;
-                setTeamInfo(team.teamNum, team);
+                cteam.pickList[idx].ban = true;
+                cteam.cban++;
+                setTeamInfo(team.teamNum, cteam);
             }
         }
+        forceUpdate((prevState) => prevState + 1);
     };
 
     // 아래로 내리기

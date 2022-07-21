@@ -76,7 +76,7 @@ const useIRC = ({
     };
 
     const onMsgReceived = (ev: MessageEvent) => {
-        console.log(`messge get ${ev.data}`);
+        // console.log(`messge get ${ev.data}`);
         if (ev.data !== undefined) {
             const msg: string = ev.data;
 
@@ -130,8 +130,6 @@ const useIRC = ({
             };
 
             let user = await getUser(msg.id);
-            console.log(msg.id);
-            console.log(user);
             // 소속 팀 유무 확인
             if (user.id === "") {
                 user = {

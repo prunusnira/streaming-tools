@@ -42,7 +42,6 @@ export class Subject implements ISubject {
     };
 
     updateMessage = (msg: string) => {
-        console.log("update message");
         this.msg = msg;
     };
 }

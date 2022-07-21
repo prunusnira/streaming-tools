@@ -14,7 +14,6 @@ const requestUserProfile = (
             },
         })
         .then((res) => {
-            console.log(res);
             const data = res.data;
             if (data !== null || data !== undefined) {
                 // map으로 만듦

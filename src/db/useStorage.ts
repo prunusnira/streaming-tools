@@ -22,7 +22,6 @@ const useStorage = () => {
                 cpick: 0,
                 cban: 0,
             };
-            console.log("team1 init");
             setTeamInfo(1, team1);
 
             const team2 = {
@@ -32,7 +31,6 @@ const useStorage = () => {
                 cpick: 0,
                 cban: 0,
             };
-            console.log("team2 init");
             setTeamInfo(2, team2);
         };
         initialize();
@@ -40,7 +38,6 @@ const useStorage = () => {
 
     const getTeamInfo = async (teamNum: number) => {
         try {
-            console.log("// team info");
             const team = await localforage.getItem<Team>(`team${teamNum}`);
             if (team) return team;
             else return emptyTeam;
@@ -110,11 +107,8 @@ const useStorage = () => {
 
     const hasUser = async (teamNum: number, id: string) => {
         try {
-            console.log(`${teamNum} ${id}`);
             const userlist = await localforage.getItem<Array<string>>(`team${teamNum}list`);
-            console.log(userlist);
             if (!userlist) return false;
-            console.log(userlist.filter((x) => x === id));
             return userlist.filter((x) => x === id).length > 0 ? true : false;
         } catch (e) {
             console.log(e);
