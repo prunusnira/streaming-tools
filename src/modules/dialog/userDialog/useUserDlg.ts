@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import Message from "../../../data/message";
+import { Phase } from "../../../data/phase";
 import Team from "../../../data/team";
 import User, { emptyUser } from "../../../data/user";
+import { IBanpickData } from "../../main/useBanpickData";
 
 type Props = {
     team1: Team;
@@ -9,6 +11,7 @@ type Props = {
     team1list: Array<string>;
     team2list: Array<string>;
     userList: Array<User>;
+    banpickData: IBanpickData;
     setTeamInfo: (tn: number, t: Team) => void;
     updateUser: (user: User) => void;
 };
@@ -19,6 +22,7 @@ const useUserDlg = ({
     team1list,
     team2list,
     userList,
+    banpickData,
     setTeamInfo,
     updateUser,
 }: Props) => {
@@ -33,11 +37,33 @@ const useUserDlg = ({
             const msg = chatList[idx];
             const team = checkTeam(msg.id);
             if (team === 1) {
-                team1.pickList.push(msg);
-                setTeamInfo(1, team1);
+                team1.cpick++;
+
+                if (team1.cpick + team2.cpick >= banpickData.turnPick * 2) {
+                    banpickData.setPhase(Phase.BAN);
+                    setTeamInfo(1, {
+                        ...team1,
+                        pickList: [...team1.pickList, msg],
+                        cpick: 0,
+                    });
+                    setTeamInfo(2, { ...team2, cpick: 0 });
+                } else {
+                    setTeamInfo(1, { ...team1, pickList: [...team1.pickList, msg] });
+                }
             } else if (team === 2) {
-                team2.pickList.push(msg);
-                setTeamInfo(2, team2);
+                team2.cpick++;
+
+                if (team1.cpick + team2.cpick >= banpickData.turnPick * 2) {
+                    banpickData.setPhase(Phase.BAN);
+                    setTeamInfo(1, { ...team1, cpick: 0 });
+                    setTeamInfo(2, {
+                        ...team2,
+                        pickList: [...team2.pickList, msg],
+                        cpick: 0,
+                    });
+                } else {
+                    setTeamInfo(2, { ...team2, pickList: [...team2.pickList, msg] });
+                }
             }
             const user = userList.filter((x) => x.id === msg.id)[0];
             user.picked = true;

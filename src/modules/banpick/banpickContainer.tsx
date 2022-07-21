@@ -6,13 +6,36 @@ import useBanPick from "./useBanPick";
 import useBanpickData, { IBanpickData } from "../main/useBanpickData";
 import { BanPickRemoveModal } from "./banpickRemoveModal";
 import BanPickPresenter from "./banpickPresenter";
+import Message from "../../data/message";
+import { IAlertDialog } from "../dialog/alertDialog/useAlertDialog";
 
 interface Props {
+    userList: Array<User>;
     team: Team;
+    teamList: Array<string>;
     banpickData: IBanpickData;
+    setTeamInfo: (tn: number, team: Team) => void;
+    setDlgUser: (b: boolean) => void;
+    setPicked: (u: User) => void;
+    setChatList: (m: Array<Message>) => void;
+    setNego: (b: boolean) => void;
+    setAlertDisplay: (b: boolean) => void;
+    setupAlertDialog: (d: IAlertDialog) => void;
 }
 
-const BanPickContainer = ({ team, banpickData }: Props) => {
+const BanPickContainer = ({
+    userList,
+    team,
+    teamList,
+    banpickData,
+    setTeamInfo,
+    setDlgUser,
+    setPicked,
+    setChatList,
+    setNego,
+    setAlertDisplay,
+    setupAlertDialog,
+}: Props) => {
     const {
         pickList,
         editMessage,
@@ -25,10 +48,6 @@ const BanPickContainer = ({ team, banpickData }: Props) => {
         editIdx,
         removeDlg,
         removeIdx,
-        negoUser,
-        negoMessage,
-        openNego,
-        closeNego,
     } = useBanPick({ team });
 
     // 밴 or 언밴 하기
@@ -36,19 +55,23 @@ const BanPickContainer = ({ team, banpickData }: Props) => {
         if (team.pickList[idx].ban) {
             team.pickList[idx].ban = false;
             team.cban--;
+            setTeamInfo(team.teamNum, team);
         } else {
             // 밴 하기 전에 현재 밴 수 확인
             if (team.cban >= banpickData.turnBan) {
                 // 밴 횟수 초과 상태 알림
-                // banOverAlertOpen(team.teamName, team.teamNum);
+                setupAlertDialog({
+                    title: "밴 횟수 초과 알림",
+                    body: "이번 페이즈에서 이 팀에 대해 밴을 할 수 있는 횟수를 초과했습니다.",
+                    btnOK: "확인",
+                });
+                setAlertDisplay(true);
             } else {
                 team.pickList[idx].ban = true;
                 team.cban++;
+                setTeamInfo(team.teamNum, team);
             }
         }
-
-        // 다음 페이즈 결정
-        // phaseChange();
     };
 
     // 아래로 내리기
@@ -63,12 +86,21 @@ const BanPickContainer = ({ team, banpickData }: Props) => {
         )!.scrollHeight;
     };
 
+    const openNego = (msg: Message) => {
+        const user = userList.filter((x) => x.id === msg.id)[0];
+        setPicked(user);
+        setNego(true);
+        setChatList([msg]);
+        setDlgUser(true);
+    };
+
     return (
         <>
             <BanPickPresenter
                 pickList={pickList}
-                teamName={team.teamName}
-                teamNum={team.teamNum}
+                team={team}
+                teamList={teamList}
+                banpickData={banpickData}
                 edit={editMessage}
                 openRemove={openRemove}
                 ban={banPick}

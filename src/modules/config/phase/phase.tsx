@@ -18,17 +18,19 @@ const PhaseIndicator = ({ banpickData }: Props) => {
                     return <Row>GET READY</Row>;
                 } else {
                     return (
-                        <Row>
-                            {phase === Phase.PICK ? "PICK" : "BAN"} PHASE
-                            <BPButton
-                                color="dark"
-                                onClick={() =>
-                                    setPhase(phase === Phase.PICK ? Phase.BAN : Phase.PICK)
-                                }
-                            >
-                                강제 페이즈 변경
-                            </BPButton>
-                        </Row>
+                        <>
+                            <Row>{phase === Phase.PICK ? "PICK" : "BAN"} PHASE</Row>
+                            <Row>
+                                <BPButton
+                                    color="dark"
+                                    onClick={() =>
+                                        setPhase(phase === Phase.PICK ? Phase.BAN : Phase.PICK)
+                                    }
+                                >
+                                    강제 페이즈 변경
+                                </BPButton>
+                            </Row>
+                        </>
                     );
                 }
             })()}

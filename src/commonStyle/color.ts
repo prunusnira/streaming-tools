@@ -5,4 +5,4 @@ export const Gray = "rgb(127, 127, 127)";
 export const LightGray = "rgb(230, 230, 230)";
 export const Dark = "rgb(30, 30, 30)";
 export const Orange = "rgb(255, 160, 28)";
-export const BGDark = "rgb(33, 2, 24)";
+export const BGDark = "rgb(3, 4, 21)";

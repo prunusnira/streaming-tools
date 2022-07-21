@@ -1,5 +1,6 @@
 import React from "react";
 import { BPButton, MiniButton, BtnWrapper } from "../../../commonStyle/global.style";
+import { Phase } from "../../../data/phase";
 import { IBanpickData } from "../../main/useBanpickData";
 import {
     ControlBtnArea,
@@ -30,6 +31,7 @@ const Control = ({ banpickData }: Props) => {
         setTurnBan,
         turnPick,
         setTurnPick,
+        setPhase,
         reset,
     } = banpickData;
 
@@ -44,6 +46,7 @@ const Control = ({ banpickData }: Props) => {
                                     onClick={() => {
                                         setStart(true);
                                         setEnter(true);
+                                        setPhase(Phase.PICK);
                                     }}
                                 >
                                     인원 모집 시작

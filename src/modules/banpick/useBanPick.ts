@@ -16,10 +16,6 @@ const useBanPick = ({ team }: Props) => {
     const [removeDlg, setRemoveDlg] = useState(false);
     const [removeIdx, setRemoveIdx] = useState(-1);
 
-    const [negoDlg, setNegoDlg] = useState(false);
-    const [negoUser, setNegoUser] = useState(emptyUser);
-    const [negoMessage, setNegoMessage] = useState(emptyMessage);
-
     const editMessage = (msg: Message, idx: number) => {
         team.pickList[idx] = msg;
         setEditMsg(pickList[idx]);
@@ -47,17 +43,6 @@ const useBanPick = ({ team }: Props) => {
         setRemoveIdx(-1);
     };
 
-    const openNego = (userid: string) => {
-        // 사용자 아이디 -> 사용자 리스트에서 정보 가져옴 -> lastChat 설정
-        // setNegoUser(getMember(teamNum, message.id));
-        // setNegoMessage(message);
-        setNegoDlg(true);
-    };
-
-    const closeNego = () => {
-        setNegoDlg(false);
-    };
-
     return {
         pickList,
         editMessage,
@@ -72,11 +57,6 @@ const useBanPick = ({ team }: Props) => {
 
         removeDlg,
         removeIdx,
-
-        negoUser,
-        negoMessage,
-        openNego,
-        closeNego,
     };
 };
 

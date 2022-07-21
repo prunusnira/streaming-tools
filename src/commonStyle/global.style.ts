@@ -54,10 +54,12 @@ export const BtnWrapper = styled.div<{ width: number }>`
     width: ${(props) => props.width}px;
 `;
 
-export const MiniButton = styled.button`
+export const MiniButton = styled.button<{ disabled?: boolean }>`
     ${FontReg14}
     color: ${Dark};
     background-color: ${Orange};
     border: none;
     width: 100%;
+
+    ${(props) => props.disabled && `background-color: ${BGGray}`}
 `;

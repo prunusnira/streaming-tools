@@ -9,7 +9,6 @@ import Header from "../header/header";
 import { DataWrapper, MainContainer, MainLayout, TabButton, TabLayout } from "./main.style";
 import Config from "../config/config";
 import useIRC from "../../websocket/useIRC";
-import useTTS from "../../tts/useTTS";
 import { useEffect } from "react";
 import useMain from "./useMain";
 import InnerPresenter from "../presenter/innerPresenter";
@@ -65,16 +64,21 @@ const MainPage = () => {
         team1list,
         team2list,
         userList,
+        banpickData,
         setTeamInfo,
         updateUser,
     });
 
     const { dlgRoulette, setDlgRoulette, runRoulette } = useRoulette({
         userList,
+        team1,
+        team2,
         team1list,
         team2list,
+        banpickData,
         setPicked,
         setDlgUser,
+        setNego,
         setChatList,
         setAlertDisplay,
         setupAlertDialog,
@@ -82,6 +86,7 @@ const MainPage = () => {
 
     const { registerObserver } = useIRC({
         banpickData,
+        isNego,
         hasUser,
         removeUser,
         addUser,
@@ -97,8 +102,6 @@ const MainPage = () => {
     });
 
     const observer = useRef<Observer>(new Observer());
-    const { speech } = useTTS();
-
     const { user } = useSelector((state: RootState) => state);
 
     useEffect(() => {
@@ -116,13 +119,17 @@ const MainPage = () => {
                             activate={pageMode === PageMode.UserList}
                             onClick={() => setPageMode(PageMode.UserList)}
                         >
-                            User List
+                            유저
+                            <br />
+                            목록
                         </TabButton>
                         <TabButton
                             activate={pageMode === PageMode.BanPickList}
                             onClick={() => setPageMode(PageMode.BanPickList)}
                         >
-                            BanPick
+                            밴픽
+                            <br />
+                            목록
                         </TabButton>
                     </TabLayout>
                     <DataWrapper>
@@ -134,13 +141,25 @@ const MainPage = () => {
                                         userList={userList}
                                         team={team1}
                                         teamList={team1list}
-                                        teamListDisplay={banpickData.showUsers}
+                                        banpickData={banpickData}
                                         setTeamInfo={setTeamInfo}
                                         runRoulette={runRoulette}
                                         updateUser={updateUser}
                                     />
                                 ) : (
-                                    <BanPickContainer team={team1} banpickData={banpickData} />
+                                    <BanPickContainer
+                                        userList={userList}
+                                        team={team1}
+                                        teamList={team1list}
+                                        banpickData={banpickData}
+                                        setTeamInfo={setTeamInfo}
+                                        setDlgUser={setDlgUser}
+                                        setPicked={setPicked}
+                                        setChatList={setChatList}
+                                        setNego={setNego}
+                                        setAlertDisplay={setAlertDisplay}
+                                        setupAlertDialog={setupAlertDialog}
+                                    />
                                 )
                             }
                         />
@@ -152,13 +171,25 @@ const MainPage = () => {
                                         userList={userList}
                                         team={team2}
                                         teamList={team2list}
-                                        teamListDisplay={banpickData.showUsers}
+                                        banpickData={banpickData}
                                         setTeamInfo={setTeamInfo}
                                         runRoulette={runRoulette}
                                         updateUser={updateUser}
                                     />
                                 ) : (
-                                    <BanPickContainer team={team2} banpickData={banpickData} />
+                                    <BanPickContainer
+                                        userList={userList}
+                                        team={team2}
+                                        teamList={team2list}
+                                        banpickData={banpickData}
+                                        setTeamInfo={setTeamInfo}
+                                        setDlgUser={setDlgUser}
+                                        setPicked={setPicked}
+                                        setChatList={setChatList}
+                                        setNego={setNego}
+                                        setAlertDisplay={setAlertDisplay}
+                                        setupAlertDialog={setupAlertDialog}
+                                    />
                                 )
                             }
                         />
@@ -191,19 +222,6 @@ const MainPage = () => {
                 btnOK={alertBtn}
                 setAlertDisplay={setAlertDisplay}
             />
-            {/* <BanOverAlert
-                teamName={banDlgTeamName}
-                teamNum={banDlgTeamNum}
-                alertOpen={banDlg}
-                close={banOverAlertClose}
-            />
-            <PickSelect
-                onRoulette={onPickedRoulette}
-                pickedMsgDlg={pickedMsgDlg}
-                pickedFailMsgDlg={pickedFailMsgDlg}
-                pickedMsg={pickedMsg}
-                close={closePickedMsgDlg}
-            /> */}
         </>
     );
 };

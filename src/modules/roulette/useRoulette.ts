@@ -1,15 +1,21 @@
 import { useState } from "react";
 import Message from "../../data/message";
 import Roulette from "../../data/roulette";
+import Team from "../../data/team";
 import User from "../../data/user";
 import { IAlertDialog } from "../dialog/alertDialog/useAlertDialog";
+import { IBanpickData } from "../main/useBanpickData";
 
 type Params<T> = {
     userList: Array<User>;
+    team1: Team;
+    team2: Team;
     team1list: Array<string>;
     team2list: Array<string>;
+    banpickData: IBanpickData;
     setPicked: (u: User) => void;
     setDlgUser: (b: boolean) => void;
+    setNego: (b: boolean) => void;
     setChatList: (c: Array<Message>) => void;
     setAlertDisplay: (b: boolean) => void;
     setupAlertDialog: ({ title, body, btnOK }: IAlertDialog) => void;
@@ -17,10 +23,14 @@ type Params<T> = {
 
 const useRoulette = ({
     userList,
+    team1,
+    team2,
     team1list,
     team2list,
+    banpickData,
     setPicked,
     setDlgUser,
+    setNego,
     setChatList,
     setAlertDisplay,
     setupAlertDialog,
@@ -45,10 +55,21 @@ const useRoulette = ({
                   }
               });
 
-        console.log(list);
+        const isOver =
+            teamNum === 1
+                ? team1.cpick >= banpickData.turnPick
+                : team2.cpick >= banpickData.turnPick;
 
         // 사용자 수 검사
-        if (list.length > 0) {
+        if (isOver) {
+            // alert 표기
+            setupAlertDialog({
+                title: "ⓘ 사용자 룰렛 알림",
+                body: "이번 페이즈에 사용 가능한 픽 횟수를 초과했습니다",
+                btnOK: "확인",
+            });
+            setAlertDisplay(true);
+        } else if (list.length > 0) {
             // 다이얼로그 열기
             setDlgRoulette(true);
 
@@ -86,6 +107,7 @@ const useRoulette = ({
     const closeRoulette = () => {
         setDlgRoulette(false);
         setDlgUser(true);
+        setNego(false);
     };
 
     return {

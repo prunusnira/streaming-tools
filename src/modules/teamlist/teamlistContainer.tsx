@@ -4,12 +4,13 @@ import Team from "../../data/team";
 import TeamList from "./teamlist";
 import useTeamList from "./useTeamList";
 import TeamNameChangeDlg from "../dialog/teamNameChange/teamNameChange";
+import { IBanpickData } from "../main/useBanpickData";
 
 interface Props {
     userList: Array<User>;
     team: Team;
     teamList: Array<string>;
-    teamListDisplay: boolean;
+    banpickData: IBanpickData;
     setTeamInfo: (teamNum: number, team: Team) => Promise<void>;
     runRoulette: (tn: number) => void;
     updateUser: (u: User) => void;
@@ -19,7 +20,7 @@ const TeamListContainer = ({
     userList,
     team,
     teamList,
-    teamListDisplay,
+    banpickData,
     setTeamInfo,
     runRoulette,
     updateUser,
@@ -40,10 +41,9 @@ const TeamListContainer = ({
         <>
             <TeamList
                 userList={userList}
-                teamNum={team.teamNum}
-                teamName={team.teamName}
+                team={team}
+                banpickData={banpickData}
                 teamList={teamList}
-                teamListDisplay={teamListDisplay}
                 summonUser={summonUser}
                 setDlgTN={setTNChange}
                 runRoulette={runRoulette}

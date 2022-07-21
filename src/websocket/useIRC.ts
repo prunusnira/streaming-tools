@@ -1,18 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import Message, { emptyMessage, getFormatDate } from "../data/message";
 import { Observer, Subject } from "../data/observer/observer";
 import Parser from "../data/parser";
-import User, { emptyUser } from "../data/user";
+import User from "../data/user";
 import requestUserProfile from "../data/userProfile";
 import { IBanpickData } from "../modules/main/useBanpickData";
 import Team from "../data/team";
 import { RootState } from "../redux/reducer";
 import useTTS from "../tts/useTTS";
+import { Phase } from "../data/phase";
 
 type Props = {
     banpickData: IBanpickData;
+    isNego: boolean;
     hasUser: (teamNum: number, id: string) => Promise<boolean>;
     removeUser: (teamNum: number, id: string) => Promise<void>;
     addUser: (teamNum: number, user: User) => Promise<void>;
@@ -29,6 +31,7 @@ type Props = {
 
 const useIRC = ({
     banpickData,
+    isNego,
     hasUser,
     removeUser,
     addUser,
@@ -131,7 +134,6 @@ const useIRC = ({
             console.log(user);
             // 소속 팀 유무 확인
             if (user.id === "") {
-                console.log("// new user");
                 user = {
                     id: msgParsed.get("userid")!,
                     name: msgParsed.get("display-name")!,
@@ -171,10 +173,9 @@ const useIRC = ({
 
             // 선택된 사용자의 채팅 입력 처리
             if (picked.id !== "" && msg.id === picked.id) {
-                if (!isNegoMode && (msg.msg.startsWith("!pick ") || msg.msg.startsWith("!픽 "))) {
+                if (!isNego && (msg.msg.startsWith("!pick ") || msg.msg.startsWith("!픽 "))) {
                     const team1 = await getTeamInfo(1);
                     const team2 = await getTeamInfo(2);
-                    let nextPick = (team1 ? team1.cpick : 0) + (team2 ? team2.cpick : 0);
 
                     const pickSplited = msg.msg.split(" ");
                     let pickMsg = "";
@@ -183,18 +184,37 @@ const useIRC = ({
                         if (i !== pickSplited.length - 1) pickMsg += " ";
                     }
                     msg.msg = pickMsg;
-                    nextPick++;
 
                     user.picked = true;
 
                     if (await hasUser(1, user.id)) {
-                        console.log("// team 1에 있음");
-                        setTeamInfo(1, { ...team1, pickList: [...team1.pickList, msg] });
+                        team1.cpick++;
+
+                        if (team1.cpick + team2.cpick >= turnPick * 2) {
+                            banpickData.setPhase(Phase.BAN);
+                            setTeamInfo(1, {
+                                ...team1,
+                                pickList: [...team1.pickList, msg],
+                                cpick: 0,
+                            });
+                            setTeamInfo(2, { ...team2, cpick: 0 });
+                        } else {
+                            setTeamInfo(1, { ...team1, pickList: [...team1.pickList, msg] });
+                        }
                     } else if (await hasUser(2, user.id)) {
-                        console.log("// team 2에 있음");
-                        setTeamInfo(2, { ...team2, pickList: [...team2.pickList, msg] });
-                    } else {
-                        console.log("// 아무 팀에도 없음");
+                        team2.cpick++;
+
+                        if (team1.cpick + team2.cpick >= turnPick * 2) {
+                            banpickData.setPhase(Phase.BAN);
+                            setTeamInfo(1, { ...team1, cpick: 0 });
+                            setTeamInfo(2, {
+                                ...team2,
+                                pickList: [...team2.pickList, msg],
+                                cpick: 0,
+                            });
+                        } else {
+                            setTeamInfo(2, { ...team2, pickList: [...team2.pickList, msg] });
+                        }
                     }
 
                     speech(pickMsg);
@@ -202,24 +222,17 @@ const useIRC = ({
                     // 현재 픽 수와 밴 간격을 계산하여 다음 페이즈를 결정
                     let nextPhase = 1;
 
-                    if (nextPick >= turnPick * 2) {
-                        nextPhase = 2;
-                        nextPick = 0;
-
-                        // 각 팀의 현재 pick도 초기화
-                        // resetPick();
+                    if (team1.cpick + team2.cpick >= turnPick * 2) {
+                        banpickData.setPhase(Phase.BAN);
+                        setTeamInfo(1, { ...team1, cpick: 0 });
+                        setTeamInfo(2, { ...team2, cpick: 0 });
                     }
 
                     setDlgUser(false);
-                    // setCurrentUser(new User("", "", false));
-                    // setCurrentChat(new Array<Message>());
-                    // setPhase(nextPhase);
-                    // setTotalPick(totalPick + 1);
 
                     // state 변경 이후 실행되어야 함
                     // scrollToBottomPick(currentTeam);
                 } else {
-                    console.log("// display");
                     setChatList([...chatList, msg]);
                     speech(msg.msg);
                 }

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BGGray, White } from "../../commonStyle/color";
+import { BGGray, Dark, White } from "../../commonStyle/color";
 import { FontMed18 } from "../../commonStyle/font";
 
 export const BanPickWrapper = styled.section`
@@ -10,15 +10,23 @@ export const BanPickWrapper = styled.section`
 `;
 
 export const BanPickTitle = styled.div`
-    background-color: ${BGGray};
+    display: flex;
+    flex-direction: column;
+    background-color: ${Dark};
     padding: 10px;
     text-align: center;
     color: ${White};
 `;
 
+export const BPRow = styled.div<{ fontBig?: boolean }>`
+    width: 100%;
+
+    ${(props) => props.fontBig && `${FontMed18}`}
+`;
+
 export const BanPickBody = styled.div`
     flex: 1;
-    border: 1px solid black;
+    border: 1px solid ${White};
     overflow-y: auto;
 `;
 

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BGGray, White } from "../../commonStyle/color";
 
 export const MainContainer = styled.main`
     display: flex;
@@ -27,11 +28,11 @@ export const TabButton = styled.button<{ activate: boolean }>`
     ${(props) =>
         props.activate
             ? `
-    background-color: white;
+    background-color: ${White};
     `
             : `
-            background-color: white;
-    `}
+            background-color: ${BGGray};
+    `};
 `;
 
 export const MainLayout = styled.section`

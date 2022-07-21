@@ -1,14 +1,16 @@
 import React from "react";
 import { BPButton } from "../../commonStyle/global.style";
+import { Phase } from "../../data/phase";
+import Team from "../../data/team";
 import User from "../../data/user";
+import { IBanpickData } from "../main/useBanpickData";
 import { TeamListBody, TeamListHeader, TeamListWrapper, TLRow } from "./teamlist.style";
 
 type TeamListProps = {
     userList: Array<User>;
-    teamNum: number;
-    teamName: string;
+    team: Team;
     teamList: Array<string>;
-    teamListDisplay: boolean;
+    banpickData: IBanpickData;
 
     setDlgTN: (b: boolean) => void;
     runRoulette: (tn: number) => void;
@@ -19,10 +21,9 @@ type TeamListProps = {
 
 const TeamList = ({
     userList,
-    teamNum,
-    teamName,
+    team,
     teamList,
-    teamListDisplay,
+    banpickData,
 
     setDlgTN,
     runRoulette,
@@ -34,10 +35,10 @@ const TeamList = ({
         <>
             <TeamListWrapper>
                 <TeamListHeader className="text-center">
-                    <TLRow>
-                        {teamName} (
+                    <TLRow fontBig={true}>
+                        {team.teamName} (
                         {(function () {
-                            if (teamListDisplay) {
+                            if (banpickData.showUsers) {
                                 return "-";
                             } else {
                                 return teamList.length;
@@ -46,10 +47,16 @@ const TeamList = ({
                         명)
                     </TLRow>
                     <TLRow>
+                        {banpickData.phase === Phase.PICK &&
+                            `이번 페이즈 Pick ${team.cpick} / ${banpickData.turnPick}`}
+                        {banpickData.phase === Phase.BAN &&
+                            `이번 페이즈 Ban ${team.cban} / ${banpickData.turnBan}`}
+                    </TLRow>
+                    <TLRow>
                         <BPButton onClick={() => setDlgTN(true)}>팀명 변경</BPButton>
                         <BPButton
                             onClick={() => {
-                                runRoulette(teamNum);
+                                runRoulette(team.teamNum);
                             }}
                         >
                             이 팀에서 1명 선택
@@ -58,7 +65,7 @@ const TeamList = ({
                     <TLRow id="rTargetTest"></TLRow>
                 </TeamListHeader>
                 <TeamListBody>
-                    {teamListDisplay ? (
+                    {banpickData.showUsers ? (
                         <TLRow>팀 목록 숨김 상태</TLRow>
                     ) : (
                         teamList.map((v) => {
