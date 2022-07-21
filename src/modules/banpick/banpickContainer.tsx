@@ -21,6 +21,7 @@ interface Props {
     setNego: (b: boolean) => void;
     setAlertDisplay: (b: boolean) => void;
     setupAlertDialog: (d: IAlertDialog) => void;
+    runRoulette: (tn: number) => void;
 }
 
 const BanPickContainer = ({
@@ -35,9 +36,9 @@ const BanPickContainer = ({
     setNego,
     setAlertDisplay,
     setupAlertDialog,
+    runRoulette,
 }: Props) => {
     const {
-        pickList,
         editMessage,
         closeEdit,
         removeMessage,
@@ -97,7 +98,6 @@ const BanPickContainer = ({
     return (
         <>
             <BanPickPresenter
-                pickList={pickList}
                 team={team}
                 teamList={teamList}
                 banpickData={banpickData}
@@ -105,6 +105,7 @@ const BanPickContainer = ({
                 openRemove={openRemove}
                 ban={banPick}
                 nego={openNego}
+                runRoulette={runRoulette}
             />
             <BanPickEditor
                 team={team}

@@ -5,7 +5,6 @@ import { FontMed18, FontReg14, FontReg24 } from "../../commonStyle/font";
 export const HeaderWrapper = styled.header`
     height: 100px;
     width: 100%;
-    padding: 10px;
 
     display: flex;
     flex-direction: row;
@@ -17,6 +16,7 @@ export const HeaderWrapper = styled.header`
 export const HeaderTitle = styled.div`
     ${FontReg24}
     text-align: center;
+    padding-left: 16px;
 `;
 
 export const HeaderUser = styled.div`
@@ -45,4 +45,5 @@ export const HeaderButton = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2px;
+    padding-right: 16px;
 `;

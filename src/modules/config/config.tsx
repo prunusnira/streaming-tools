@@ -14,7 +14,7 @@ const Config = ({ banpickData }: Props) => {
         <ConfigLayout>
             <Control banpickData={banpickData} />
             <PhaseIndicator banpickData={banpickData} />
-            <Timer />
+            {/* <Timer /> */}
         </ConfigLayout>
     );
 };

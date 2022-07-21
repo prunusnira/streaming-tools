@@ -48,4 +48,6 @@ export const DataWrapper = styled.section`
     display: flex;
     flex-direction: row;
     width: 100%;
+    gap: 8px;
+    padding: 0 8px;
 `;

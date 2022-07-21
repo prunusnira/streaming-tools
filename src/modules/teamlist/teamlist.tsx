@@ -1,10 +1,17 @@
 import React from "react";
+import { Green, White } from "../../commonStyle/color";
 import { BPButton } from "../../commonStyle/global.style";
 import { Phase } from "../../data/phase";
 import Team from "../../data/team";
 import User from "../../data/user";
 import { IBanpickData } from "../main/useBanpickData";
-import { TeamListBody, TeamListHeader, TeamListWrapper, TLRow } from "./teamlist.style";
+import {
+    TeamListBody,
+    TeamListHeader,
+    TeamListHeaderSub,
+    TeamListWrapper,
+    TLRow,
+} from "./teamlist.style";
 
 type TeamListProps = {
     userList: Array<User>;
@@ -52,18 +59,22 @@ const TeamList = ({
                         {banpickData.phase === Phase.BAN &&
                             `이번 페이즈 Ban ${team.cban} / ${banpickData.turnBan}`}
                     </TLRow>
+                </TeamListHeader>
+                <TeamListHeaderSub>
                     <TLRow>
-                        <BPButton onClick={() => setDlgTN(true)}>팀명 변경</BPButton>
                         <BPButton
+                            color={White}
+                            bgColor={Green}
+                            borderRadius={0}
                             onClick={() => {
                                 runRoulette(team.teamNum);
                             }}
                         >
                             이 팀에서 1명 선택
                         </BPButton>
+                        <BPButton onClick={() => setDlgTN(true)}>팀명 변경</BPButton>
                     </TLRow>
-                    <TLRow id="rTargetTest"></TLRow>
-                </TeamListHeader>
+                </TeamListHeaderSub>
                 <TeamListBody>
                     {banpickData.showUsers ? (
                         <TLRow>팀 목록 숨김 상태</TLRow>

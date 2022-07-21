@@ -1,5 +1,5 @@
 import React from "react";
-import { BPButton } from "../../../commonStyle/global.style";
+import { MiniButton } from "../../../commonStyle/global.style";
 import { Phase } from "../../../data/phase";
 import { IBanpickData } from "../../main/useBanpickData";
 import { PhaseWrapper, Row } from "./phase.style";
@@ -21,14 +21,13 @@ const PhaseIndicator = ({ banpickData }: Props) => {
                         <>
                             <Row>{phase === Phase.PICK ? "PICK" : "BAN"} PHASE</Row>
                             <Row>
-                                <BPButton
-                                    color="dark"
+                                <MiniButton
                                     onClick={() =>
                                         setPhase(phase === Phase.PICK ? Phase.BAN : Phase.PICK)
                                     }
                                 >
                                     강제 페이즈 변경
-                                </BPButton>
+                                </MiniButton>
                             </Row>
                         </>
                     );

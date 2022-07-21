@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { MiniButton } from "../../commonStyle/global.style";
+import { White, Green } from "../../commonStyle/color";
+import { BPButton, MiniButton } from "../../commonStyle/global.style";
 import Message, { getFormatDate } from "../../data/message";
 import { Phase } from "../../data/phase";
 import Team from "../../data/team";
@@ -21,10 +22,10 @@ import {
     BPMid,
     BPMidUp,
     BPRow,
+    BanPickTitleSub,
 } from "./banpick.style";
 
 interface Props {
-    pickList: Array<Message>;
     team: Team;
     teamList: Array<string>;
     banpickData: IBanpickData;
@@ -32,10 +33,10 @@ interface Props {
     openRemove: (idx: number) => void;
     ban: (idx: number) => void;
     nego: (msg: Message) => void;
+    runRoulette: (tn: number) => void;
 }
 
 const BanPickPresenter = ({
-    pickList,
     team,
     teamList,
     banpickData,
@@ -43,13 +44,14 @@ const BanPickPresenter = ({
     openRemove,
     ban,
     nego,
+    runRoulette,
 }: Props) => {
     const { phase } = banpickData;
     return (
         <BanPickWrapper>
             <BanPickTitle>
                 <BPRow fontBig={true}>
-                    {team.teamName} ({teamList.length} 명)
+                    {team.teamName} ({banpickData.showUsers ? "-" : teamList.length} 명)
                 </BPRow>
                 <BPRow>
                     {banpickData.phase === Phase.PICK &&
@@ -58,8 +60,22 @@ const BanPickPresenter = ({
                         `이번 페이즈 Ban ${team.cban} / ${banpickData.turnBan}`}
                 </BPRow>
             </BanPickTitle>
+            <BanPickTitleSub>
+                <BPRow>
+                    <BPButton
+                        color={White}
+                        bgColor={Green}
+                        borderRadius={0}
+                        onClick={() => {
+                            runRoulette(team.teamNum);
+                        }}
+                    >
+                        이 팀에서 1명 선택
+                    </BPButton>
+                </BPRow>
+            </BanPickTitleSub>
             <BanPickBody id={`banpick-box${team.teamNum}`} className="banpicklist-body">
-                {pickList.map((v, i) => {
+                {team.pickList.map((v, i) => {
                     return (
                         <BPWrapper>
                             <BPNum>PICK {i + 1}</BPNum>

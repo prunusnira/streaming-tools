@@ -148,6 +148,7 @@ const MainPage = () => {
                                     />
                                 ) : (
                                     <BanPickContainer
+                                        key="bp1"
                                         userList={userList}
                                         team={team1}
                                         teamList={team1list}
@@ -159,6 +160,7 @@ const MainPage = () => {
                                         setNego={setNego}
                                         setAlertDisplay={setAlertDisplay}
                                         setupAlertDialog={setupAlertDialog}
+                                        runRoulette={runRoulette}
                                     />
                                 )
                             }
@@ -178,6 +180,7 @@ const MainPage = () => {
                                     />
                                 ) : (
                                     <BanPickContainer
+                                        key="bp2"
                                         userList={userList}
                                         team={team2}
                                         teamList={team2list}
@@ -189,6 +192,7 @@ const MainPage = () => {
                                         setNego={setNego}
                                         setAlertDisplay={setAlertDisplay}
                                         setupAlertDialog={setupAlertDialog}
+                                        runRoulette={runRoulette}
                                     />
                                 )
                             }

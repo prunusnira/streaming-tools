@@ -39,6 +39,7 @@ export const BPButton = styled.button<{
     color?: string;
     reversed?: boolean;
     disabled?: boolean;
+    borderRadius?: number;
 }>`
     ${FontReg16}
     color: ${(props) => (props.color ? props.color : Dark)};
@@ -46,8 +47,9 @@ export const BPButton = styled.button<{
         props.disabled ? BGGray : props.bgColor ? props.bgColor : Orange};
     border: none;
     padding: 10px 24px;
-    border-radius: 10px;
+    border-radius: ${(props) => (props.borderRadius ? `${props.borderRadius}px` : "10px")};
     width: 100%;
+    height: 40px;
 `;
 
 export const BtnWrapper = styled.div<{ width: number }>`

@@ -1,11 +1,10 @@
 import styled from "styled-components";
 
 export const ControlWrapper = styled.section`
-    flex: 2;
+    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
 
     gap: 10px;
@@ -20,6 +19,7 @@ export const ControlBtnArea = styled.section`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-left: 16px;
 `;
 
 export const ControlBtnRow = styled.div`
@@ -30,7 +30,9 @@ export const ControlBtnRow = styled.div`
 
 export const ControlSelectArea = styled.section`
     flex: 1;
-    width: 100%;
+    width: 300px;
+    max-width: 300px;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;

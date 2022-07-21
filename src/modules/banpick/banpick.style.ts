@@ -12,8 +12,19 @@ export const BanPickWrapper = styled.section`
 export const BanPickTitle = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    height: 80px;
     background-color: ${Dark};
-    padding: 10px;
+    text-align: center;
+    color: ${White};
+`;
+
+export const BanPickTitleSub = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 40px;
+    background-color: ${Dark};
     text-align: center;
     color: ${White};
 `;
@@ -26,7 +37,6 @@ export const BPRow = styled.div<{ fontBig?: boolean }>`
 
 export const BanPickBody = styled.div`
     flex: 1;
-    border: 1px solid ${White};
     overflow-y: auto;
 `;
 
