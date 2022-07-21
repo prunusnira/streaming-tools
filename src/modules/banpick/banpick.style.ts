@@ -40,6 +40,13 @@ export const BanPickBody = styled.div`
     overflow-y: auto;
 `;
 
+export const BPEmpty = styled.div`
+    width: 100%;
+    text-align: center;
+    padding-top: 30%;
+    ${FontMed18}
+`;
+
 export const BPWrapper = styled.div`
     display: flex;
     flex-direction: row;

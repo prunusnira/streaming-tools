@@ -33,9 +33,21 @@ export const TeamListBody = styled.div`
     flex: 1;
 `;
 
-export const TLRow = styled.div<{ fontBig?: boolean }>`
-    text-align: center;
+export const TLRow = styled.div<{ fontBig?: boolean; align?: string }>`
+    text-align: ${(props) => (props.align ? props.align : "center")};
     width: 100%;
 
     ${(props) => props.fontBig && `${FontMed18}`}
+`;
+
+export const TLAnchor = styled.a`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const TLEmpty = styled.div`
+    width: 100%;
+    text-align: center;
+    padding-top: 30%;
+    ${FontMed18}
 `;

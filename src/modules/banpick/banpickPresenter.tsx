@@ -21,6 +21,7 @@ import {
     BPMidUp,
     BPRow,
     BanPickTitleSub,
+    BPEmpty,
 } from "./banpick.style";
 
 interface Props {
@@ -73,40 +74,44 @@ const BanPickPresenter = ({
                 </BPRow>
             </BanPickTitleSub>
             <BanPickBody id={`banpick-box${team.teamNum}`} className="banpicklist-body">
-                {team.pickList.map((v, i) => {
-                    return (
-                        <BPWrapper key={`bp_${team.teamNum}_${i}`}>
-                            <BPNum>PICK {i + 1}</BPNum>
-                            <BPMid>
-                                <BPMidUp>
-                                    <BPMessage>{v.ban ? <del>{v.msg}</del> : v.msg}</BPMessage>
-                                </BPMidUp>
-                                <BPMidBot>
-                                    <BPTime>{getFormatDate(v.time)}</BPTime>
-                                    <BPName>
-                                        {v.name} ({v.id})
-                                    </BPName>
-                                </BPMidBot>
-                            </BPMid>
-                            <BPButtonWrapper>
-                                <MiniButton onClick={() => edit(v, i)}>수정</MiniButton>
-                                <MiniButton onClick={() => openRemove(i)}>삭제</MiniButton>
-                                {phase === Phase.PICK && v.ban ? (
-                                    <MiniButton disabled>언밴</MiniButton>
-                                ) : phase === Phase.PICK && !v.ban ? (
-                                    <MiniButton disabled>밴</MiniButton>
-                                ) : phase === Phase.BAN && v.ban ? (
-                                    <MiniButton onClick={() => ban(i)}>언밴</MiniButton>
-                                ) : phase === Phase.BAN && !v.ban ? (
-                                    <MiniButton onClick={() => ban(i)}>밴</MiniButton>
-                                ) : (
-                                    <MiniButton disabled>밴</MiniButton>
-                                )}
-                                <MiniButton onClick={() => nego(v)}>협테</MiniButton>
-                            </BPButtonWrapper>
-                        </BPWrapper>
-                    );
-                })}
+                {team.pickList.length === 0 ? (
+                    <BPEmpty>항목 없음</BPEmpty>
+                ) : (
+                    team.pickList.map((v, i) => {
+                        return (
+                            <BPWrapper key={`bp_${team.teamNum}_${i}`}>
+                                <BPNum>PICK {i + 1}</BPNum>
+                                <BPMid>
+                                    <BPMidUp>
+                                        <BPMessage>{v.ban ? <del>{v.msg}</del> : v.msg}</BPMessage>
+                                    </BPMidUp>
+                                    <BPMidBot>
+                                        <BPTime>{getFormatDate(v.time)}</BPTime>
+                                        <BPName>
+                                            {v.name} ({v.id})
+                                        </BPName>
+                                    </BPMidBot>
+                                </BPMid>
+                                <BPButtonWrapper>
+                                    <MiniButton onClick={() => edit(v, i)}>수정</MiniButton>
+                                    <MiniButton onClick={() => openRemove(i)}>삭제</MiniButton>
+                                    {phase === Phase.PICK && v.ban ? (
+                                        <MiniButton disabled>언밴</MiniButton>
+                                    ) : phase === Phase.PICK && !v.ban ? (
+                                        <MiniButton disabled>밴</MiniButton>
+                                    ) : phase === Phase.BAN && v.ban ? (
+                                        <MiniButton onClick={() => ban(i)}>언밴</MiniButton>
+                                    ) : phase === Phase.BAN && !v.ban ? (
+                                        <MiniButton onClick={() => ban(i)}>밴</MiniButton>
+                                    ) : (
+                                        <MiniButton disabled>밴</MiniButton>
+                                    )}
+                                    <MiniButton onClick={() => nego(v)}>협테</MiniButton>
+                                </BPButtonWrapper>
+                            </BPWrapper>
+                        );
+                    })
+                )}
             </BanPickBody>
         </BanPickWrapper>
     );
