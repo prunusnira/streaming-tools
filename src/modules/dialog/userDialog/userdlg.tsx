@@ -1,7 +1,7 @@
 import React from "react";
 import { BPButton, MiniButton } from "../../../commonStyle/global.style";
 import Popup from "../../../component/popup";
-import Message from "../../../data/message";
+import Message, { getFormatDate, msToTime } from "../../../data/message";
 import User from "../../../data/user";
 import {
     Title,
@@ -59,8 +59,10 @@ const UserDialog = ({ user, nego, chat, display, use, skip, close }: Props) => {
                             <ChatBox key={`chat_${v.id}_${i}`}>
                                 <ChatBoxLeft>
                                     <ChatTimeWrapper>
-                                        <ChatTime>from {v.timeInTxt}</ChatTime>
-                                        <ChatTime>now {Date.now() - v.time}</ChatTime>
+                                        <ChatTime>{v.timeInTxt}</ChatTime>
+                                        <ChatTime>{`${msToTime(
+                                            Date.now() - v.time
+                                        )} 초 전`}</ChatTime>
                                     </ChatTimeWrapper>
                                     <ChatMsg>{v.msg}</ChatMsg>
                                 </ChatBoxLeft>
@@ -78,7 +80,7 @@ const UserDialog = ({ user, nego, chat, display, use, skip, close }: Props) => {
             }
             footer={
                 <DlgFooter>
-                    <BPButton onClick={() => skip()}>넘기기</BPButton>
+                    {!nego && <BPButton onClick={() => skip()}>넘기기</BPButton>}
                     <BPButton onClick={() => close()}>닫기</BPButton>
                 </DlgFooter>
             }

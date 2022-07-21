@@ -24,6 +24,11 @@ export const getFormatDate = (time: number) => {
     return year + "/" + month + "/" + day + " " + hr + ":" + min + ":" + sec; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 };
 
+export const msToTime = (time: number) => {
+    const sec = Math.floor(time / 1000);
+    return sec;
+};
+
 export const emptyMessage: Message = {
     id: "",
     name: "",

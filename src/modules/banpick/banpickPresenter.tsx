@@ -1,11 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { White, Green } from "../../commonStyle/color";
 import { BPButton, MiniButton } from "../../commonStyle/global.style";
 import Message, { getFormatDate } from "../../data/message";
 import { Phase } from "../../data/phase";
 import Team from "../../data/team";
-import { RootState } from "../../redux/reducer";
 import { IBanpickData } from "../main/useBanpickData";
 
 import {
@@ -77,7 +75,7 @@ const BanPickPresenter = ({
             <BanPickBody id={`banpick-box${team.teamNum}`} className="banpicklist-body">
                 {team.pickList.map((v, i) => {
                     return (
-                        <BPWrapper>
+                        <BPWrapper key={`bp_${team.teamNum}_${i}`}>
                             <BPNum>PICK {i + 1}</BPNum>
                             <BPMid>
                                 <BPMidUp>
