@@ -7,7 +7,7 @@ interface Props {
 
 const ChatPresenter = ({ username }: Props) => {
     const baseUrl: string = "https://www.twitch.tv/embed/";
-    const baseUrl2: string = "/chat?parent=banpick.nira.one";
+    const baseUrl2: string = "/chat?parent=banpick.nira.one&darkpopout";
 
     return (
         <ChatContainer>
