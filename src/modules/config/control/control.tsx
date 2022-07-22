@@ -1,4 +1,5 @@
 import React from "react";
+import { LightBlue, White } from "../../../commonStyle/color";
 import { BPButton, MiniButton, BtnWrapper } from "../../../commonStyle/global.style";
 import { Phase } from "../../../data/phase";
 import { IBanpickData } from "../../main/useBanpickData";
@@ -48,16 +49,32 @@ const Control = ({ banpickData }: Props) => {
                                         setEnter(true);
                                         setPhase(Phase.PICK);
                                     }}
+                                    color={White}
+                                    bgColor={LightBlue}
                                 >
                                     인원 모집 시작
                                 </BPButton>
                             );
                         } else if (isStarted && isEntering) {
                             return (
-                                <BPButton onClick={() => setEnter(false)}>인원 그만 받기</BPButton>
+                                <BPButton
+                                    onClick={() => setEnter(false)}
+                                    color={White}
+                                    bgColor={LightBlue}
+                                >
+                                    인원 그만 받기
+                                </BPButton>
                             );
                         } else if (isStarted && !isEntering) {
-                            return <BPButton onClick={() => setEnter(true)}>인원 더 받기</BPButton>;
+                            return (
+                                <BPButton
+                                    onClick={() => setEnter(true)}
+                                    color={White}
+                                    bgColor={LightBlue}
+                                >
+                                    인원 더 받기
+                                </BPButton>
+                            );
                         }
                     })()}
                 </BtnWrapper>

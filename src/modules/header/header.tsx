@@ -31,12 +31,8 @@ const Header = () => {
                     <UserId>({streamer.id})</UserId>
                 </HeaderUser>
                 <HeaderButton>
-                    <BPButton color="warning" className="reset-btn no-wrap" onClick={showHowTo}>
-                        사용방법
-                    </BPButton>
-                    <BPButton color="danger" className="reset-btn no-wrap" onClick={tokenReset}>
-                        로그인 상태 리셋
-                    </BPButton>
+                    <BPButton onClick={showHowTo}>사용방법</BPButton>
+                    <BPButton onClick={tokenReset}>로그인 상태 리셋</BPButton>
                 </HeaderButton>
             </HeaderWrapper>
 

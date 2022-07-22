@@ -8,3 +8,5 @@ export const Orange = "rgb(255, 160, 28)";
 export const BGDark = "rgb(3, 4, 21)";
 export const Red = "rgb(180, 50, 50)";
 export const Green = "rgb(50, 180, 50)";
+export const Blue = "rgb(50, 50, 180)";
+export const LightBlue = "rgb(100, 100, 180)";

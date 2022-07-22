@@ -78,7 +78,7 @@ const TeamList = ({
             </TeamListHeaderSub>
             <TeamListBody>
                 {banpickData.showUsers ? (
-                    <TLRow>팀 목록 숨김 상태</TLRow>
+                    <TLEmpty>팀 목록 숨김 상태</TLEmpty>
                 ) : teamList.length === 0 ? (
                     <TLEmpty>아직 등록된 사람이 없음</TLEmpty>
                 ) : (
@@ -109,13 +109,13 @@ const TeamList = ({
                                             }
                                         })()}
                                     </span>
-                                    {/* <MiniButton
+                                    <MiniButton
                                         style={{ display: "none", width: "auto" }}
                                         id={"sum" + v}
                                         onClick={() => summonUser(v)}
                                     >
-                                        강제소환
-                                    </MiniButton> */}
+                                        {/*강제소환*/}
+                                    </MiniButton>
                                 </TLAnchor>
                             </TLRow>
                         );

@@ -69,6 +69,7 @@ const useUserDlg = ({
             user.picked = true;
             updateUser(user);
             setDlgUser(false);
+            setPicked(emptyUser);
         }
     };
 
@@ -78,6 +79,7 @@ const useUserDlg = ({
             user.picked = true;
             updateUser(user);
             setDlgUser(false);
+            setPicked(emptyUser);
         }
     };
 

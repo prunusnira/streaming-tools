@@ -23,6 +23,7 @@ import RouletteDialog from "../roulette/rouletteDialog";
 import useRoulette from "../roulette/useRoulette";
 import AlertDialog from "../dialog/alertDialog/alertDialog";
 import useAlertDialog from "../dialog/alertDialog/useAlertDialog";
+import { emptyUser } from "../../data/user";
 
 const MainPage = () => {
     const { banpickData } = useBanpickData();
@@ -99,6 +100,7 @@ const MainPage = () => {
         chatList,
         setChatList,
         setDlgUser,
+        setPicked,
     });
 
     const observer = useRef<Observer>(new Observer());
@@ -211,7 +213,10 @@ const MainPage = () => {
                 display={dlgUser}
                 use={useMessage}
                 skip={skipMessage}
-                close={() => setDlgUser(false)}
+                close={() => {
+                    setDlgUser(false);
+                    setPicked(emptyUser);
+                }}
             />
             <RouletteDialog
                 key={"roulette"}

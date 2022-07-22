@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import Message, { emptyMessage, getFormatDate } from "../data/message";
 import { Observer, Subject } from "../data/observer/observer";
 import Parser from "../data/parser";
-import User from "../data/user";
+import User, { emptyUser } from "../data/user";
 import requestUserProfile from "../data/userProfile";
 import { IBanpickData } from "../modules/main/useBanpickData";
 import Team from "../data/team";
@@ -27,6 +27,7 @@ type Props = {
     chatList: Array<Message>;
     setChatList: (l: Array<Message>) => void;
     setDlgUser: (b: boolean) => void;
+    setPicked: (u: User) => void;
 };
 
 const useIRC = ({
@@ -44,6 +45,7 @@ const useIRC = ({
     chatList,
     setChatList,
     setDlgUser,
+    setPicked,
 }: Props) => {
     const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
     const subject = useRef<Subject>(new Subject());
@@ -61,7 +63,7 @@ const useIRC = ({
 
     useEffect(() => {
         subject.current.setFunction(processMessage);
-    }, [isStarted, picked, chatList]);
+    }, [isStarted, isEntering, picked, chatList]);
 
     const onSocketOpen = (ev: Event) => {
         console.log("IRC Connected " + ev.returnValue);
@@ -227,6 +229,7 @@ const useIRC = ({
                     }
 
                     setDlgUser(false);
+                    setPicked(emptyUser);
 
                     // state 변경 이후 실행되어야 함
                     // scrollToBottomPick(currentTeam);
