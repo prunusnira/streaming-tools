@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { BPButton } from "../../commonStyle/global.style";
 import { ModalContext } from "../../context/modalContext";
 import Message from "../../data/message";
@@ -6,7 +6,6 @@ import Roulette from "../../data/roulette";
 import Team from "../../data/team";
 import User from "../../data/user";
 import { PopupBody, PopupFooter, PopupTitle } from "../dialog/alertDialog/alertDialog.style";
-import { IAlertDialog } from "../dialog/alertDialog/useAlertDialog";
 import { IBanpickData } from "../main/useBanpickData";
 import { RBody, RFooter } from "./rouletteDialog.style";
 
@@ -22,8 +21,7 @@ type Params<T> = {
     setDlgUser: (b: boolean) => void;
     setNego: (b: boolean) => void;
     setChatList: (c: Array<Message>) => void;
-    setAlertDisplay: (b: boolean) => void;
-    setupAlertDialog: ({ title, body, btnOK }: IAlertDialog) => void;
+    openUserDlg: () => void;
 };
 
 const useRoulette = ({
@@ -38,8 +36,7 @@ const useRoulette = ({
     setDlgUser,
     setNego,
     setChatList,
-    setAlertDisplay,
-    setupAlertDialog,
+    openUserDlg,
 }: Params<User>) => {
     // 룰렛
     const { openDialog, modifyDlgBody, closeDialog } = useContext(ModalContext);
@@ -69,12 +66,18 @@ const useRoulette = ({
         // 사용자 수 검사
         if (isOver) {
             // alert 표기
-            setupAlertDialog({
-                title: "ⓘ 사용자 룰렛 알림",
-                body: "이번 페이즈에 사용 가능한 픽 횟수를 초과했습니다",
-                btnOK: "확인",
+            openDialog({
+                width: "480px",
+                maxWidth: 480,
+                active: true,
+                header: <PopupTitle>ⓘ 사용자 룰렛 알림</PopupTitle>,
+                body: <PopupBody>이번 페이즈에 사용 가능한 픽 횟수를 초과했습니다</PopupBody>,
+                footer: (
+                    <PopupFooter>
+                        <BPButton onClick={() => closeDialog()}>확인</BPButton>
+                    </PopupFooter>
+                ),
             });
-            setAlertDisplay(true);
         } else if (list.length > 0) {
             // 현재 목록에서 유저 선택
             let randVal = Math.floor(Math.random() * list.length);
@@ -85,7 +88,7 @@ const useRoulette = ({
                 width: "90%",
                 maxWidth: 480,
                 active: true,
-                header: "사용자 룰렛",
+                header: "ⓘ 사용자 룰렛",
                 body: <RBody>{picked.name}</RBody>,
                 footer: <RFooter></RFooter>,
             });
@@ -97,7 +100,9 @@ const useRoulette = ({
             roulette.start();
             roulette.roulette(updateRoulette);
             roulette.stop((obj: Object) => {
-                updateRoulette(list[randVal]);
+                const picked = list[randVal];
+                updateRoulette(picked);
+                updatePickedUser(picked);
                 setChatList([list[randVal].lastChat]);
                 setTimeout(closeRoulette, 1000);
             }, 3);
@@ -120,13 +125,18 @@ const useRoulette = ({
 
     const updateRoulette = (obj: Object) => {
         const user = userList.filter((x) => x.id === (obj as User).id)[0];
-        setPicked(user);
         modifyDlgBody(<RBody>{user.name}</RBody>);
+    };
+
+    const updatePickedUser = (obj: Object) => {
+        const user = userList.filter((x) => x.id === (obj as User).id)[0];
+        setPicked(user);
     };
 
     const closeRoulette = () => {
         closeDialog();
-        setDlgUser(true);
+        // setDlgUser(true);
+        openUserDlg();
         setNego(false);
     };
 

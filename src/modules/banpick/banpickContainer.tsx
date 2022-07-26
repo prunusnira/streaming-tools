@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import User from "../../data/user";
 import Team from "../../data/team";
-import BanPickEditor from "./banpickEditor";
 import useBanPick from "./useBanPick";
-import useBanpickData, { IBanpickData } from "../main/useBanpickData";
-import { BanPickRemoveModal } from "./banpickRemoveModal";
+import { IBanpickData } from "../main/useBanpickData";
 import BanPickPresenter from "./banpickPresenter";
 import Message from "../../data/message";
-import { IAlertDialog } from "../dialog/alertDialog/useAlertDialog";
+import { BPButton } from "../../commonStyle/global.style";
+import { PopupTitle, PopupBody, PopupFooter } from "../dialog/alertDialog/alertDialog.style";
+import { ModalContext } from "../../context/modalContext";
 
 interface Props {
     userList: Array<User>;
@@ -19,8 +19,6 @@ interface Props {
     setPicked: (u: User) => void;
     setChatList: (m: Array<Message>) => void;
     setNego: (b: boolean) => void;
-    setAlertDisplay: (b: boolean) => void;
-    setupAlertDialog: (d: IAlertDialog) => void;
     runRoulette: (tn: number) => void;
 }
 
@@ -34,23 +32,11 @@ const BanPickContainer = ({
     setPicked,
     setChatList,
     setNego,
-    setAlertDisplay,
-    setupAlertDialog,
     runRoulette,
 }: Props) => {
     const [_, forceUpdate] = useState(0);
-    const {
-        editMessage,
-        closeEdit,
-        removeMessage,
-        openRemove,
-        closeRemove,
-        editDlg,
-        editMsg,
-        editIdx,
-        removeDlg,
-        removeIdx,
-    } = useBanPick({ team });
+    const { editMessage, openRemove } = useBanPick({ team });
+    const { openDialog, closeDialog } = useContext(ModalContext);
 
     // 밴 or 언밴 하기
     const banPick = (idx: number) => {
@@ -63,12 +49,22 @@ const BanPickContainer = ({
             // 밴 하기 전에 현재 밴 수 확인
             if (team.cban >= banpickData.turnBan) {
                 // 밴 횟수 초과 상태 알림
-                setupAlertDialog({
-                    title: "밴 횟수 초과 알림",
-                    body: "이번 페이즈에서 이 팀에 대해 밴을 할 수 있는 횟수를 초과했습니다.",
-                    btnOK: "확인",
+                openDialog({
+                    width: "480px",
+                    maxWidth: 480,
+                    active: true,
+                    header: <PopupTitle>ⓘ 밴 횟수 초과 알림</PopupTitle>,
+                    body: (
+                        <PopupBody>
+                            이번 페이즈에서 이 팀에 대해 밴을 할 수 있는 횟수를 초과했습니다
+                        </PopupBody>
+                    ),
+                    footer: (
+                        <PopupFooter>
+                            <BPButton onClick={() => closeDialog()}>확인</BPButton>
+                        </PopupFooter>
+                    ),
                 });
-                setAlertDisplay(true);
             } else {
                 cteam.pickList[idx].ban = true;
                 cteam.cban++;
@@ -99,31 +95,16 @@ const BanPickContainer = ({
     };
 
     return (
-        <>
-            <BanPickPresenter
-                team={team}
-                teamList={teamList}
-                banpickData={banpickData}
-                edit={editMessage}
-                openRemove={openRemove}
-                ban={banPick}
-                nego={openNego}
-                runRoulette={runRoulette}
-            />
-            <BanPickEditor
-                team={team}
-                msg={editMsg}
-                display={editDlg}
-                idx={editIdx}
-                close={closeEdit}
-            />
-            <BanPickRemoveModal
-                removeDlg={removeDlg}
-                selected={removeIdx}
-                removePick={removeMessage}
-                close={closeRemove}
-            />
-        </>
+        <BanPickPresenter
+            team={team}
+            teamList={teamList}
+            banpickData={banpickData}
+            edit={editMessage}
+            openRemove={openRemove}
+            ban={banPick}
+            nego={openNego}
+            runRoulette={runRoulette}
+        />
     );
 };
 

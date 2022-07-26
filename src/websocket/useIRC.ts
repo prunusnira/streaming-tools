@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import Message, { emptyMessage, getFormatDate } from "../data/message";
@@ -11,6 +11,7 @@ import Team from "../data/team";
 import { RootState } from "../redux/reducer";
 import useTTS from "../tts/useTTS";
 import { Phase } from "../data/phase";
+import { ModalContext } from "../context/modalContext";
 
 type Props = {
     banpickData: IBanpickData;
@@ -26,7 +27,6 @@ type Props = {
     picked: User;
     chatList: Array<Message>;
     setChatList: (l: Array<Message>) => void;
-    setDlgUser: (b: boolean) => void;
     setPicked: (u: User) => void;
 };
 
@@ -44,13 +44,13 @@ const useIRC = ({
     picked,
     chatList,
     setChatList,
-    setDlgUser,
     setPicked,
 }: Props) => {
     const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
     const subject = useRef<Subject>(new Subject());
     const { acctok, loginName, clientId } = useSelector((state: RootState) => state.user);
     const { allPick, turnPick, turnBan, isStarted, isEntering, isNegoMode, phase } = banpickData;
+    const { closeDialog } = useContext(ModalContext);
 
     const { speech } = useTTS();
 
@@ -228,7 +228,7 @@ const useIRC = ({
                         setTeamInfo(2, { ...team2, cpick: 0 });
                     }
 
-                    setDlgUser(false);
+                    closeDialog();
                     setPicked(emptyUser);
 
                     // state 변경 이후 실행되어야 함
@@ -243,42 +243,6 @@ const useIRC = ({
             updateUser(user);
         }
     };
-    // 해당 메시지를 Pick으로 선택하기
-    // const useMessage = (msg: Message) => {
-    //     let nextPick = getNextPick();
-
-    //     let currentTeam = 0;
-
-    //     if (hasMember(1, msg.id)) {
-    //         currentTeam = 1;
-
-    //         // 팀에 소속되어있다면 해당 팀의 픽 리스트에 등록
-    //         addPick(1, msg);
-
-    //         // 픽 한 유저는 리스트에서 더 사용할 수 없도록 처리함
-    //         getMember(1, msg.id).picked = true;
-    //         nextPick++;
-    //     }
-    //     if (hasMember(2, msg.id)) {
-    //         currentTeam = 2;
-    //         addPick(2, msg);
-    //         getMember(2, msg.id).picked = true;
-    //         nextPick++;
-    //     }
-
-    //     console.log(msg.id + "(팀" + currentTeam + ") MSG: " + msg.msg);
-    //     speech(msg.msg);
-
-    //     // 현재 픽 수와 밴 간격을 계산하여 다음 페이즈를 결정
-    //     // phaseChange();
-    //     // setTotalPick(totalPick + 1);
-    //     // setUserDlg(false);
-    //     // setCurrentUser(new User("", "", false));
-    //     // setCurrentChat([]);
-
-    //     // 끝나고 실행해야 할 것
-    //     // scrollToBottomPick(currentTeam);
-    // };
 
     return { registerObserver };
 };

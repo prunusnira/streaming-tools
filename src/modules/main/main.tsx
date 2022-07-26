@@ -19,10 +19,7 @@ import useBanpickData from "./useBanpickData";
 import useStorage from "../../db/useStorage";
 import UserDialog from "../dialog/userDialog/userdlg";
 import useUserDlg from "../dialog/userDialog/useUserDlg";
-import RouletteDialog from "../roulette/rouletteDialog";
 import useRoulette from "../roulette/useRoulette";
-import AlertDialog from "../dialog/alertDialog/alertDialog";
-import useAlertDialog from "../dialog/alertDialog/useAlertDialog";
 import { emptyUser } from "../../data/user";
 import PopupModal from "../../component/popupModal";
 
@@ -46,9 +43,6 @@ const MainPage = () => {
         setTeamInfo,
     } = useStorage();
 
-    const { alertDisplay, alertTitle, alertBody, alertBtn, setAlertDisplay, setupAlertDialog } =
-        useAlertDialog();
-
     const {
         dlgUser,
         setDlgUser,
@@ -58,8 +52,9 @@ const MainPage = () => {
         setNego,
         chatList,
         setChatList,
-        useMessage,
+        pickMessage,
         skipMessage,
+        openUserDlg,
     } = useUserDlg({
         team1,
         team2,
@@ -83,8 +78,7 @@ const MainPage = () => {
         setDlgUser,
         setNego,
         setChatList,
-        setAlertDisplay,
-        setupAlertDialog,
+        openUserDlg,
     });
 
     const { registerObserver } = useIRC({
@@ -101,7 +95,6 @@ const MainPage = () => {
         picked,
         chatList,
         setChatList,
-        setDlgUser,
         setPicked,
     });
 
@@ -162,8 +155,6 @@ const MainPage = () => {
                                         setPicked={setPicked}
                                         setChatList={setChatList}
                                         setNego={setNego}
-                                        setAlertDisplay={setAlertDisplay}
-                                        setupAlertDialog={setupAlertDialog}
                                         runRoulette={runRoulette}
                                     />
                                 )
@@ -194,8 +185,6 @@ const MainPage = () => {
                                         setPicked={setPicked}
                                         setChatList={setChatList}
                                         setNego={setNego}
-                                        setAlertDisplay={setAlertDisplay}
-                                        setupAlertDialog={setupAlertDialog}
                                         runRoulette={runRoulette}
                                     />
                                 )
@@ -208,26 +197,19 @@ const MainPage = () => {
             </MainContainer>
 
             <PopupModal />
-            <UserDialog
+            {/* <UserDialog
                 key={"userdialog"}
                 nego={isNego}
                 user={picked}
                 chat={chatList}
                 display={dlgUser}
-                use={useMessage}
+                use={pickMessage}
                 skip={skipMessage}
                 close={() => {
                     setDlgUser(false);
                     setPicked(emptyUser);
                 }}
-            />
-            <AlertDialog
-                display={alertDisplay}
-                title={alertTitle}
-                body={alertBody}
-                btnOK={alertBtn}
-                setAlertDisplay={setAlertDisplay}
-            />
+            /> */}
         </>
     );
 };
