@@ -1,10 +1,14 @@
-import { useState } from "react";
+import React, { useContext, useState } from "react";
+import { BPButton } from "../../commonStyle/global.style";
+import { ModalContext } from "../../context/modalContext";
 import Message from "../../data/message";
 import Roulette from "../../data/roulette";
 import Team from "../../data/team";
 import User from "../../data/user";
+import { PopupBody, PopupFooter, PopupTitle } from "../dialog/alertDialog/alertDialog.style";
 import { IAlertDialog } from "../dialog/alertDialog/useAlertDialog";
 import { IBanpickData } from "../main/useBanpickData";
+import { RBody, RFooter } from "./rouletteDialog.style";
 
 type Params<T> = {
     userList: Array<User>;
@@ -13,6 +17,7 @@ type Params<T> = {
     team1list: Array<string>;
     team2list: Array<string>;
     banpickData: IBanpickData;
+    picked: User;
     setPicked: (u: User) => void;
     setDlgUser: (b: boolean) => void;
     setNego: (b: boolean) => void;
@@ -28,6 +33,7 @@ const useRoulette = ({
     team1list,
     team2list,
     banpickData,
+    picked,
     setPicked,
     setDlgUser,
     setNego,
@@ -36,7 +42,7 @@ const useRoulette = ({
     setupAlertDialog,
 }: Params<User>) => {
     // 룰렛
-    const [dlgRoulette, setDlgRoulette] = useState(false);
+    const { openDialog, modifyDlgBody, closeDialog } = useContext(ModalContext);
 
     const runRoulette = (teamNum: number) => {
         const list = new Array<User>();
@@ -70,12 +76,19 @@ const useRoulette = ({
             });
             setAlertDisplay(true);
         } else if (list.length > 0) {
-            // 다이얼로그 열기
-            setDlgRoulette(true);
-
             // 현재 목록에서 유저 선택
             let randVal = Math.floor(Math.random() * list.length);
             if (randVal == list.length) randVal--;
+
+            // 다이얼로그 열기
+            openDialog({
+                width: "90%",
+                maxWidth: 480,
+                active: true,
+                header: "사용자 룰렛",
+                body: <RBody>{picked.name}</RBody>,
+                footer: <RFooter></RFooter>,
+            });
 
             // 룰렛 선택 표기
             const roulette = new Roulette(list, false);
@@ -90,29 +103,34 @@ const useRoulette = ({
             }, 3);
         } else {
             // alert 표기
-            setupAlertDialog({
-                title: "ⓘ 사용자 룰렛 알림",
-                body: "이 팀에 이용 가능한 인원이 없습니다",
-                btnOK: "확인",
+            openDialog({
+                width: 480,
+                maxWidth: 480,
+                active: true,
+                header: <PopupTitle>ⓘ 사용자 룰렛 알림</PopupTitle>,
+                body: <PopupBody>이 팀에 이용 가능한 인원이 없습니다</PopupBody>,
+                footer: (
+                    <PopupFooter>
+                        <BPButton onClick={() => closeDialog()}>확인</BPButton>
+                    </PopupFooter>
+                ),
             });
-            setAlertDisplay(true);
         }
     };
 
     const updateRoulette = (obj: Object) => {
         const user = userList.filter((x) => x.id === (obj as User).id)[0];
         setPicked(user);
+        modifyDlgBody(<RBody>{user.name}</RBody>);
     };
 
     const closeRoulette = () => {
-        setDlgRoulette(false);
+        closeDialog();
         setDlgUser(true);
         setNego(false);
     };
 
     return {
-        dlgRoulette,
-        setDlgRoulette,
         runRoulette,
     };
 };

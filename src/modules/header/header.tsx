@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { BPButton } from "../../commonStyle/global.style";
+import { ModalContext } from "../../context/modalContext";
 import {
     HeaderButton,
     HeaderTitle,
@@ -9,14 +10,21 @@ import {
     UserId,
     UserName,
 } from "./header.style";
-import HowToPopup from "./howto/howto";
+import HowToBody from "./howto/howtoBody";
 import useHeader from "./useHeader";
 
 const Header = () => {
-    const [howtoOpen, setHowToOpen] = useState(false);
+    const { openDialog, closeDialog } = useContext(ModalContext);
 
     const showHowTo = () => {
-        setHowToOpen(!howtoOpen);
+        openDialog({
+            width: "90%",
+            maxWidth: 1024,
+            active: true,
+            header: "사용 방법",
+            body: <HowToBody />,
+            footer: <BPButton onClick={closeDialog}>닫기</BPButton>,
+        });
     };
 
     const { streamer, tokenReset } = useHeader();
@@ -35,8 +43,6 @@ const Header = () => {
                     <BPButton onClick={tokenReset}>로그인 상태 리셋</BPButton>
                 </HeaderButton>
             </HeaderWrapper>
-
-            <HowToPopup howtoOpen={howtoOpen} showHowTo={showHowTo} />
         </>
     );
 };

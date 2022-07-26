@@ -33,7 +33,9 @@ const ValidContainer = ({ hash }: Props) => {
                         userId: res.data.user_id as string,
                     },
                 });
-                window.location.href = process.env.REACT_APP_REDIR_URI!;
+                setTimeout(() => {
+                    window.location.href = process.env.REACT_APP_REDIR_URI!;
+                }, 2000);
             })
             .catch((err) => {
                 // validation failed
@@ -45,7 +47,7 @@ const ValidContainer = ({ hash }: Props) => {
         return hash.split("&")[0].split("#access_token=")[1];
     };
 
-    return <></>;
+    return <>로그인 진행 중...</>;
 };
 
 export default ValidContainer;

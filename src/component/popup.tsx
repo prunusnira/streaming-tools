@@ -6,6 +6,7 @@ import {
     DialogHeader,
     DialogOuter,
 } from "../commonStyle/dialog.style";
+import Portal from "./portal";
 
 type Props = {
     width: number | string;
@@ -18,13 +19,15 @@ type Props = {
 
 const Popup = ({ width, maxWidth, active, header, body, footer }: Props) => {
     return (
-        <DialogOuter active={active}>
-            <DialogContainer width={width} maxWidth={maxWidth}>
-                <DialogHeader>{header}</DialogHeader>
-                <DialogBody>{body}</DialogBody>
-                <DialogFooter>{footer}</DialogFooter>
-            </DialogContainer>
-        </DialogOuter>
+        <Portal domid="#dialog">
+            <DialogOuter active={active}>
+                <DialogContainer width={width} maxWidth={maxWidth}>
+                    <DialogHeader>{header}</DialogHeader>
+                    <DialogBody>{body}</DialogBody>
+                    <DialogFooter>{footer}</DialogFooter>
+                </DialogContainer>
+            </DialogOuter>
+        </Portal>
     );
 };
 

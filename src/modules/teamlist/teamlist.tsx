@@ -21,7 +21,8 @@ type TeamListProps = {
     teamList: Array<string>;
     banpickData: IBanpickData;
 
-    setDlgTN: (b: boolean) => void;
+    openTeamNameChangeDialog: () => void;
+    // setDlgTN: (b: boolean) => void;
     runRoulette: (tn: number) => void;
     isPicked: (id: string) => boolean;
     updateUser: (u: User) => void;
@@ -34,7 +35,7 @@ const TeamList = ({
     teamList,
     banpickData,
 
-    setDlgTN,
+    openTeamNameChangeDialog,
     runRoulette,
     isPicked,
     updateUser,
@@ -73,7 +74,7 @@ const TeamList = ({
                     >
                         이 팀에서 1명 선택
                     </BPButton>
-                    <BPButton onClick={() => setDlgTN(true)}>팀명 변경</BPButton>
+                    <BPButton onClick={() => openTeamNameChangeDialog()}>팀명 변경</BPButton>
                 </TLRow>
             </TeamListHeaderSub>
             <TeamListBody>

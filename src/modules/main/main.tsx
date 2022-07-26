@@ -24,6 +24,7 @@ import useRoulette from "../roulette/useRoulette";
 import AlertDialog from "../dialog/alertDialog/alertDialog";
 import useAlertDialog from "../dialog/alertDialog/useAlertDialog";
 import { emptyUser } from "../../data/user";
+import PopupModal from "../../component/popupModal";
 
 const MainPage = () => {
     const { banpickData } = useBanpickData();
@@ -70,13 +71,14 @@ const MainPage = () => {
         updateUser,
     });
 
-    const { dlgRoulette, setDlgRoulette, runRoulette } = useRoulette({
+    const { runRoulette } = useRoulette({
         userList,
         team1,
         team2,
         team1list,
         team2list,
         banpickData,
+        picked,
         setPicked,
         setDlgUser,
         setNego,
@@ -205,6 +207,7 @@ const MainPage = () => {
                 <Footer />
             </MainContainer>
 
+            <PopupModal />
             <UserDialog
                 key={"userdialog"}
                 nego={isNego}
@@ -217,12 +220,6 @@ const MainPage = () => {
                     setDlgUser(false);
                     setPicked(emptyUser);
                 }}
-            />
-            <RouletteDialog
-                key={"roulette"}
-                display={dlgRoulette}
-                pickedUser={picked}
-                onClose={() => setDlgRoulette(false)}
             />
             <AlertDialog
                 display={alertDisplay}

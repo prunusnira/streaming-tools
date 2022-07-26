@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Popup from "../../component/popup";
 import User from "../../data/user";
 import { RBody, RFooter } from "./rouletteDialog.style";
-import useRoulette from "./useRoulette";
 
 type Props = {
     display: boolean;

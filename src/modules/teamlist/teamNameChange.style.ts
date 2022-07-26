@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FontReg16 } from "../../../commonStyle/font";
+import { FontReg16 } from "../../commonStyle/font";
 
 export const TNWrapper = styled.div`
     display: flex;
