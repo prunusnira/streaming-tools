@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { MutableRefObject, useContext } from "react";
 import { BPButton } from "../../commonStyle/global.style";
 import { ModalContext } from "../../context/modalContext";
 import Message from "../../data/message";
@@ -17,11 +17,14 @@ type Params<T> = {
     team2list: Array<string>;
     banpickData: IBanpickData;
     picked: User;
+    // picked: MutableRefObject<User>;
+    // chatList: MutableRefObject<Array<Message>>;
+    // isNego: MutableRefObject<boolean>;
     setPicked: (u: User) => void;
     setDlgUser: (b: boolean) => void;
     setNego: (b: boolean) => void;
     setChatList: (c: Array<Message>) => void;
-    openUserDlg: () => void;
+    // openUserDlg: () => void;
 };
 
 const useRoulette = ({
@@ -32,12 +35,14 @@ const useRoulette = ({
     team2list,
     banpickData,
     picked,
+    // chatList,
+    // isNego,
     setPicked,
     setDlgUser,
     setNego,
     setChatList,
-    openUserDlg,
-}: Params<User>) => {
+}: // openUserDlg,
+Params<User>) => {
     // 룰렛
     const { openDialog, modifyDlgBody, closeDialog } = useContext(ModalContext);
 
@@ -104,6 +109,7 @@ const useRoulette = ({
                 updateRoulette(picked);
                 updatePickedUser(picked);
                 setChatList([list[randVal].lastChat]);
+                // chatList.current = [list[randVal].lastChat];
                 setTimeout(closeRoulette, 1000);
             }, 3);
         } else {
@@ -131,13 +137,15 @@ const useRoulette = ({
     const updatePickedUser = (obj: Object) => {
         const user = userList.filter((x) => x.id === (obj as User).id)[0];
         setPicked(user);
+        // picked.current = user;
     };
 
     const closeRoulette = () => {
         closeDialog();
-        // setDlgUser(true);
-        openUserDlg();
+        setDlgUser(true);
+        // openUserDlg();
         setNego(false);
+        // isNego.current = false;
     };
 
     return {

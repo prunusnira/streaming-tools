@@ -23,6 +23,9 @@ import {
     ChatBtn,
     DlgFooter,
 } from "./userDlg.style";
+import UserDlgBody from "./userDlgBody";
+import UserDlgFooter from "./userDlgFooter";
+import UserDlgHeader from "./userDlgHeader";
 
 type Props = {
     team1: Team;
@@ -54,71 +57,39 @@ const useUserDlg = ({
     // const chatList = useRef<Array<Message>>([]);
     const { openDialog, closeDialog } = useContext(ModalContext);
 
-    useEffect(() => {
-        console.log(picked.name);
-    }, [picked]);
-    useEffect(() => {
-        console.log(chatList);
-    }, [chatList]);
-    useEffect(() => {
-        console.log(isNego);
-    }, [isNego]);
+    // useEffect(() => {
+    //     console.log(picked.name);
+    // }, [picked]);
+    // useEffect(() => {
+    //     console.log(chatList);
+    // }, [chatList]);
+    // useEffect(() => {
+    //     console.log(isNego);
+    // }, [isNego]);
 
-    const openUserDlg = useCallback(() => {
-        console.log(chatList.length);
-        openDialog({
-            width: "90%",
-            maxWidth: 1000,
-            active: true,
-            header: (
-                <TitleWrapper>
-                    <Title>
-                        <TitleIcon src={picked.profileUrl} />
-                        <TitleUserName>{picked.name}</TitleUserName>
-                        <TitleUserId>{`(${picked.id})`}</TitleUserId>
-                        <TitleSub>{picked.subs && "[구독자]"}</TitleSub>
-                    </Title>
-                    <TitleDesc>
-                        {isNego
-                            ? "ⓘ 스트리머와 내용에 대해 협상하세요. 여기서는 !픽 / !pick 을 사용할 수 없습니다"
-                            : "ⓘ 당첨자는 '!픽 내용' 혹은 '!pick 내용'을 입력하여 픽을 진행할 수 있습니다"}
-                    </TitleDesc>
-                </TitleWrapper>
-            ),
-            body: (
-                <ChatWrapper>
-                    {chatList.map((v, i) => {
-                        return (
-                            <ChatBox key={`chat_${v.id}_${i}`}>
-                                <ChatBoxLeft>
-                                    <ChatTimeWrapper>
-                                        <ChatTime>{v.timeInTxt}</ChatTime>
-                                        <ChatTime>{`${msToTime(
-                                            Date.now() - v.time
-                                        )} 초 전`}</ChatTime>
-                                    </ChatTimeWrapper>
-                                    <ChatMsg>{v.msg}</ChatMsg>
-                                </ChatBoxLeft>
-                                {!isNego && (
-                                    <ChatBtn>
-                                        <MiniButton onClick={() => pickMessage(i)}>
-                                            이걸로 결정하기
-                                        </MiniButton>
-                                    </ChatBtn>
-                                )}
-                            </ChatBox>
-                        );
-                    })}
-                </ChatWrapper>
-            ),
-            footer: (
-                <DlgFooter>
-                    {!isNego && <BPButton onClick={() => skipMessage()}>넘기기</BPButton>}
-                    <BPButton onClick={() => closeDialog()}>닫기</BPButton>
-                </DlgFooter>
-            ),
-        });
-    }, [picked, chatList, isNego]);
+    // const openUserDlg = () => {
+    //     // console.log(chatList.length);
+    //     openDialog({
+    //         width: "90%",
+    //         maxWidth: 1000,
+    //         active: true,
+    //         header: <UserDlgHeader picked={picked.current} isNego={isNego.current} />,
+    //         body: (
+    //             <UserDlgBody
+    //                 chatList={chatList.current}
+    //                 isNego={isNego.current}
+    //                 pickMessage={pickMessage}
+    //             />
+    //         ),
+    //         footer: (
+    //             <UserDlgFooter
+    //                 isNego={isNego.current}
+    //                 skipMessage={skipMessage}
+    //                 closeDialog={closeDialog}
+    //             />
+    //         ),
+    //     });
+    // };
 
     const pickMessage = (idx: number) => {
         if (picked) {
@@ -157,8 +128,8 @@ const useUserDlg = ({
             const user = userList.filter((x) => x.id === msg.id)[0];
             user.picked = true;
             updateUser(user);
-            setDlgUser(false);
             setPicked(emptyUser);
+            // closeDialog();
         }
     };
 
@@ -167,8 +138,8 @@ const useUserDlg = ({
             const user = userList.filter((x) => x.id === picked.id)[0];
             user.picked = true;
             updateUser(user);
-            setDlgUser(false);
             setPicked(emptyUser);
+            // closeDialog();
         }
     };
 
@@ -189,10 +160,9 @@ const useUserDlg = ({
         setNego,
         chatList,
         setChatList,
-
+        // openUserDlg,
         pickMessage,
         skipMessage,
-        openUserDlg,
     };
 };
 

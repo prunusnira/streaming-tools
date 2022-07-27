@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { MutableRefObject, useContext, useEffect, useState } from "react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import Message, { emptyMessage, getFormatDate } from "../data/message";
@@ -16,6 +16,7 @@ import { ModalContext } from "../context/modalContext";
 type Props = {
     banpickData: IBanpickData;
     isNego: boolean;
+    // isNego: MutableRefObject<boolean>;
     hasUser: (teamNum: number, id: string) => Promise<boolean>;
     removeUser: (teamNum: number, id: string) => Promise<void>;
     addUser: (teamNum: number, user: User) => Promise<void>;
@@ -24,6 +25,8 @@ type Props = {
     getTeamInfo: (teamNum: number) => Promise<Team>;
     setTeamInfo: (teamNum: number, team: Team) => void;
 
+    // picked: MutableRefObject<User>;
+    // chatList: MutableRefObject<Array<Message>>;
     picked: User;
     chatList: Array<Message>;
     setChatList: (l: Array<Message>) => void;
@@ -53,6 +56,7 @@ const useIRC = ({
     const { closeDialog } = useContext(ModalContext);
 
     const { speech } = useTTS();
+    const [_, forceUpdate] = useState(0);
 
     useEffect(() => {
         socket.current.onopen = onSocketOpen;
@@ -230,12 +234,15 @@ const useIRC = ({
 
                     closeDialog();
                     setPicked(emptyUser);
+                    // picked.current = emptyUser;
 
                     // state 변경 이후 실행되어야 함
                     // scrollToBottomPick(currentTeam);
                 } else {
                     setChatList([...chatList, msg]);
+                    // chatList.current = [...chatList.current, msg];
                     speech(msg.msg);
+                    forceUpdate((prevState) => prevState + 1);
                 }
             }
 

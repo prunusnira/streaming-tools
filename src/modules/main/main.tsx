@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Observer } from "../../data/observer/observer";
 import { PageMode } from "../../data/pageMode";
@@ -9,7 +9,6 @@ import Header from "../header/header";
 import { DataWrapper, MainContainer, MainLayout, TabButton, TabLayout } from "./main.style";
 import Config from "../config/config";
 import useIRC from "../../websocket/useIRC";
-import { useEffect } from "react";
 import useMain from "./useMain";
 import InnerPresenter from "../presenter/innerPresenter";
 import TeamListContainer from "../teamlist/teamlistContainer";
@@ -17,11 +16,11 @@ import BanPickContainer from "../banpick/banpickContainer";
 import ChatPresenter from "../chat/chatPresenter";
 import useBanpickData from "./useBanpickData";
 import useStorage from "../../db/useStorage";
-import UserDialog from "../dialog/userDialog/userdlg";
 import useUserDlg from "../dialog/userDialog/useUserDlg";
 import useRoulette from "../roulette/useRoulette";
-import { emptyUser } from "../../data/user";
 import PopupModal from "../../component/popupModal";
+import UserDialog from "../dialog/userDialog/userdlg";
+import { emptyUser } from "../../data/user";
 
 const MainPage = () => {
     const { banpickData } = useBanpickData();
@@ -52,9 +51,9 @@ const MainPage = () => {
         setNego,
         chatList,
         setChatList,
+        // openUserDlg,
         pickMessage,
         skipMessage,
-        openUserDlg,
     } = useUserDlg({
         team1,
         team2,
@@ -74,11 +73,13 @@ const MainPage = () => {
         team2list,
         banpickData,
         picked,
+        // chatList,
+        // isNego,
         setPicked,
         setDlgUser,
         setNego,
         setChatList,
-        openUserDlg,
+        // openUserDlg,
     });
 
     const { registerObserver } = useIRC({
@@ -197,7 +198,7 @@ const MainPage = () => {
             </MainContainer>
 
             <PopupModal />
-            {/* <UserDialog
+            <UserDialog
                 key={"userdialog"}
                 nego={isNego}
                 user={picked}
@@ -209,7 +210,7 @@ const MainPage = () => {
                     setDlgUser(false);
                     setPicked(emptyUser);
                 }}
-            /> */}
+            />
         </>
     );
 };

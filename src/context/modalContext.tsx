@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 type ModalData = {
     width: number | string;
@@ -44,22 +44,17 @@ const ModalProvider = ({ children }: Props) => {
     const [body, setBody] = useState<React.ReactNode>("");
     const [footer, setFooter] = useState<React.ReactNode>("");
 
-    const openDialog = ({ width, maxWidth, header, body, footer }: ModalData) => {
-        // setModalData({
-        //     width,
-        //     maxWidth,
-        //     active: true,
-        //     header,
-        //     body,
-        //     footer,
-        // });
-        setWidth(width);
-        setMaxWidth(maxWidth);
-        setActive(true);
-        setHeader(header);
-        setBody(body);
-        setFooter(footer);
-    };
+    const openDialog = useCallback(
+        ({ width, maxWidth, header, body, footer }: ModalData) => {
+            setWidth(width);
+            setMaxWidth(maxWidth);
+            setActive(true);
+            setHeader(header);
+            setBody(body);
+            setFooter(footer);
+        },
+        [header, body, footer]
+    );
 
     const closeDialog = () => {
         // setModalData({ ...modalData, active: false });
