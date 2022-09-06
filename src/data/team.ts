@@ -1,19 +1,9 @@
-import Message from "./message";
+import { Message } from "./message";
 
-type Team = {
-    teamNum: number;
-    teamName: string;
+export type TeamInfoType = {
+    num: number;
+    name: string;
     pickList: Array<Message>;
-    cpick: number;
-    cban: number;
+    curPick: number;
+    curBan: number;
 };
-
-export const emptyTeam: Team = {
-    teamNum: 0,
-    teamName: "",
-    pickList: [],
-    cpick: 0,
-    cban: 0,
-};
-
-export default Team;

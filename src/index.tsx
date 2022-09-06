@@ -1,24 +1,33 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { PersistGate } from "redux-persist/integration/react";
-import reduxStore from "./redux/store";
-import { Provider } from "react-redux";
-import "./index.css";
+import StreamerProvider from "./lib/context/streamerProvider";
+import { BrowserRouter } from "react-router-dom";
+import CombinedProviders from "./lib/context/combinedProvider";
+import TeamProvider from "./lib/context/teamProvider";
+import StatusProvider from "./lib/context/statusProvider";
+import ModalProvider from "./lib/context/modalProvider";
+import TalkProvider from "./lib/context/talkProvider";
 
-const { store, persistor } = reduxStore;
-const rootElement = document.getElementById("root")!;
-const root = createRoot(rootElement);
-
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-    <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-            <React.StrictMode>
+    <React.StrictMode>
+        <BrowserRouter>
+            <CombinedProviders
+                components={[
+                    StreamerProvider,
+                    TeamProvider,
+                    StatusProvider,
+                    ModalProvider,
+                    TalkProvider,
+                ]}
+            >
                 <App />
-            </React.StrictMode>
-        </PersistGate>
-    </Provider>
+            </CombinedProviders>
+        </BrowserRouter>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
