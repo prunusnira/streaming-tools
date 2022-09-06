@@ -117,6 +117,7 @@ const BanpickList = () => {
                             changeBanStatus={changeBanStatus}
                             openEditDialog={openEditDialog}
                             openDeleteDialog={openDeleteDialog}
+                            openNegoMode={openNegoMode}
                         />
                     ))
                 ) : (
@@ -133,6 +134,7 @@ const BanpickList = () => {
                             changeBanStatus={changeBanStatus}
                             openEditDialog={openEditDialog}
                             openDeleteDialog={openDeleteDialog}
+                            openNegoMode={openNegoMode}
                         />
                     ))
                 ) : (

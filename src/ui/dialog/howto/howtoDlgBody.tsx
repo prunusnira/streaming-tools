@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { BodyContainer } from "./howto.style";
+import { BodyContainer, HowtoPH1, HowtoPH2 } from "./howto.style";
 import { PagerBtn, PagerContainer } from "./pager.style";
 
 const Page1 = () => {
     return (
         <>
-            Twitch BanPicker는?
+            <HowtoPH1>Twitch BanPicker는?</HowtoPH1>
             <ul>
                 <li>
                     시청자들의 참여를 유도하여 컨텐츠에 집중할 수 있게 해주는 트위치 스트리머용
@@ -23,8 +23,8 @@ const Page1 = () => {
 const Page2 = () => {
     return (
         <>
-            1단계 참여하기
-            <>스트리머</>
+            <HowtoPH1>1단계 참여하기</HowtoPH1>
+            <HowtoPH2>스트리머</HowtoPH2>
             <ul>
                 <li>
                     시작하기 전에 각 팀으로부터 받을 전체 픽 개수, 턴당 각 팀으로부터 받을 픽 개수,
@@ -39,7 +39,7 @@ const Page2 = () => {
                 <li>인원 모집을 재개하려면 인원 모집 재개 버튼을 선택합니다</li>
                 <li>인원 모집 상태와 무관하게 밴픽을 진행할 수 있습니다</li>
             </ul>
-            <>시청자</>
+            <HowtoPH2>시청자</HowtoPH2>
             <ul>
                 <li>
                     스트리머가 인원 참여 시작 버튼을 누르면 <b>!team 1 혹은 2</b> /{" "}
@@ -53,8 +53,8 @@ const Page2 = () => {
 const Page3 = () => {
     return (
         <>
-            2단계 밴픽 진행하기
-            <>스트리머</>
+            <HowtoPH1>2단계 밴픽 진행하기</HowtoPH1>
+            <HowtoPH2>스트리머</HowtoPH2>
             <ul>
                 <li>
                     인원 모집이 충분히 진행되었다면 '이 팀에서 1명 선택' 버튼을 눌러 각 팀에 참여한

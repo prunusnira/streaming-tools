@@ -1,12 +1,15 @@
 import { useContext, useEffect } from "react";
 import { Phase } from "../../data/status";
 import { StatusContext } from "../../lib/context/statusProvider";
+import { TeamContext } from "../../lib/context/teamProvider";
 import {
     ConfButton,
     ConfigBtnGroup,
     ConfigContainer,
     ConfigCtrl,
     ConfigPhase,
+    ConfigPhaseWrapper,
+    PhaseChangeBtn,
 } from "./config.style";
 import Control from "./control";
 
@@ -18,6 +21,7 @@ const Config = () => {
         pause,
         resetStatus,
         changeTeamVisible,
+        changePhase,
         totalPickAdd,
         totalPickSub,
         phaseBanAdd,
@@ -25,6 +29,24 @@ const Config = () => {
         phasePickAdd,
         phasePickSub,
     } = useContext(StatusContext);
+    const { team1, team2, updateTeam1, updateTeam2, resetTeam } = useContext(TeamContext);
+
+    const forcePhaseChange = () => {
+        if (data.phase === Phase.Pick) {
+            changePhase(Phase.Ban);
+            team1.curPick = 0;
+            team2.curPick = 0;
+            updateTeam1(team1);
+            updateTeam2(team2);
+        }
+        if (data.phase === Phase.Ban) {
+            changePhase(Phase.Pick);
+            team1.curBan = 0;
+            team2.curBan = 0;
+            updateTeam1(team1);
+            updateTeam2(team2);
+        }
+    };
 
     return (
         <ConfigContainer>
@@ -41,7 +63,13 @@ const Config = () => {
                     {data.run && !data.join && "인원 모집 재개"}
                     {data.run && data.join && "인원 모집 중단"}
                 </ConfButton>
-                <ConfButton bgColor="" onClick={resetStatus}>
+                <ConfButton
+                    bgColor=""
+                    onClick={() => {
+                        resetStatus();
+                        resetTeam();
+                    }}
+                >
                     리셋
                 </ConfButton>
                 <ConfButton
@@ -74,11 +102,19 @@ const Config = () => {
                     sub={phaseBanSub}
                 />
             </ConfigCtrl>
-            <ConfigPhase>
-                {data.phase === Phase.Ready && "READY"}
-                {data.phase === Phase.Pick && "PICK PHASE"}
-                {data.phase === Phase.Ban && "BAN PHASE"}
-            </ConfigPhase>
+            <ConfigPhaseWrapper>
+                <ConfigPhase>
+                    {data.phase === Phase.Ready && "READY"}
+                    {data.phase === Phase.Pick && "PICK PHASE"}
+                    {data.phase === Phase.Ban && "BAN PHASE"}
+                </ConfigPhase>
+                <PhaseChangeBtn
+                    disabled={data.phase === Phase.Ready ? true : false}
+                    onClick={forcePhaseChange}
+                >
+                    강제 페이즈 전환
+                </PhaseChangeBtn>
+            </ConfigPhaseWrapper>
         </ConfigContainer>
     );
 };

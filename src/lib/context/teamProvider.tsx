@@ -18,6 +18,7 @@ type TeamContextType = {
     updateTeam1: (data: TeamInfoType) => void;
     updateTeam2: (data: TeamInfoType) => void;
     updateUserList: (list: Array<UserType>) => void;
+    resetTeam: () => void;
 };
 
 export const TeamContext = React.createContext<TeamContextType>({
@@ -27,6 +28,7 @@ export const TeamContext = React.createContext<TeamContextType>({
     updateTeam1: (data: TeamInfoType) => {},
     updateTeam2: (data: TeamInfoType) => {},
     updateUserList: (list: Array<UserType>) => {},
+    resetTeam: () => {},
 });
 
 type ProviderProps = {
@@ -68,6 +70,20 @@ const TeamProvider = ({ children }: ProviderProps) => {
         setUserList((prev) => [...list]);
     };
 
+    const resetTeam = () => {
+        setTeam1Num(1);
+        setTeam1Name("TEAM 1");
+        setTeam1PickList([]);
+        setTeam1CurPick(0);
+        setTeam1CurBan(0);
+        setTeam2Num(2);
+        setTeam2Name("TEAM 2");
+        setTeam2PickList([]);
+        setTeam2CurPick(0);
+        setTeam2CurBan(0);
+        setUserList([]);
+    };
+
     return (
         <TeamContext.Provider
             value={{
@@ -89,6 +105,7 @@ const TeamProvider = ({ children }: ProviderProps) => {
                 updateTeam1,
                 updateTeam2,
                 updateUserList,
+                resetTeam,
             }}
         >
             {children}

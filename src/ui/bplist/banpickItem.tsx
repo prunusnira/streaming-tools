@@ -18,6 +18,7 @@ type Props = {
     changeBanStatus: (tn: number, idx: number) => void;
     openEditDialog: (teamNum: number, idx: number, msg: Message) => void;
     openDeleteDialog: (teamNum: number, idx: number) => void;
+    openNegoMode: () => void;
 };
 
 const BanpickItem = ({
@@ -27,6 +28,7 @@ const BanpickItem = ({
     changeBanStatus,
     openEditDialog,
     openDeleteDialog,
+    openNegoMode,
 }: Props) => {
     return (
         <ItemContainer>
@@ -41,7 +43,7 @@ const BanpickItem = ({
             <ItemBodyBtnWrapper>
                 <ItemButton onClick={() => openEditDialog(team, idx, item)}>수정</ItemButton>
                 <ItemButton onClick={() => openDeleteDialog(team, idx)}>삭제</ItemButton>
-                <ItemButton>협상</ItemButton>
+                <ItemButton onClick={() => openNegoMode()}>협상</ItemButton>
                 <ItemButton onClick={() => changeBanStatus(team, idx)}>
                     {item.ban && "언밴"}
                     {!item.ban && "밴"}

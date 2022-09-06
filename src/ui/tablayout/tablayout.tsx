@@ -17,8 +17,18 @@ const TabLayout = () => {
     return (
         <TabLayoutContainer>
             <TabPlacement>
-                <TabButton onClick={() => setTabType(TabType.TeamList)}>유저목록</TabButton>
-                <TabButton onClick={() => setTabType(TabType.BPList)}>밴픽목록</TabButton>
+                <TabButton
+                    active={tabType === TabType.TeamList}
+                    onClick={() => setTabType(TabType.TeamList)}
+                >
+                    유저목록
+                </TabButton>
+                <TabButton
+                    active={tabType === TabType.BPList}
+                    onClick={() => setTabType(TabType.BPList)}
+                >
+                    밴픽목록
+                </TabButton>
             </TabPlacement>
             <TabFragment>
                 {tabType === TabType.TeamList && <TeamList />}

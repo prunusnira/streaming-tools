@@ -9,6 +9,7 @@ export const ConfigContainer = styled.section`
 
 export const ConfigBtnGroup = styled.div`
     flex: 2;
+    width: 100%;
 `;
 
 export const ConfigCtrl = styled.div`
@@ -17,13 +18,19 @@ export const ConfigCtrl = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
 `;
 
+export const ConfigPhaseWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
 export const ConfigPhase = styled.div`
     flex: 1;
     text-align: center;
+    font-size: 20px;
 `;
 
+export const PhaseChangeBtn = styled.button``;
+
 export const ConfButton = styled.button<{ bgColor: string }>`
-    width: 200px;
-    height: 48px;
     padding: 10px 20px;
 `;
