@@ -1,24 +1,18 @@
-import React from "react";
-import { Provider } from "react-redux";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { PersistGate } from "redux-persist/integration/react";
-import { GlobalStyle } from "./commonStyle/global.style";
-import IndexContainer from "./modules/indexContainer";
-import { store, persistor } from "./redux/store";
+import useLogin from "./core/login/useLogin";
+import { LoginStatusType } from "./data/loginStatus";
+import Loading from "./ui/loading/loading";
+import MainPage from "./ui/main";
 
 const App = () => {
-    return (
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <GlobalStyle />
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<IndexContainer />} />
-                    </Routes>
-                </BrowserRouter>
-            </PersistGate>
-        </Provider>
-    );
+    const { loginStatus } = useLogin();
+
+    switch (loginStatus) {
+        case LoginStatusType.Signed:
+            return <MainPage />;
+        case LoginStatusType.None:
+        default:
+            return <Loading />;
+    }
 };
 
 export default App;
