@@ -1,7 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { ModalContext } from "../../lib/context/modalProvider";
 import { StatusContext } from "../../lib/context/statusProvider";
 import { StreamerContext } from "../../lib/context/streamerProvider";
 import { TalkContext } from "../../lib/context/talkProvider";
+import AlertDialog from "../../ui/dialog/alert/alertDlg";
 import { Observer, Subject } from "./observer";
 import useProcessMessage from "./useProcessMessage";
 
@@ -11,6 +13,7 @@ const useIRC = () => {
     const { data: dataStreamer } = useContext(StreamerContext);
     const { data: dataStatus } = useContext(StatusContext);
     const { pickedUser } = useContext(TalkContext);
+    const { openDialog, closeDialog } = useContext(ModalContext);
     const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
     const { processMessage } = useProcessMessage();
 
@@ -47,7 +50,20 @@ const useIRC = () => {
         };
 
         socket.current.onclose = (ev: CloseEvent) => {
-            console.log("WS Closed: " + ev.code);
+            // 소켓 닫힘 알림 보내고 리로드
+            openDialog({
+                width: 420,
+                maxWidth: 420,
+                active: true,
+                header: "알림",
+                body: (
+                    <AlertDialog
+                        msg={"트위치 채팅서버와 연결이 끊어졌습니다. 새로고침 해주세요."}
+                        closeDialog={closeDialog}
+                    />
+                ),
+                footer: undefined,
+            });
         };
 
         registerObserver(observer.current);

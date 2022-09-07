@@ -31,6 +31,12 @@ export const ConfigPhase = styled.div`
 
 export const PhaseChangeBtn = styled.button``;
 
-export const ConfButton = styled.button<{ bgColor: string }>`
+export const ConfSButton = styled.button<{ run: boolean; join: boolean }>`
     padding: 10px 20px;
+    ${(props) => !props.run && `background-color: #e83737; color: white;`}
+`;
+
+export const ConfButton = styled.button`
+    padding: 10px 20px;
+    background-color: #fef8e8;
 `;

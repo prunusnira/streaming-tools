@@ -5,6 +5,7 @@ import { TeamInfoType } from "../../data/team";
 import { ModalContext } from "../../lib/context/modalProvider";
 import { StatusContext } from "../../lib/context/statusProvider";
 import { TeamContext } from "../../lib/context/teamProvider";
+import AlertDialog from "../dialog/alert/alertDlg";
 import TNChangeBody from "../dialog/teamname/tnChangeBody";
 import TNChangeFooter from "../dialog/teamname/tnChangeFooter";
 import TNChangeHeader from "../dialog/teamname/tnChangeHeader";
@@ -47,7 +48,23 @@ const ListColumn = ({ teamInfo, children }: Props) => {
             <ColumnBtnDiv>
                 <ColumnBtnPick
                     onClick={() => {
-                        runRoulette(teamInfo.num);
+                        if (data.phase === Phase.Pick && teamInfo.curPick < data.pickPhase) {
+                            runRoulette(teamInfo.num);
+                        } else {
+                            openDialog({
+                                width: 420,
+                                maxWidth: 420,
+                                active: true,
+                                header: "제한 안내",
+                                body: (
+                                    <AlertDialog
+                                        msg={`${teamInfo.num}번 팀에 대해 이번 페이즈에 할당된 픽 수를 모두 사용했습니다`}
+                                        closeDialog={closeDialog}
+                                    />
+                                ),
+                                footer: undefined,
+                            });
+                        }
                     }}
                 >
                     이 팀에서 선택

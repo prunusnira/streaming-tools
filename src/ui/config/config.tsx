@@ -9,6 +9,7 @@ import {
     ConfigCtrl,
     ConfigPhase,
     ConfigPhaseWrapper,
+    ConfSButton,
     PhaseChangeBtn,
 } from "./config.style";
 import Control from "./control";
@@ -51,8 +52,9 @@ const Config = () => {
     return (
         <ConfigContainer>
             <ConfigBtnGroup>
-                <ConfButton
-                    bgColor=""
+                <ConfSButton
+                    run={data.run}
+                    join={data.join}
                     onClick={() => {
                         !data.run && startup();
                         data.run && !data.join && resume();
@@ -62,9 +64,8 @@ const Config = () => {
                     {!data.run && "인원 모집 시작"}
                     {data.run && !data.join && "인원 모집 재개"}
                     {data.run && data.join && "인원 모집 중단"}
-                </ConfButton>
+                </ConfSButton>
                 <ConfButton
-                    bgColor=""
                     onClick={() => {
                         resetStatus();
                         resetTeam();
@@ -73,7 +74,6 @@ const Config = () => {
                     리셋
                 </ConfButton>
                 <ConfButton
-                    bgColor=""
                     onClick={() => {
                         data.teamVisible ? changeTeamVisible(false) : changeTeamVisible(true);
                     }}

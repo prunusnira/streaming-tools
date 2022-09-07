@@ -1,3 +1,4 @@
+import useController from "../core/control/useController";
 import useIRC from "../core/irc/useIRC";
 import Config from "./config/config";
 import PopupModal from "./dialog/popupModal";
@@ -9,6 +10,7 @@ import TabLayout from "./tablayout/tablayout";
 
 const MainPage = () => {
     useIRC();
+    useController();
 
     return (
         <MainContainer>

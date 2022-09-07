@@ -26,10 +26,14 @@ const BanpickList = () => {
     const changeBanStatus = (teamNum: number, idx: number) => {
         if (teamNum === 1) {
             team1.pickList[idx].ban = !team1.pickList[idx].ban;
+            team1.pickList[idx].ban && team1.curBan++;
+            !team1.pickList[idx].ban && team1.curBan--;
             updateTeam1(team1);
         }
         if (teamNum === 2) {
             team2.pickList[idx].ban = !team2.pickList[idx].ban;
+            team2.pickList[idx].ban && team2.curBan++;
+            !team2.pickList[idx].ban && team2.curBan--;
             updateTeam2(team2);
         }
         forceUpdate((p) => p + 1);

@@ -36,7 +36,7 @@ type ProviderProps = {
 const StatusProvider = ({ children }: ProviderProps) => {
     const [phase, setPhase] = useState(Phase.Ready);
     const [totalPick, setTotalPick] = useState(7);
-    const [pickPhase, setPickPhase] = useState(3);
+    const [pickPhase, setPickPhase] = useState(1);
     const [banPhase, setBanPhase] = useState(1);
     const [run, setRun] = useState(false);
     const [join, setJoin] = useState(false);
