@@ -115,6 +115,7 @@ const BanpickList = () => {
                 {checkLength(team1.pickList) ? (
                     team1.pickList.map((x, i) => (
                         <BanpickItem
+                            key={`bplist_1_${i}`}
                             team={1}
                             item={x}
                             idx={i}
@@ -132,6 +133,7 @@ const BanpickList = () => {
                 {checkLength(team2.pickList) ? (
                     team2.pickList.map((x, i) => (
                         <BanpickItem
+                            key={`bplist_2_${i}`}
                             team={2}
                             item={x}
                             idx={i}

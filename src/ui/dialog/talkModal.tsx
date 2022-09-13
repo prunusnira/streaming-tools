@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { emptyUser } from "../../data/user";
 import { TalkContext } from "../../lib/context/talkProvider";
 import { TeamContext } from "../../lib/context/teamProvider";
 import {
@@ -14,11 +15,12 @@ import TalkDlgFooter from "./talk/talkDlgFooter";
 import TalkDlgHeader from "./talk/talkDlgHeader";
 
 const TalkModal = () => {
-    const { data, pickedUser, talkHistory, negoMode, initTime, closeTalkDialog } =
+    const { data, pickedUser, talkHistory, negoMode, initTime, closeTalkDialog, changePickedUser } =
         useContext(TalkContext);
     const { userList, updateUserList } = useContext(TeamContext);
 
     const cancelDialog = () => {
+        changePickedUser(emptyUser);
         closeTalkDialog();
     };
 
@@ -26,6 +28,7 @@ const TalkModal = () => {
         const idx = userList.findIndex((x) => x.userid === pickedUser.userid);
         userList[idx].picked = true;
         updateUserList(userList);
+        changePickedUser(emptyUser);
         closeTalkDialog();
     };
 
@@ -37,7 +40,11 @@ const TalkModal = () => {
                         <TalkDlgHeader active={data.active} user={pickedUser} initTime={initTime} />
                     </DialogHeader>
                     <DialogBody>
-                        <TalkDlg team={pickedUser.team} msglist={talkHistory} negoMode={negoMode} />
+                        <TalkDlg
+                            pickedUser={pickedUser}
+                            msglist={talkHistory}
+                            negoMode={negoMode}
+                        />
                     </DialogBody>
                     <DialogFooter>
                         <TalkDlgFooter skipDialog={skipDialog} cancelDialog={cancelDialog} />

@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import { emptyUser, UserType } from "../../data/user";
 import { ModalContext } from "../../lib/context/modalProvider";
 import { TalkContext } from "../../lib/context/talkProvider";
@@ -13,7 +13,7 @@ import RouletteErrorHeader from "../../ui/dialog/roulette/rouletteErrorHeader";
 const useRoulette = () => {
     const target = useRef<UserType>(emptyUser);
     const roulette = useRef<NodeJS.Timeout>();
-    const { userList, updateUserList } = useContext(TeamContext);
+    const { userList } = useContext(TeamContext);
     const { changePickedUser, openTalkDialog, addTalkHistory } = useContext(TalkContext);
     const { openDialog, closeDialog } = useContext(ModalContext);
 
@@ -36,6 +36,7 @@ const useRoulette = () => {
 
     const runRoulette = (teamNum: number) => {
         const rouletteUsers = getRouletteUserList(teamNum);
+        console.log(rouletteUsers);
 
         if (rouletteUsers.length === 0) {
             // 에러 표시하고 리턴

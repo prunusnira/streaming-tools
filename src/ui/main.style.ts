@@ -6,6 +6,7 @@ export const MainContainer = styled.main`
     justify-content: center;
     align-items: center;
     width: 100vw;
+    min-width: 1350px;
     height: 100vh;
 
     color: white;

@@ -11,4 +11,7 @@ export const TalkDlgContainer = styled.section`
 
 export const TalkDlgDesc = styled.div``;
 
-export const TalkDlgMsgList = styled.div``;
+export const TalkDlgMsgList = styled.div`
+    height: 50vh;
+    overflow-y: auto;
+`;

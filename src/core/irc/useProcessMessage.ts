@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { emptyMessage, Message } from "../../data/message";
+import { emptyUser } from "../../data/user";
 import { ModalContext } from "../../lib/context/modalProvider";
 import { StatusContext } from "../../lib/context/statusProvider";
 import { StreamerContext } from "../../lib/context/streamerProvider";
@@ -15,7 +16,8 @@ const useProcessMessage = () => {
         useContext(TeamContext);
     const { data: dataStreamer } = useContext(StreamerContext);
     const { data: dataStatus } = useContext(StatusContext);
-    const { pickedUser, negoMode, addTalkHistory, closeTalkDialog } = useContext(TalkContext);
+    const { pickedUser, negoMode, addTalkHistory, closeTalkDialog, changePickedUser } =
+        useContext(TalkContext);
     const { speech } = useSpeech();
 
     const getUser = (userid: string) => {
@@ -118,6 +120,7 @@ const useProcessMessage = () => {
                             timeInTxt: msg.timeInTxt,
                             ban: false,
                         });
+                        team1.curPick++;
                         updateTeam1(team1);
                     } else if (userinfo.team === 2) {
                         team2.pickList.push({
@@ -128,6 +131,7 @@ const useProcessMessage = () => {
                             timeInTxt: msg.timeInTxt,
                             ban: false,
                         });
+                        team2.curPick++;
                         updateTeam2(team2);
                     }
 
@@ -138,6 +142,7 @@ const useProcessMessage = () => {
                     // 현재 채팅 리스트를 초기화 해주어야 함
                     // !pick을 제외하고 말하기 필요
                     speech(pickMsg);
+                    changePickedUser(emptyUser);
                     closeTalkDialog();
                 } else {
                     // !pick 이외의 경우

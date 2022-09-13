@@ -29,6 +29,7 @@ const RouletteDlg = ({ list }: Props) => {
         txtRoulette.current.forEach((x) => {
             clearInterval(x);
         });
+        txtRoulette.current.splice(0, txtRoulette.current.length);
     };
 
     return <RouletteDlgContainer>{sel}</RouletteDlgContainer>;

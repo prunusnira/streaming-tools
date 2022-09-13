@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BodyContainer, HowtoPH1, HowtoPH2 } from "./howto.style";
+import { BodyContainer, BodyContent, BodyPager, HowtoPH1, HowtoPH2 } from "./howto.style";
 import { PagerBtn, PagerContainer } from "./pager.style";
 
 const Page1 = () => {
@@ -91,10 +91,14 @@ const HowtoDlgBody = () => {
     const [page, setPage] = useState(0);
     return (
         <BodyContainer>
-            {page === 0 && <Page1 />}
-            {page === 1 && <Page2 />}
-            {page === 2 && <Page3 />}
-            <Pager setPage={setPage} />
+            <BodyContent>
+                {page === 0 && <Page1 />}
+                {page === 1 && <Page2 />}
+                {page === 2 && <Page3 />}
+            </BodyContent>
+            <BodyPager>
+                <Pager setPage={setPage} />
+            </BodyPager>
         </BodyContainer>
     );
 };
