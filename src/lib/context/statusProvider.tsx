@@ -79,7 +79,7 @@ const StatusProvider = ({ children }: ProviderProps) => {
     };
 
     const totalPickSub = () => {
-        totalPick > 0 && setTotalPick(totalPick - 1);
+        totalPick > 0 && totalPick > pickPhase && setTotalPick(totalPick - 1);
     };
 
     const phasePickAdd = () => {
@@ -87,11 +87,11 @@ const StatusProvider = ({ children }: ProviderProps) => {
     };
 
     const phasePickSub = () => {
-        pickPhase > 0 && pickPhase > banPhase + 1 && setPickPhase(pickPhase - 1);
+        pickPhase > 0 && pickPhase > banPhase && setPickPhase(pickPhase - 1);
     };
 
     const phaseBanAdd = () => {
-        setBanPhase(banPhase + 1);
+        banPhase < pickPhase && setBanPhase(banPhase + 1);
     };
 
     const phaseBanSub = () => {

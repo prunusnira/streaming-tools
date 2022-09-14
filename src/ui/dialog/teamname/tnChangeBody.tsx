@@ -15,7 +15,7 @@ const TNChangeBody = ({ teamNum }: Props) => {
     return (
         <TNChangeContainer>
             <TNCurrent>
-                현재 팀 {teamNum}의 이름:
+                현재 팀 {teamNum}의 이름:&nbsp;
                 {teamNum === 1 && team1.name}
                 {teamNum === 2 && team2.name}
             </TNCurrent>
@@ -27,7 +27,7 @@ const TNChangeBody = ({ teamNum }: Props) => {
                 }}
             />
             <TNBtnWrapper>
-                <TNButton>취소</TNButton>
+                <TNButton onClick={closeDialog}>취소</TNButton>
                 <TNButton
                     onClick={() => {
                         if (teamNum === 1) {

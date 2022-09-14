@@ -7,7 +7,6 @@ import { StatusContext } from "../../lib/context/statusProvider";
 import { TeamContext } from "../../lib/context/teamProvider";
 import AlertDialog from "../dialog/alert/alertDlg";
 import TNChangeBody from "../dialog/teamname/tnChangeBody";
-import TNChangeFooter from "../dialog/teamname/tnChangeFooter";
 import TNChangeHeader from "../dialog/teamname/tnChangeHeader";
 import {
     ColumnBtnDiv,
@@ -78,7 +77,7 @@ const ListColumn = ({ teamInfo, children }: Props) => {
                             active: true,
                             header: <TNChangeHeader />,
                             body: <TNChangeBody teamNum={teamInfo.num} />,
-                            footer: <TNChangeFooter closeDialog={closeDialog} />,
+                            footer: undefined,
                         });
                     }}
                 >

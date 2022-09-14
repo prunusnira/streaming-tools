@@ -10,18 +10,18 @@ export const FooterContainer = styled.section`
 export const FooterItem = styled.span``;
 
 export const FooterAnchor = styled.a`
-    color: "yellow";
+    color: yellow;
 
     :hover {
-        color: "yellow";
+        color: yellow;
     }
     :visited {
-        color: "yellow";
+        color: yellow;
     }
     :active {
-        color: "yellow";
+        color: yellow;
     }
     :link {
-        color: "yellow";
+        color: yellow;
     }
 `;
