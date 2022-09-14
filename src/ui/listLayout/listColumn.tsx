@@ -7,7 +7,6 @@ import { StatusContext } from "../../lib/context/statusProvider";
 import { TeamContext } from "../../lib/context/teamProvider";
 import AlertDialog from "../dialog/alert/alertDlg";
 import TNChangeBody from "../dialog/teamname/tnChangeBody";
-import TNChangeFooter from "../dialog/teamname/tnChangeFooter";
 import TNChangeHeader from "../dialog/teamname/tnChangeHeader";
 import {
     ColumnBtnDiv,
@@ -58,6 +57,7 @@ const ListColumn = ({ teamInfo, children }: Props) => {
                                 header: "제한 안내",
                                 body: (
                                     <AlertDialog
+                                        btn={"확인"}
                                         msg={`${teamInfo.num}번 팀에 대해 이번 페이즈에 할당된 픽 수를 모두 사용했습니다`}
                                         closeDialog={closeDialog}
                                     />
@@ -77,7 +77,7 @@ const ListColumn = ({ teamInfo, children }: Props) => {
                             active: true,
                             header: <TNChangeHeader />,
                             body: <TNChangeBody teamNum={teamInfo.num} />,
-                            footer: <TNChangeFooter closeDialog={closeDialog} />,
+                            footer: undefined,
                         });
                     }}
                 >

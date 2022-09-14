@@ -9,6 +9,7 @@ const initTeam: TeamInfoType = {
     pickList: [],
     curPick: 0,
     curBan: 0,
+    totalPick: 0,
 };
 
 type TeamContextType = {
@@ -41,12 +42,14 @@ const TeamProvider = ({ children }: ProviderProps) => {
     const [team1PickList, setTeam1PickList] = useState<Array<Message>>([]);
     const [team1CurPick, setTeam1CurPick] = useState(0);
     const [team1CurBan, setTeam1CurBan] = useState(0);
+    const [team1TotalPick, setTeam1TotalPick] = useState(0);
 
     const [team2Num, setTeam2Num] = useState(2);
     const [team2Name, setTeam2Name] = useState("TEAM 2");
     const [team2PickList, setTeam2PickList] = useState<Array<Message>>([]);
     const [team2CurPick, setTeam2CurPick] = useState(0);
     const [team2CurBan, setTeam2CurBan] = useState(0);
+    const [team2TotalPick, setTeam2TotalPick] = useState(0);
 
     const [userList, setUserList] = useState<Array<UserType>>([]);
 
@@ -56,6 +59,7 @@ const TeamProvider = ({ children }: ProviderProps) => {
         setTeam1PickList(data.pickList);
         setTeam1CurPick(data.curPick);
         setTeam1CurBan(data.curBan);
+        setTeam1TotalPick(data.totalPick);
     };
 
     const updateTeam2 = (data: TeamInfoType) => {
@@ -64,6 +68,7 @@ const TeamProvider = ({ children }: ProviderProps) => {
         setTeam2PickList(data.pickList);
         setTeam2CurPick(data.curPick);
         setTeam2CurBan(data.curBan);
+        setTeam2TotalPick(data.totalPick);
     };
 
     const updateUserList = (list: Array<UserType>) => {
@@ -76,11 +81,13 @@ const TeamProvider = ({ children }: ProviderProps) => {
         setTeam1PickList([]);
         setTeam1CurPick(0);
         setTeam1CurBan(0);
+        setTeam1TotalPick(0);
         setTeam2Num(2);
         setTeam2Name("TEAM 2");
         setTeam2PickList([]);
         setTeam2CurPick(0);
         setTeam2CurBan(0);
+        setTeam2TotalPick(0);
         setUserList([]);
     };
 
@@ -93,6 +100,7 @@ const TeamProvider = ({ children }: ProviderProps) => {
                     pickList: team1PickList,
                     curPick: team1CurPick,
                     curBan: team1CurBan,
+                    totalPick: team1TotalPick,
                 },
                 team2: {
                     num: team2Num,
@@ -100,6 +108,7 @@ const TeamProvider = ({ children }: ProviderProps) => {
                     pickList: team2PickList,
                     curPick: team2CurPick,
                     curBan: team2CurBan,
+                    totalPick: team2TotalPick,
                 },
                 userList,
                 updateTeam1,

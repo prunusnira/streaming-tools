@@ -33,3 +33,10 @@ export const emptyUser: UserType = {
     },
     team: 0,
 };
+
+export const emptyStreamer: StreamerType = {
+    acctok: "",
+    userid: "",
+    iconurl: "",
+    displayname: "",
+};

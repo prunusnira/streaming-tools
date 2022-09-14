@@ -4,6 +4,8 @@ export const ItemContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 10px 20px;
+    margin: 10px;
+    border: solid 1px white;
 `;
 
 export const ItemTitle = styled.div`

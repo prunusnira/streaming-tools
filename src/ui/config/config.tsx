@@ -1,7 +1,10 @@
 import { useContext, useEffect } from "react";
+import { ModalType } from "../../data/modal";
 import { Phase } from "../../data/status";
+import { ModalContext } from "../../lib/context/modalProvider";
 import { StatusContext } from "../../lib/context/statusProvider";
 import { TeamContext } from "../../lib/context/teamProvider";
+import AlertDialog from "../dialog/alert/alertDlg";
 import {
     ConfButton,
     ConfigBtnGroup,
@@ -31,6 +34,7 @@ const Config = () => {
         phasePickSub,
     } = useContext(StatusContext);
     const { team1, team2, updateTeam1, updateTeam2, resetTeam } = useContext(TeamContext);
+    const { openDialog, closeDialog } = useContext(ModalContext);
 
     const forcePhaseChange = () => {
         if (data.phase === Phase.Pick) {
@@ -67,8 +71,27 @@ const Config = () => {
                 </ConfSButton>
                 <ConfButton
                     onClick={() => {
-                        resetStatus();
-                        resetTeam();
+                        openDialog({
+                            width: 420,
+                            maxWidth: 420,
+                            active: true,
+                            header: "진행사항 리셋",
+                            body: (
+                                <AlertDialog
+                                    type={ModalType.TwoBtn}
+                                    btnOk={"리셋"}
+                                    btn={"취소"}
+                                    ok={() => {
+                                        resetStatus();
+                                        resetTeam();
+                                        closeDialog();
+                                    }}
+                                    closeDialog={closeDialog}
+                                    msg={"현재 진행중인 밴픽을 리셋하시겠습니까?"}
+                                />
+                            ),
+                            footer: undefined,
+                        });
                     }}
                 >
                     리셋
@@ -84,18 +107,21 @@ const Config = () => {
             </ConfigBtnGroup>
             <ConfigCtrl>
                 <Control
+                    type={0}
                     title={"픽(전체)"}
                     num={data.totalPick}
                     add={totalPickAdd}
                     sub={totalPickSub}
                 />
                 <Control
+                    type={1}
                     title={"픽(페이즈)"}
                     num={data.pickPhase}
                     add={phasePickAdd}
                     sub={phasePickSub}
                 />
                 <Control
+                    type={2}
                     title={"밴(페이즈)"}
                     num={data.banPhase}
                     add={phaseBanAdd}

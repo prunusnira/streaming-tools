@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StreamerType } from "../../data/user";
+import { emptyStreamer, StreamerType } from "../../data/user";
 
 const initUser: StreamerType = {
     acctok: "",
@@ -12,12 +12,14 @@ type StreamerContextType = {
     data: StreamerType;
     loadStreamer: () => void;
     updateStreamer: (user: StreamerType) => void;
+    resetStreamer: () => void;
 };
 
 export const StreamerContext = React.createContext<StreamerContextType>({
     data: initUser,
     loadStreamer: () => {},
     updateStreamer: (user: StreamerType) => {},
+    resetStreamer: () => {},
 });
 
 type ProviderProps = {
@@ -51,6 +53,10 @@ const StreamerProvider = ({ children }: ProviderProps) => {
         localStorage.setItem("streamer", JSON.stringify(user));
     };
 
+    const resetStreamer = () => {
+        updateStreamer(emptyStreamer);
+    };
+
     return (
         <StreamerContext.Provider
             value={{
@@ -62,6 +68,7 @@ const StreamerProvider = ({ children }: ProviderProps) => {
                 },
                 loadStreamer,
                 updateStreamer,
+                resetStreamer,
             }}
         >
             {children}

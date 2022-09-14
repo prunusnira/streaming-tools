@@ -6,4 +6,5 @@ export type TeamInfoType = {
     pickList: Array<Message>;
     curPick: number;
     curBan: number;
+    totalPick: number;
 };

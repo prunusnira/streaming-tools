@@ -18,3 +18,7 @@ export const NumText = styled.div`
     width: 100%;
     text-align: center;
 `;
+
+export const Help = styled.div`
+    cursor: pointer;
+`;

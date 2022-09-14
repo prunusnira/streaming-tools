@@ -5,11 +5,21 @@ export const BodyContainer = styled.section`
     flex-direction: column;
 `;
 
-export const BodyContent = styled.div``;
+export const BodyContent = styled.div`
+    height: 70vh;
+    min-height: 400px;
+    overflow-y: auto;
+`;
 
-export const BodyPager = styled.div``;
+export const BodyPager = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+`;
 
-export const FooterCloseBtn = styled.button``;
+export const FooterCloseBtn = styled.button`
+    padding: 10px 20px;
+`;
 
 export const HowtoPH1 = styled.div`
     padding: 10px 0;

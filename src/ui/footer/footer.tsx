@@ -10,6 +10,7 @@ const Footer = () => {
             <FooterAnchor target="_blank" href="https://github.com/prunusnira/twitch-banpicker">
                 GitHub
             </FooterAnchor>
+            <FooterItem>minimum width: 1350px</FooterItem>
         </FooterContainer>
     );
 };

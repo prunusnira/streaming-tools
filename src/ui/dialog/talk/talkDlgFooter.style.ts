@@ -5,4 +5,6 @@ export const TalkFooterContainer = styled.div`
     flex-direction: row;
 `;
 
-export const TalkFooterBtn = styled.button``;
+export const TalkFooterBtn = styled.button`
+    padding: 10px 20px;
+`;

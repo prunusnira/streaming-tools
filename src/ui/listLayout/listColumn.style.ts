@@ -37,4 +37,6 @@ export const ColumnContent = styled.div`
 
     display: flex;
     flex-direction: column;
+
+    overflow-y: auto;
 `;
