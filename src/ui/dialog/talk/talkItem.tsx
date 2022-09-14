@@ -21,7 +21,7 @@ type Props = {
 const TalkItem = ({ pickedUser, msg }: Props) => {
     const { team1, team2, updateTeam1, updateTeam2, userList, updateUserList } =
         useContext(TeamContext);
-    const { closeTalkDialog, changePickedUser } = useContext(TalkContext);
+    const { closeTalkDialog, changePickedUser, negoMode } = useContext(TalkContext);
 
     const { speech } = useSpeech();
 
@@ -52,7 +52,7 @@ const TalkItem = ({ pickedUser, msg }: Props) => {
                 <TalkItemMsg>{msg.msg}</TalkItemMsg>
                 <TalkItemTime>{msg.timeInTxt}</TalkItemTime>
             </TalkWrapper>
-            <TalkButton onClick={addToPickList}>선택하기</TalkButton>
+            {!negoMode && <TalkButton onClick={addToPickList}>선택하기</TalkButton>}
         </TalkItemContainer>
     );
 };

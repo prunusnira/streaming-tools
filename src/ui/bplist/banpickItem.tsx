@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import { Message } from "../../data/message";
+import { Phase } from "../../data/status";
+import { StatusContext } from "../../lib/context/statusProvider";
 import {
     ItemBody,
     ItemBodyBtnWrapper,
@@ -18,7 +21,7 @@ type Props = {
     changeBanStatus: (tn: number, idx: number) => void;
     openEditDialog: (teamNum: number, idx: number, msg: Message) => void;
     openDeleteDialog: (teamNum: number, idx: number) => void;
-    openNegoMode: () => void;
+    openNegoMode: (id: string) => void;
 };
 
 const BanpickItem = ({
@@ -30,6 +33,7 @@ const BanpickItem = ({
     openDeleteDialog,
     openNegoMode,
 }: Props) => {
+    const { data } = useContext(StatusContext);
     return (
         <ItemContainer>
             <ItemTitle>
@@ -43,8 +47,11 @@ const BanpickItem = ({
             <ItemBodyBtnWrapper>
                 <ItemButton onClick={() => openEditDialog(team, idx, item)}>수정</ItemButton>
                 <ItemButton onClick={() => openDeleteDialog(team, idx)}>삭제</ItemButton>
-                <ItemButton onClick={() => openNegoMode()}>협상</ItemButton>
-                <ItemButton onClick={() => changeBanStatus(team, idx)}>
+                <ItemButton onClick={() => openNegoMode(item.id)}>협상</ItemButton>
+                <ItemButton
+                    disabled={data.phase !== Phase.Ban}
+                    onClick={() => changeBanStatus(team, idx)}
+                >
                     {item.ban && "언밴"}
                     {!item.ban && "밴"}
                 </ItemButton>

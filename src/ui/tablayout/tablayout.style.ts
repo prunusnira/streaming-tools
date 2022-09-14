@@ -5,6 +5,7 @@ export const TabLayoutContainer = styled.section`
     flex-direction: row;
     width: 100%;
     height: 100%;
+    overflow-y: auto;
 `;
 
 export const TabPlacement = styled.section`
@@ -13,6 +14,7 @@ export const TabPlacement = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 24px;
 `;
 
 export const TabFragment = styled.section`
@@ -24,7 +26,7 @@ export const TabFragment = styled.section`
 
 export const TabChat = styled.section`
     width: 300px;
-    height: 100%;
+    height: 99%;
 
     iframe {
         height: 100%;

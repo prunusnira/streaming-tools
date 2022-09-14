@@ -79,15 +79,18 @@ const useProcessMessage = () => {
                 (msg.msg.startsWith("!team ") || msg.msg.startsWith("!팀 "))
             ) {
                 const teamNum = msg.msg.split(" ")[1].split("\r\n")[0];
+                const tnInNum = parseInt(teamNum);
+
+                if (tnInNum !== 1 && tnInNum !== 2) return;
 
                 const useridx = userList.findIndex((x) => x.userid === msg.id);
                 if (useridx > -1) {
                     // 기존 데이터를 지우고 다시 해당 사용자를 추가
-                    userList[useridx].team = parseInt(teamNum);
+                    userList[useridx].team = tnInNum;
                     updateUserList(userList);
                 } else {
                     // 새 사용자를 추가
-                    user.team = parseInt(teamNum);
+                    user.team = tnInNum;
                     userList.push(user);
                     updateUserList(userList);
                 }
