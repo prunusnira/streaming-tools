@@ -84,18 +84,21 @@ const Config = () => {
             </ConfigBtnGroup>
             <ConfigCtrl>
                 <Control
+                    type={0}
                     title={"픽(전체)"}
                     num={data.totalPick}
                     add={totalPickAdd}
                     sub={totalPickSub}
                 />
                 <Control
+                    type={1}
                     title={"픽(페이즈)"}
                     num={data.pickPhase}
                     add={phasePickAdd}
                     sub={phasePickSub}
                 />
                 <Control
+                    type={2}
                     title={"밴(페이즈)"}
                     num={data.banPhase}
                     add={phaseBanAdd}

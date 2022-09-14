@@ -24,6 +24,9 @@ export const HeaderIcon = styled.img`
     height: 50px;
 `;
 
-export const HeaderButton = styled.button`
+export const HeaderButton = styled.button<{ color: string; bgColor: string }>`
     padding: 20px;
+    ${(props) => props.color && `color: ${props.color};`}
+    ${(props) => props.bgColor && `background-color: ${props.bgColor};`}
+    border-radius: 10px;
 `;

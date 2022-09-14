@@ -58,6 +58,7 @@ const ListColumn = ({ teamInfo, children }: Props) => {
                                 header: "제한 안내",
                                 body: (
                                     <AlertDialog
+                                        btn={"확인"}
                                         msg={`${teamInfo.num}번 팀에 대해 이번 페이즈에 할당된 픽 수를 모두 사용했습니다`}
                                         closeDialog={closeDialog}
                                     />

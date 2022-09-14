@@ -6,8 +6,9 @@ export const BodyContainer = styled.section`
 `;
 
 export const BodyContent = styled.div`
-    height: 50vh;
+    height: 70vh;
     min-height: 400px;
+    overflow-y: auto;
 `;
 
 export const BodyPager = styled.div`

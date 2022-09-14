@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BGGray, Dark, White } from "../pref/color.style";
 
-export const DialogOuter = styled.section<{ active: boolean }>`
+export const DialogOuter = styled.section<{ active: boolean; zIdx?: number }>`
     width: 100%;
     height: 100%;
     background-color: ${BGGray};
@@ -16,6 +16,7 @@ export const DialogOuter = styled.section<{ active: boolean }>`
     align-items: center;
 
     ${(props) => !props.active && "display: none;"}
+    ${(props) => props.zIdx && `z-index: ${props.zIdx};`}
 `;
 
 export const DialogContainer = styled.section<{ width: number | string; maxWidth: number }>`

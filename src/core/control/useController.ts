@@ -8,7 +8,6 @@ const useController = () => {
     const { data, changePhase } = useContext(StatusContext);
 
     useEffect(() => {
-        console.log("team changed");
         if (data.phase === Phase.Pick && team1.curPick + team2.curPick === data.pickPhase * 2) {
             changePhase(Phase.Ban);
 

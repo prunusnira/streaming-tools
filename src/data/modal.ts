@@ -6,3 +6,8 @@ export type ModalData = {
     body: React.ReactNode;
     footer: React.ReactNode;
 };
+
+export enum ModalType {
+    OneBtn,
+    TwoBtn,
+}

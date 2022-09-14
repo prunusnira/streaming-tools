@@ -93,8 +93,6 @@ const useProcessMessage = () => {
                 }
             }
 
-            console.log(msg.id, " | ", pickedUser.userid);
-
             // 선택된 사용자의 채팅 입력 처리
             if (pickedUser.userid !== "" && pickedUser.userid === msg.id) {
                 if (!negoMode && (msg.msg.startsWith("!pick ") || msg.msg.startsWith("!픽 "))) {

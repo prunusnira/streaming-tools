@@ -58,6 +58,7 @@ const useIRC = () => {
                 header: "알림",
                 body: (
                     <AlertDialog
+                        btn={"확인"}
                         msg={"트위치 채팅서버와 연결이 끊어졌습니다. 새로고침 해주세요."}
                         closeDialog={closeDialog}
                     />
