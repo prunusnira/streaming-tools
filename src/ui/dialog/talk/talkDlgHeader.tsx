@@ -24,7 +24,6 @@ const TalkDlgHeader = ({ active, user, initTime }: Props) => {
         active &&
             timer.current.push(
                 setInterval(() => {
-                    console.log("tick");
                     setTimerNum(convertMStoSec(Date.now() - initTime));
                 }, 1000)
             );

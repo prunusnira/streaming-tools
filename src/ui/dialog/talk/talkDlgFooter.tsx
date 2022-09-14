@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { TalkContext } from "../../../lib/context/talkProvider";
 import { TalkFooterContainer, TalkFooterBtn } from "./talkDlgFooter.style";
 
 type Props = {
@@ -6,9 +8,10 @@ type Props = {
 };
 
 const TalkDlgFooter = ({ skipDialog, cancelDialog }: Props) => {
+    const { negoMode } = useContext(TalkContext);
     return (
         <TalkFooterContainer>
-            <TalkFooterBtn onClick={skipDialog}>스킵</TalkFooterBtn>
+            {!negoMode && <TalkFooterBtn onClick={skipDialog}>스킵</TalkFooterBtn>}
             <TalkFooterBtn onClick={cancelDialog}>취소</TalkFooterBtn>
         </TalkFooterContainer>
     );

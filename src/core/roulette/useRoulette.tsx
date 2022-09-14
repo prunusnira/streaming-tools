@@ -20,7 +20,6 @@ const useRoulette = () => {
     const getRouletteUserList = (teamNum: number) => {
         // 현재 팀의 선택된 적이 없는 유저 리스트를 가져옴
         const list = userList.filter((x) => x.team === teamNum && !x.picked);
-        console.log(`list length: ${list.length}`);
         // 선택된 리스트에서 20명을 추림
         // 시작 포인트를 골라서 처리함
         if (list.length > 20) {
@@ -36,7 +35,6 @@ const useRoulette = () => {
 
     const runRoulette = (teamNum: number) => {
         const rouletteUsers = getRouletteUserList(teamNum);
-        console.log(rouletteUsers);
 
         if (rouletteUsers.length === 0) {
             // 에러 표시하고 리턴
@@ -52,9 +50,7 @@ const useRoulette = () => {
         }
 
         const num = makeRandom(0, rouletteUsers.length - 1);
-        console.log(num);
         target.current = rouletteUsers[num];
-        console.log(target.current.userid);
 
         openDialog({
             width: 420,

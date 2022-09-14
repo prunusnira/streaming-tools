@@ -3,9 +3,8 @@ import styled from "@emotion/styled";
 export const MainContainer = styled.main`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    width: 100vw;
+    width: 100%;
     min-width: 1350px;
     height: 100vh;
 

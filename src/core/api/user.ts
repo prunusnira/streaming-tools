@@ -6,7 +6,7 @@ export const apiGetUsers = (userid: string, acctok: string) => {
             Authorization: `Bearer ${acctok}`,
             "Client-Id": process.env.REACT_APP_CLIENT_ID!,
         },
-        data: {
+        params: {
             login: userid,
         },
     });

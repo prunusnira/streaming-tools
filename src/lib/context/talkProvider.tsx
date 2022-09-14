@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Message } from "../../data/message";
 import { emptyUser, UserType } from "../../data/user";
 
@@ -61,8 +61,6 @@ const TalkProvider = ({ children }: ProviderProps) => {
     };
 
     const addTalkHistory = (msg: Message) => {
-        console.log("add new msg");
-        console.log(msg.msg);
         setTalkHistory((prev) => [...prev, msg]);
     };
 

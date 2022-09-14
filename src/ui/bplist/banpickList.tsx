@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { TeamContext } from "../../lib/context/teamProvider";
 import ListColumn from "../listLayout/listColumn";
-import { BanpickListContainer } from "./banpickList.style";
+import { BanpickListContainer, BPListDesc, BPListWrapper } from "./banpickList.style";
 import BanpickItem from "./banpickItem";
 import { Message } from "../../data/message";
 import BanpickListEmpty from "./banpickListEmpty";
@@ -15,9 +15,9 @@ import DeleteDlgFooter from "../dialog/delete/deleteDlgFooter";
 
 const BanpickList = () => {
     const [_, forceUpdate] = useState(0);
-    const { team1, team2, updateTeam1, updateTeam2 } = useContext(TeamContext);
+    const { team1, team2, userList, updateTeam1, updateTeam2 } = useContext(TeamContext);
     const { openDialog, closeDialog } = useContext(ModalContext);
-    const { changeNegoMode, openTalkDialog } = useContext(TalkContext);
+    const { changeNegoMode, openTalkDialog, changePickedUser } = useContext(TalkContext);
 
     const checkLength = (arr: Array<Message>) => {
         return arr.length > 0;
@@ -76,9 +76,13 @@ const BanpickList = () => {
         });
     };
 
-    const openNegoMode = () => {
-        changeNegoMode(true);
-        openTalkDialog();
+    const openNegoMode = (id: string) => {
+        const user = userList.filter((x) => x.userid === id);
+        if (user && user.length === 1) {
+            changePickedUser(user[0]);
+            changeNegoMode(true);
+            openTalkDialog();
+        }
     };
 
     const editMessage = (teamNum: number, idx: number, text: string) => {
@@ -111,42 +115,45 @@ const BanpickList = () => {
 
     return (
         <BanpickListContainer>
-            <ListColumn teamInfo={team1}>
-                {checkLength(team1.pickList) ? (
-                    team1.pickList.map((x, i) => (
-                        <BanpickItem
-                            key={`bplist_1_${i}`}
-                            team={1}
-                            item={x}
-                            idx={i}
-                            changeBanStatus={changeBanStatus}
-                            openEditDialog={openEditDialog}
-                            openDeleteDialog={openDeleteDialog}
-                            openNegoMode={openNegoMode}
-                        />
-                    ))
-                ) : (
-                    <BanpickListEmpty />
-                )}
-            </ListColumn>
-            <ListColumn teamInfo={team2}>
-                {checkLength(team2.pickList) ? (
-                    team2.pickList.map((x, i) => (
-                        <BanpickItem
-                            key={`bplist_2_${i}`}
-                            team={2}
-                            item={x}
-                            idx={i}
-                            changeBanStatus={changeBanStatus}
-                            openEditDialog={openEditDialog}
-                            openDeleteDialog={openDeleteDialog}
-                            openNegoMode={openNegoMode}
-                        />
-                    ))
-                ) : (
-                    <BanpickListEmpty />
-                )}
-            </ListColumn>
+            <BPListDesc>* 사용자 밴픽 리스트가 표시되는 화면입니다</BPListDesc>
+            <BPListWrapper>
+                <ListColumn teamInfo={team1}>
+                    {checkLength(team1.pickList) ? (
+                        team1.pickList.map((x, i) => (
+                            <BanpickItem
+                                key={`bplist_1_${i}`}
+                                team={1}
+                                item={x}
+                                idx={i}
+                                changeBanStatus={changeBanStatus}
+                                openEditDialog={openEditDialog}
+                                openDeleteDialog={openDeleteDialog}
+                                openNegoMode={openNegoMode}
+                            />
+                        ))
+                    ) : (
+                        <BanpickListEmpty />
+                    )}
+                </ListColumn>
+                <ListColumn teamInfo={team2}>
+                    {checkLength(team2.pickList) ? (
+                        team2.pickList.map((x, i) => (
+                            <BanpickItem
+                                key={`bplist_2_${i}`}
+                                team={2}
+                                item={x}
+                                idx={i}
+                                changeBanStatus={changeBanStatus}
+                                openEditDialog={openEditDialog}
+                                openDeleteDialog={openDeleteDialog}
+                                openNegoMode={openNegoMode}
+                            />
+                        ))
+                    ) : (
+                        <BanpickListEmpty />
+                    )}
+                </ListColumn>
+            </BPListWrapper>
         </BanpickListContainer>
     );
 };
