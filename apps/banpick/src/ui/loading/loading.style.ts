@@ -1,9 +1,4 @@
-import styled from "@emotion/styled";
+import styles from "../pref/legacy.module.css";
+import { createComponent } from "../pref/createComponent";
 
-export const LoadingWrapper = styled.main`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 36px;
-    width: 100%;
-`;
+export const LoadingWrapper = createComponent("main", styles.loading);

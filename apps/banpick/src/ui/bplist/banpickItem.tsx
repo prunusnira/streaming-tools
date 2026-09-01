@@ -1,4 +1,6 @@
 import { useContext } from "react";
+import { cn } from "@streaming-tools/ui";
+import styles from "../pref/legacy.module.css";
 import { Message } from "../../data/message";
 import { Phase } from "../../data/status";
 import { StatusContext } from "../../lib/context/statusProvider";
@@ -41,7 +43,7 @@ const BanpickItem = ({
                 <ItemTitleName>by {item.name}</ItemTitleName>
             </ItemTitle>
             <ItemBody>
-                <ItemBodyContent isBanned={item.ban}>{item.msg}</ItemBodyContent>
+                <ItemBodyContent className={cn(item.ban && styles.banned)}>{item.msg}</ItemBodyContent>
             </ItemBody>
             <ItemFooter>{item.timeInTxt}</ItemFooter>
             <ItemBodyBtnWrapper>

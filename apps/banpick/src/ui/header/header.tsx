@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Button } from "@streaming-tools/ui";
 import { ModalType } from "../../data/modal";
 import { ModalContext } from "../../lib/context/modalProvider";
 import { StreamerContext } from "../../lib/context/streamerProvider";
@@ -6,7 +7,7 @@ import AlertDialog from "../dialog/alert/alertDlg";
 import HowtoDlgBody from "../dialog/howto/howtoDlgBody";
 import HowtoDlgFooter from "../dialog/howto/howtoDlgFotoer";
 import HowtoDlgHeader from "../dialog/howto/howtoDlgHeader";
-import { HeaderButton, HeaderContainer, HeaderIcon, HeaderItem } from "./header.style";
+import { HeaderContainer, HeaderIcon, HeaderItem } from "./header.style";
 
 const Header = () => {
     const { data: dataStreamer, resetStreamer } = useContext(StreamerContext);
@@ -22,9 +23,9 @@ const Header = () => {
                 {dataStreamer.displayname} ({dataStreamer.userid})
             </HeaderItem>
             <HeaderItem position={"right"}>
-                <HeaderButton
-                    color={"black"}
-                    bgColor={"yellow"}
+                <Button
+                    variant="default"
+                    size="lg"
                     onClick={() => {
                         openDialog({
                             width: "90%",
@@ -37,10 +38,10 @@ const Header = () => {
                     }}
                 >
                     사용방법
-                </HeaderButton>
-                <HeaderButton
-                    color={"white"}
-                    bgColor={"red"}
+                </Button>
+                <Button
+                    variant="destructive"
+                    size="lg"
                     onClick={() => {
                         openDialog({
                             width: 420,
@@ -67,7 +68,7 @@ const Header = () => {
                     }}
                 >
                     데이터 리셋
-                </HeaderButton>
+                </Button>
             </HeaderItem>
         </HeaderContainer>
     );

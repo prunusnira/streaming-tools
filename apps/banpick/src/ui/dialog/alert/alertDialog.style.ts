@@ -1,16 +1,7 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const AlertContainer = styled.section``;
-
-export const AlertTxt = styled.div`
-    padding-bottom: 50px;
-`;
-
-export const AlertBtnWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-`;
-
-export const AlertButton = styled.button`
-    padding: 10px 20px;
-`;
+export const AlertContainer = createComponent("section", styles.stack);
+export const AlertTxt = createComponent("div", styles.alertText);
+export const AlertBtnWrapper = createComponent("div", "flex justify-center gap-2");
+export const AlertButton = createComponent("button", styles.primaryButton);

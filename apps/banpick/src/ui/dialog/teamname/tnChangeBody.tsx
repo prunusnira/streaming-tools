@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { type ChangeEvent, useContext, useState } from "react";
 import { ModalContext } from "../../../lib/context/modalProvider";
 import { TeamContext } from "../../../lib/context/teamProvider";
 import { TNBtnWrapper, TNButton, TNChangeContainer, TNCurrent, TNNew } from "./tnChange.style";
@@ -22,8 +22,8 @@ const TNChangeBody = ({ teamNum }: Props) => {
             <TNNew
                 value={teamName}
                 autoFocus={true}
-                onChange={(e) => {
-                    setTeamName(e.target.value);
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    setTeamName(event.target.value);
                 }}
             />
             <TNBtnWrapper>

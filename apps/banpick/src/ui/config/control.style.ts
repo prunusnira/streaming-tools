@@ -1,24 +1,8 @@
-import styled from "@emotion/styled";
+import styles from "../pref/legacy.module.css";
+import { createComponent } from "../pref/createComponent";
 
-export const ControlContainer = styled.section`
-    display: flex;
-    flex-direction: column;
-`;
-
-export const CtrlRow = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-`;
-
-export const NumCtrl = styled.button``;
-
-export const NumText = styled.div`
-    width: 100%;
-    text-align: center;
-`;
-
-export const Help = styled.div`
-    cursor: pointer;
-`;
+export const ControlContainer = createComponent("section", styles.stack);
+export const CtrlRow = createComponent("div", "flex items-center justify-center gap-2");
+export const NumCtrl = createComponent("button", styles.button);
+export const NumText = createComponent("div", "w-full text-center");
+export const Help = createComponent("div", "cursor-pointer text-blue-300");

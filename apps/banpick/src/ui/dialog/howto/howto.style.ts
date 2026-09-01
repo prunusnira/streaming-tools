@@ -1,31 +1,9 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const BodyContainer = styled.section`
-    display: flex;
-    flex-direction: column;
-`;
-
-export const BodyContent = styled.div`
-    height: 70vh;
-    min-height: 400px;
-    overflow-y: auto;
-`;
-
-export const BodyPager = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 100%;
-`;
-
-export const FooterCloseBtn = styled.button`
-    padding: 10px 20px;
-`;
-
-export const HowtoPH1 = styled.div`
-    padding: 10px 0;
-    font-size: 20px;
-`;
-
-export const HowtoPH2 = styled.div`
-    font-size: 18px;
-`;
+export const BodyContainer = createComponent("section", styles.stack);
+export const BodyContent = createComponent("div", styles.howtoContent);
+export const BodyPager = createComponent("div", styles.pager);
+export const FooterCloseBtn = createComponent("button", styles.primaryButton);
+export const HowtoPH1 = createComponent("div", "py-2 text-xl font-semibold");
+export const HowtoPH2 = createComponent("div", "text-lg font-medium");

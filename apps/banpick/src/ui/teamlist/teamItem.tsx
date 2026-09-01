@@ -1,4 +1,6 @@
-import { useContext } from "react";
+import { type MouseEvent, useContext } from "react";
+import { cn } from "@streaming-tools/ui";
+import styles from "../pref/legacy.module.css";
 import { UserType } from "../../data/user";
 import { TalkContext } from "../../lib/context/talkProvider";
 import { TeamItemCover } from "./teamItem.style";
@@ -13,11 +15,11 @@ const TeamItem = ({ children, picked, changePickedState }: Props) => {
     const { openTalkDialog, changeNegoMode, changePickedUser } = useContext(TalkContext);
     return (
         <TeamItemCover
-            picked={picked.picked}
+            className={cn(picked.picked && styles.banned)}
             onClick={changePickedState}
-            onContextMenu={(e) => {
+            onContextMenu={(event: MouseEvent<HTMLDivElement>) => {
                 // 해당 유저에 대한 컨텍스트 메뉴 열기
-                e.preventDefault();
+                event.preventDefault();
                 changeNegoMode(true);
                 changePickedUser(picked);
                 openTalkDialog();

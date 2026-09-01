@@ -1,4 +1,6 @@
 import { useContext, useState } from "react";
+import { cn } from "@streaming-tools/ui";
+import styles from "../pref/legacy.module.css";
 import { TabType } from "../../data/tabType";
 import { StreamerContext } from "../../lib/context/streamerProvider";
 import BanpickList from "../bplist/banpickList";
@@ -18,13 +20,13 @@ const TabLayout = () => {
         <TabLayoutContainer>
             <TabPlacement>
                 <TabButton
-                    active={tabType === TabType.TeamList}
+                    className={cn(tabType === TabType.TeamList && styles.tabActive)}
                     onClick={() => setTabType(TabType.TeamList)}
                 >
                     유저목록
                 </TabButton>
                 <TabButton
-                    active={tabType === TabType.BPList}
+                    className={cn(tabType === TabType.BPList && styles.tabActive)}
                     onClick={() => setTabType(TabType.BPList)}
                 >
                     밴픽목록

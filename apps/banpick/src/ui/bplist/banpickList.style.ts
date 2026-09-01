@@ -1,19 +1,6 @@
-import styled from "@emotion/styled";
+import styles from "../pref/legacy.module.css";
+import { createComponent } from "../pref/createComponent";
 
-export const BanpickListContainer = styled.section`
-    width: 100%;
-    height: 100%;
-`;
-
-export const BPListDesc = styled.section`
-    width: 100%;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-`;
-
-export const BPListWrapper = styled.section`
-    display: flex;
-    height: 100%;
-    overflow-y: auto;
-`;
+export const BanpickListContainer = createComponent("section", styles.listContainer);
+export const BPListDesc = createComponent("section", styles.listDesc);
+export const BPListWrapper = createComponent("section", styles.listWrapper);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import { Message } from "../../../data/message";
 import {
     EditBtnWrapper,
@@ -29,7 +29,10 @@ const EditDlg = ({ teamNum, idx, msg, editText, closeDialog: closeTalkDlg }: Pro
             </EditExistChunk>
             <EditExistChunk>
                 <ExistTitle>변경 내용:</ExistTitle>
-                <EditInput value={text} onChange={(e) => setText(e.target.value)} />
+                <EditInput
+                    value={text}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
+                />
             </EditExistChunk>
             <EditBtnWrapper>
                 <EditButton onClick={closeTalkDlg}>취소</EditButton>

@@ -1,7 +1,5 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const PagerContainer = styled.div``;
-
-export const PagerBtn = styled.button`
-    padding: 5px 10px;
-`;
+export const PagerContainer = createComponent("div", styles.pager);
+export const PagerBtn = createComponent("button", styles.button);

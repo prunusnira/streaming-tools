@@ -1,20 +1,8 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const TalkItemContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border: solid 1px white;
-`;
-
-export const TalkWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-export const TalkItemMsg = styled.div``;
-
-export const TalkItemTime = styled.div``;
-
-export const TalkButton = styled.button``;
+export const TalkItemContainer = createComponent("div", styles.talkItem);
+export const TalkWrapper = createComponent("div", styles.stack);
+export const TalkItemMsg = createComponent("div", "");
+export const TalkItemTime = createComponent("div", "text-xs text-slate-500");
+export const TalkButton = createComponent("button", styles.button);

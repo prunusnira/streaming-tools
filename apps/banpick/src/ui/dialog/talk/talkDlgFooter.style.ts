@@ -1,10 +1,5 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const TalkFooterContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-
-export const TalkFooterBtn = styled.button`
-    padding: 10px 20px;
-`;
+export const TalkFooterContainer = createComponent("div", "flex gap-2");
+export const TalkFooterBtn = createComponent("button", styles.primaryButton);

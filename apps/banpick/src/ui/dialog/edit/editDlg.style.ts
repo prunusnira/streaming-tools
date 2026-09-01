@@ -1,30 +1,10 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const EditDlgContainer = styled.section`
-    display: flex;
-    flex-direction: column;
-`;
-
-export const EditExistChunk = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 20px;
-`;
-
-export const ExistTitle = styled.span``;
-
-export const ExistTxt = styled.span``;
-
-export const EditInput = styled.input`
-    padding: 10px;
-`;
-
-export const EditBtnWrapper = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: center;
-`;
-
-export const EditButton = styled.button`
-    padding: 10px 20px;
-`;
+export const EditDlgContainer = createComponent("section", styles.stack);
+export const EditExistChunk = createComponent("div", "flex flex-col gap-1 pb-5");
+export const ExistTitle = createComponent("span", "text-sm text-slate-400");
+export const ExistTxt = createComponent("span", "");
+export const EditInput = createComponent("input", styles.input);
+export const EditBtnWrapper = createComponent("div", "flex w-full justify-center gap-2");
+export const EditButton = createComponent("button", styles.primaryButton);

@@ -1,39 +1,11 @@
-import styled from "@emotion/styled";
+import styles from "../pref/legacy.module.css";
+import { createComponent } from "../pref/createComponent";
 
-export const ListColumnContainer = styled.section`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-`;
-
-export const ColumnTitleWrapper = styled.div`
-    text-align: center;
-    background-color: #474747;
-    padding: 15px;
-`;
-
-export const ColumnTitle = styled.div`
-    font-size: 20px;
-`;
-
-export const ColumnCounter = styled.div``;
-
-export const ColumnBtnDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-`;
-export const ColumnBtnPick = styled.button`
-    padding: 10px;
-`;
-export const ColumnBtnName = styled.button`
-    padding: 10px;
-`;
-export const ColumnContent = styled.div`
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-`;
+export const ListColumnContainer = createComponent("section", styles.listColumn);
+export const ColumnTitleWrapper = createComponent("div", styles.columnTitle);
+export const ColumnTitle = createComponent("div", styles.columnName);
+export const ColumnCounter = createComponent("div", "text-sm text-slate-400");
+export const ColumnBtnDiv = createComponent("div", styles.columnButtons);
+export const ColumnBtnPick = createComponent("button", styles.primaryButton);
+export const ColumnBtnName = createComponent("button", styles.button);
+export const ColumnContent = createComponent("div", styles.columnContent);

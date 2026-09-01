@@ -1,22 +1,8 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const TNChangeContainer = styled.section``;
-
-export const TNCurrent = styled.div``;
-
-export const TNNew = styled.input`
-    width: 100%;
-    padding: 5px;
-    border-radius: 5px;
-`;
-
-export const TNBtnWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-top: 10px;
-`;
-
-export const TNButton = styled.button`
-    padding: 10px 20px;
-`;
+export const TNChangeContainer = createComponent("section", styles.stack);
+export const TNCurrent = createComponent("div", "pb-3");
+export const TNNew = createComponent("input", styles.input);
+export const TNBtnWrapper = createComponent("div", "flex justify-center gap-2 pt-3");
+export const TNButton = createComponent("button", styles.primaryButton);

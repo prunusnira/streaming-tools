@@ -1,17 +1,6 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const TalkDlgContainer = styled.section`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 80%;
-    min-height: 500px;
-    overflow-y: auto;
-`;
-
-export const TalkDlgDesc = styled.div``;
-
-export const TalkDlgMsgList = styled.div`
-    height: 50vh;
-    overflow-y: auto;
-`;
+export const TalkDlgContainer = createComponent("section", styles.talk);
+export const TalkDlgDesc = createComponent("div", "text-sm text-slate-400");
+export const TalkDlgMsgList = createComponent("div", styles.talkList);

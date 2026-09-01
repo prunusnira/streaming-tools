@@ -1,41 +1,12 @@
-import styled from "@emotion/styled";
+import styles from "../pref/legacy.module.css";
+import { createComponent } from "../pref/createComponent";
 
-export const ItemContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 10px 20px;
-    margin: 10px;
-    border: solid 1px white;
-`;
-
-export const ItemTitle = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`;
-
-export const ItemTitlePick = styled.div`
-    text-align: center;
-`;
-
-export const ItemTitleName = styled.div`
-    text-align: center;
-`;
-
-export const ItemBody = styled.div`
-    display: flex;
-`;
-
-export const ItemBodyContent = styled.div<{ isBanned: boolean }>`
-    ${(props) => props.isBanned && `text-decoration: line-through;`}
-    font-size: 24px;
-`;
-
-export const ItemFooter = styled.div``;
-
-export const ItemBodyBtnWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-
-export const ItemButton = styled.button``;
+export const ItemContainer = createComponent("div", styles.item);
+export const ItemTitle = createComponent("div", styles.itemTitle);
+export const ItemTitlePick = createComponent("div", "");
+export const ItemTitleName = createComponent("div", "");
+export const ItemBody = createComponent("div", styles.row);
+export const ItemBodyContent = createComponent("div", styles.itemContent);
+export const ItemFooter = createComponent("div", "text-sm text-slate-400");
+export const ItemBodyBtnWrapper = createComponent("div", styles.itemButtons);
+export const ItemButton = createComponent("button", styles.button);

@@ -1,6 +1,4 @@
-import styled from "@emotion/styled";
+import styles from "../pref/legacy.module.css";
+import { createComponent } from "../pref/createComponent";
 
-export const TeamItemCover = styled.div<{ picked: boolean }>`
-    padding: 5px 20px;
-    ${(props) => props.picked && "text-decoration: line-through"}
-`;
+export const TeamItemCover = createComponent("div", styles.teamItem);

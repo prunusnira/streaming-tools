@@ -1,49 +1,33 @@
-import styled from "@emotion/styled";
-import { BGGray, Dark, White } from "../pref/color.style";
+import styles from "../pref/legacy.module.css";
+import { createComponent } from "../pref/createComponent";
+import { cn } from "@streaming-tools/ui";
+import { createElement, type CSSProperties, type ReactNode } from "react";
 
-export const DialogOuter = styled.section<{ active: boolean; zIdx?: number }>`
-    width: 100%;
-    height: 100%;
-    background-color: ${BGGray};
+type DialogOuterProps = {
+    active: boolean;
+    zIdx?: number;
+    children?: ReactNode;
+};
 
-    position: absolute;
-    top: 0;
-    left: 0;
+type DialogContainerProps = {
+    width: number | string;
+    maxWidth: number;
+    children?: ReactNode;
+};
 
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+export const DialogOuter = ({ active, zIdx, children }: DialogOuterProps) =>
+    createElement("section", {
+        className: cn(styles.dialogOuter, !active && styles.dialogHidden),
+        style: zIdx ? { zIndex: zIdx } : undefined,
+        children,
+    });
 
-    ${(props) => !props.active && "display: none;"}
-    ${(props) => props.zIdx && `z-index: ${props.zIdx};`}
-`;
-
-export const DialogContainer = styled.section<{ width: number | string; maxWidth: number }>`
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    max-width: ${(props) => props.maxWidth}px;
-    background-color: ${Dark};
-    color: ${White};
-    z-index: 10;
-`;
-
-export const DialogHeader = styled.div`
-    font-size: 24px;
-    background-color: ${Dark};
-    color: ${White};
-    padding: 10px;
-`;
-
-export const DialogBody = styled.div`
-    font-size: 14px;
-    padding: 10px 24px;
-`;
-
-export const DialogFooter = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-`;
+export const DialogContainer = ({ width, maxWidth, children }: DialogContainerProps) =>
+    createElement("section", {
+        className: styles.dialogContainer,
+        style: { width, maxWidth } as CSSProperties,
+        children,
+    });
+export const DialogHeader = createComponent("div", styles.dialogHeader);
+export const DialogBody = createComponent("div", styles.dialogBody);
+export const DialogFooter = createComponent("div", styles.dialogFooter);

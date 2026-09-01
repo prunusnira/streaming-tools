@@ -1,23 +1,9 @@
-import styled from "@emotion/styled";
+import styles from "../../pref/legacy.module.css";
+import { createComponent } from "../../pref/createComponent";
 
-export const TalkHeaderContainer = styled.section`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`;
-
-export const TalkDlgTitle = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-
-export const TitleIcon = styled.img`
-    width: 50px;
-    height: 50px;
-`;
-
-export const TitleName = styled.div``;
-
-export const TitleId = styled.div``;
-
-export const TitleTime = styled.div``;
+export const TalkHeaderContainer = createComponent("section", "flex justify-between gap-4");
+export const TalkDlgTitle = createComponent("div", "flex items-center gap-3");
+export const TitleIcon = createComponent("img", styles.titleIcon);
+export const TitleName = createComponent("div", "font-medium");
+export const TitleId = createComponent("div", "text-sm text-slate-400");
+export const TitleTime = createComponent("div", "text-sm text-slate-400");
