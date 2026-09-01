@@ -1,18 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import StreamerProvider from "./lib/context/streamerProvider";
 import { BrowserRouter } from "react-router-dom";
+import App from "./App";
 import CombinedProviders from "./lib/context/combinedProvider";
-import TeamProvider from "./lib/context/teamProvider";
-import StatusProvider from "./lib/context/statusProvider";
 import ModalProvider from "./lib/context/modalProvider";
+import StatusProvider from "./lib/context/statusProvider";
+import StreamerProvider from "./lib/context/streamerProvider";
 import TalkProvider from "./lib/context/talkProvider";
+import TeamProvider from "./lib/context/teamProvider";
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-root.render(
-    <React.StrictMode>
+const BanpickRoot = () => {
+    return (
         <BrowserRouter>
             <CombinedProviders
                 components={[
@@ -26,5 +22,7 @@ root.render(
                 <App />
             </CombinedProviders>
         </BrowserRouter>
-    </React.StrictMode>
-);
+    );
+};
+
+export default BanpickRoot;
