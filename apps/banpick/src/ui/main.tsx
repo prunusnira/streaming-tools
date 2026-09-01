@@ -5,7 +5,7 @@ import PopupModal from "./dialog/popupModal";
 import TalkModal from "./dialog/talkModal";
 import Footer from "./footer/footer";
 import Header from "./header/header";
-import { MainContainer } from "./main.style";
+import styles from "./pref/legacy.module.css";
 import TabLayout from "./tablayout/tablayout";
 
 const MainPage = () => {
@@ -13,14 +13,14 @@ const MainPage = () => {
     useController();
 
     return (
-        <MainContainer>
+        <main className={styles.mainContainer}>
             <Header />
             <Config />
             <TabLayout />
             <Footer />
             <PopupModal />
             <TalkModal />
-        </MainContainer>
+        </main>
     );
 };
 

@@ -7,22 +7,22 @@ import AlertDialog from "../dialog/alert/alertDlg";
 import HowtoDlgBody from "../dialog/howto/howtoDlgBody";
 import HowtoDlgFooter from "../dialog/howto/howtoDlgFotoer";
 import HowtoDlgHeader from "../dialog/howto/howtoDlgHeader";
-import { HeaderContainer, HeaderIcon, HeaderItem } from "./header.style";
+import styles from "../pref/legacy.module.css";
 
 const Header = () => {
     const { data: dataStreamer, resetStreamer } = useContext(StreamerContext);
     const { openDialog, closeDialog } = useContext(ModalContext);
 
     return (
-        <HeaderContainer>
-            <HeaderItem fontSize={24} position={"left"}>
+        <header className={styles.headerContainer}>
+            <div className={`${styles.headerItem} ${styles.headerTitle}`}>
                 Twitch BanPicker
-            </HeaderItem>
-            <HeaderItem>
-                <HeaderIcon src={dataStreamer.iconurl} />
+            </div>
+            <div className={styles.headerItem}>
+                <img className={styles.headerIcon} src={dataStreamer.iconurl} alt="스트리머 프로필" />
                 {dataStreamer.displayname} ({dataStreamer.userid})
-            </HeaderItem>
-            <HeaderItem position={"right"}>
+            </div>
+            <div className={`${styles.headerItem} ${styles.headerActions}`}>
                 <Button
                     variant="default"
                     size="lg"
@@ -69,8 +69,8 @@ const Header = () => {
                 >
                     데이터 리셋
                 </Button>
-            </HeaderItem>
-        </HeaderContainer>
+            </div>
+        </header>
     );
 };
 

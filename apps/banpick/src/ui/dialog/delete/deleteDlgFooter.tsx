@@ -1,4 +1,4 @@
-import { DeleteBtnWrapper, DeleteButton } from "./deleteDlgFooter.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     team: number;
@@ -9,10 +9,10 @@ type Props = {
 
 const DeleteDlgFooter = ({ team, idx, deleteMessage, closeDialog }: Props) => {
     return (
-        <DeleteBtnWrapper>
-            <DeleteButton onClick={closeDialog}>아니오</DeleteButton>
-            <DeleteButton onClick={() => deleteMessage(team, idx)}>네</DeleteButton>
-        </DeleteBtnWrapper>
+        <div className="flex gap-2">
+            <button className={styles.button} onClick={closeDialog}>아니오</button>
+            <button className={styles.button} onClick={() => deleteMessage(team, idx)}>네</button>
+        </div>
     );
 };
 

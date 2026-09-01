@@ -5,8 +5,7 @@ import page1 from "./content/page1.md?raw";
 import page2 from "./content/page2.md?raw";
 import page3 from "./content/page3.md?raw";
 import styles from "./howtoMarkdown.module.css";
-import { BodyContainer, BodyContent, BodyPager } from "./howto.style";
-import { PagerBtn, PagerContainer } from "./pager.style";
+import legacyStyles from "../../pref/legacy.module.css";
 
 const pages = [page1, page2, page3];
 
@@ -26,13 +25,13 @@ type PagerProps = {
 
 const Pager = ({ setPage }: PagerProps) => {
     return (
-        <PagerContainer>
+        <div className={legacyStyles.pager}>
             {pages.map((_, index) => (
-                <PagerBtn key={index} onClick={() => setPage(index)}>
+                <button className={legacyStyles.button} key={index} onClick={() => setPage(index)}>
                     {index + 1}
-                </PagerBtn>
+                </button>
             ))}
-        </PagerContainer>
+        </div>
     );
 };
 
@@ -40,16 +39,16 @@ const HowtoDlgBody = () => {
     const [page, setPage] = useState(0);
 
     return (
-        <BodyContainer>
-            <BodyContent>
+        <section className={legacyStyles.stack}>
+            <div className={legacyStyles.howtoContent}>
                 <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
                     {pages[page]}
                 </ReactMarkdown>
-            </BodyContent>
-            <BodyPager>
+            </div>
+            <div className={legacyStyles.pager}>
                 <Pager setPage={setPage} />
-            </BodyPager>
-        </BodyContainer>
+            </div>
+        </section>
     );
 };
 

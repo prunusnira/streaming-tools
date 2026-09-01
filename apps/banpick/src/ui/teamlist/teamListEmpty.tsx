@@ -1,7 +1,7 @@
-import { EmptyContainer } from "./teamList.style";
+import styles from "../pref/legacy.module.css";
 
 const TeamListEmpty = () => {
-    return <EmptyContainer>비어있음</EmptyContainer>;
+    return <div className={styles.empty}>비어있음</div>;
 };
 
 export default TeamListEmpty;

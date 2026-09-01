@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { UserType } from "../../../data/user";
-import { RouletteDlgContainer } from "./rouletteDlg.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     list: Array<UserType>;
@@ -32,7 +32,7 @@ const RouletteDlg = ({ list }: Props) => {
         txtRoulette.current.splice(0, txtRoulette.current.length);
     };
 
-    return <RouletteDlgContainer>{sel}</RouletteDlgContainer>;
+    return <section className={styles.stack}>{sel}</section>;
 };
 
 export default RouletteDlg;

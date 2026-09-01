@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { TeamContext } from "../../lib/context/teamProvider";
 import ListColumn from "../listLayout/listColumn";
-import { TeamListContainer, TeamListDesc, TeamListWrapper } from "./teamList.style";
+import styles from "../pref/legacy.module.css";
 import TeamItem from "./teamItem";
 import { UserType } from "../../data/user";
 import TeamListEmpty from "./teamListEmpty";
@@ -25,12 +25,12 @@ const TeamList = () => {
     };
 
     return (
-        <TeamListContainer>
-            <TeamListDesc>
+        <section className={styles.listContainer}>
+            <p className={styles.listDesc}>
                 * 시청자 이름 위에 마우스 커서를 올리고 마우스 오른쪽 단추를 누르면 해당 사용자를
                 바로 소환할 수 있습니다
-            </TeamListDesc>
-            <TeamListWrapper>
+            </p>
+            <div className={styles.listWrapper}>
                 <ListColumn teamInfo={team1}>
                     {!data.teamVisible ? (
                         <TeamListInvisible />
@@ -69,8 +69,8 @@ const TeamList = () => {
                         <TeamListEmpty />
                     )}
                 </ListColumn>
-            </TeamListWrapper>
-        </TeamListContainer>
+            </div>
+        </section>
     );
 };
 

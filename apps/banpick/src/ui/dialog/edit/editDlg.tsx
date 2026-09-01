@@ -1,14 +1,6 @@
 import { type ChangeEvent, useState } from "react";
 import { Message } from "../../../data/message";
-import {
-    EditBtnWrapper,
-    EditButton,
-    EditDlgContainer,
-    EditExistChunk,
-    EditInput,
-    ExistTitle,
-    ExistTxt,
-} from "./editDlg.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     teamNum: number;
@@ -22,23 +14,23 @@ const EditDlg = ({ teamNum, idx, msg, editText, closeDialog: closeTalkDlg }: Pro
     const [text, setText] = useState("");
 
     return (
-        <EditDlgContainer>
-            <EditExistChunk>
-                <ExistTitle>현재 내용:</ExistTitle>
-                <ExistTxt>{msg.msg}</ExistTxt>
-            </EditExistChunk>
-            <EditExistChunk>
-                <ExistTitle>변경 내용:</ExistTitle>
-                <EditInput
+        <section className={styles.stack}>
+            <div className="flex flex-col gap-1 pb-5">
+                <span className="text-sm text-slate-400">현재 내용:</span>
+                <span>{msg.msg}</span>
+            </div>
+            <label className="flex flex-col gap-1 pb-5">
+                <span className="text-sm text-slate-400">변경 내용:</span>
+                <input className={styles.input}
                     value={text}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
                 />
-            </EditExistChunk>
-            <EditBtnWrapper>
-                <EditButton onClick={closeTalkDlg}>취소</EditButton>
-                <EditButton onClick={() => editText(teamNum, idx, text)}>수정</EditButton>
-            </EditBtnWrapper>
-        </EditDlgContainer>
+            </label>
+            <div className="flex w-full justify-center gap-2">
+                <button className={styles.primaryButton} onClick={closeTalkDlg}>취소</button>
+                <button className={styles.primaryButton} onClick={() => editText(teamNum, idx, text)}>수정</button>
+            </div>
+        </section>
     );
 };
 

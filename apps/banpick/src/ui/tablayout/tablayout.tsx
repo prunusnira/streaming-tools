@@ -5,8 +5,6 @@ import { TabType } from "../../data/tabType";
 import { StreamerContext } from "../../lib/context/streamerProvider";
 import BanpickList from "../bplist/banpickList";
 import TeamList from "../teamlist/teamList";
-import { TabButton } from "./tabitem.style";
-import { TabChat, TabFragment, TabLayoutContainer, TabPlacement } from "./tablayout.style";
 
 const TabLayout = () => {
     const [tabType, setTabType] = useState(TabType.TeamList);
@@ -17,29 +15,29 @@ const TabLayout = () => {
     const baseUrl2: string = "/chat?parent=banpick.nira.one&darkpopout";
 
     return (
-        <TabLayoutContainer>
-            <TabPlacement>
-                <TabButton
-                    className={cn(tabType === TabType.TeamList && styles.tabActive)}
+        <section className={styles.tabLayout}>
+            <nav className={styles.tabPlacement}>
+                <button
+                    className={cn(styles.tabButton, tabType === TabType.TeamList && styles.tabActive)}
                     onClick={() => setTabType(TabType.TeamList)}
                 >
                     유저목록
-                </TabButton>
-                <TabButton
-                    className={cn(tabType === TabType.BPList && styles.tabActive)}
+                </button>
+                <button
+                    className={cn(styles.tabButton, tabType === TabType.BPList && styles.tabActive)}
                     onClick={() => setTabType(TabType.BPList)}
                 >
                     밴픽목록
-                </TabButton>
-            </TabPlacement>
-            <TabFragment>
+                </button>
+            </nav>
+            <section className={styles.tabFragment}>
                 {tabType === TabType.TeamList && <TeamList />}
                 {tabType === TabType.BPList && <BanpickList />}
-            </TabFragment>
-            <TabChat>
-                <iframe frameBorder="0" src={`${baseUrl}${userid}${baseUrl2}`} />
-            </TabChat>
-        </TabLayoutContainer>
+            </section>
+            <section className={styles.tabChat}>
+                <iframe title="Twitch 채팅" frameBorder="0" src={`${baseUrl}${userid}${baseUrl2}`} />
+            </section>
+        </section>
     );
 };
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Message } from "../../../data/message";
 import { UserType } from "../../../data/user";
-import { TalkDlgContainer, TalkDlgDesc, TalkDlgMsgList } from "./talkDlg.style";
+import styles from "../../pref/legacy.module.css";
 import TalkItem from "./talkItem";
 
 type Props = {
@@ -18,18 +18,18 @@ const TalkDlg = ({ pickedUser, msglist, negoMode }: Props) => {
     }, [msglist]);
 
     return (
-        <TalkDlgContainer>
-            <TalkDlgDesc>
+        <section className={styles.talk}>
+            <p className="text-sm text-slate-400">
                 {negoMode
                     ? "ⓘ 스트리머와 내용에 대해 협상하세요. 여기서는 !픽 / !pick 을 사용할 수 없습니다"
                     : "ⓘ 당첨자는 '!픽 내용' 혹은 '!pick 내용'을 입력하여 픽을 진행할 수 있습니다"}
-            </TalkDlgDesc>
-            <TalkDlgMsgList ref={listRef}>
+            </p>
+            <div className={styles.talkList} ref={listRef}>
                 {msglist.map((x, i) => (
                     <TalkItem key={`talk${i}`} pickedUser={pickedUser} msg={x} />
                 ))}
-            </TalkDlgMsgList>
-        </TalkDlgContainer>
+            </div>
+        </section>
     );
 };
 

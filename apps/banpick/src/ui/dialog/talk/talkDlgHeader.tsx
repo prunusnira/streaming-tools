@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { UserType } from "../../../data/user";
 import { convertMStoSec } from "../../../lib/tool/convertMStoSec";
-import {
-    TalkDlgTitle,
-    TalkHeaderContainer,
-    TitleIcon,
-    TitleId,
-    TitleName,
-    TitleTime,
-} from "./talkDlgHeader.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     active: boolean;
@@ -39,14 +32,14 @@ const TalkDlgHeader = ({ active, user, initTime }: Props) => {
     };
 
     return (
-        <TalkHeaderContainer>
-            <TalkDlgTitle>
-                <TitleIcon src={user.iconurl} />
-                <TitleName>{user.displayname}</TitleName>
-                <TitleId>({user.userid})</TitleId>
-            </TalkDlgTitle>
-            <TitleTime>{timerNum} 초</TitleTime>
-        </TalkHeaderContainer>
+        <section className="flex justify-between gap-4">
+            <div className="flex items-center gap-3">
+                <img className={styles.titleIcon} src={user.iconurl} alt="사용자 프로필" />
+                <div className="font-medium">{user.displayname}</div>
+                <div className="text-sm text-slate-400">({user.userid})</div>
+            </div>
+            <div className="text-sm text-slate-400">{timerNum} 초</div>
+        </section>
     );
 };
 

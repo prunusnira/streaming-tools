@@ -8,16 +8,7 @@ import { TeamContext } from "../../lib/context/teamProvider";
 import AlertDialog from "../dialog/alert/alertDlg";
 import TNChangeBody from "../dialog/teamname/tnChangeBody";
 import TNChangeHeader from "../dialog/teamname/tnChangeHeader";
-import {
-    ColumnBtnDiv,
-    ColumnBtnName,
-    ColumnBtnPick,
-    ColumnContent,
-    ColumnCounter,
-    ColumnTitle,
-    ColumnTitleWrapper,
-    ListColumnContainer,
-} from "./listColumn.style";
+import styles from "../pref/legacy.module.css";
 
 type Props = {
     teamInfo: TeamInfoType;
@@ -30,22 +21,22 @@ const ListColumn = ({ teamInfo, children }: Props) => {
     const { data } = useContext(StatusContext);
     const { runRoulette } = useRoulette();
     return (
-        <ListColumnContainer>
-            <ColumnTitleWrapper>
-                <ColumnTitle>
+        <section className={styles.listColumn}>
+            <div className={styles.columnTitle}>
+                <div className={styles.columnName}>
                     {teamInfo.name} (
                     {data.teamVisible
                         ? userList.filter((x) => x.team === teamInfo.num).length
                         : "-"}{" "}
                     명)
-                </ColumnTitle>
-                <ColumnCounter>
+                </div>
+                <div className="text-sm text-slate-400">
                     {data.phase === Phase.Pick && `픽 ${teamInfo.curPick} / ${data.pickPhase}`}
                     {data.phase === Phase.Ban && `밴 ${teamInfo.curBan} / ${data.banPhase}`}
-                </ColumnCounter>
-            </ColumnTitleWrapper>
-            <ColumnBtnDiv>
-                <ColumnBtnPick
+                </div>
+            </div>
+            <div className={styles.columnButtons}>
+                <button className={styles.primaryButton}
                     onClick={() => {
                         if (data.phase === Phase.Pick && teamInfo.curPick < data.pickPhase) {
                             runRoulette(teamInfo.num);
@@ -68,8 +59,8 @@ const ListColumn = ({ teamInfo, children }: Props) => {
                     }}
                 >
                     이 팀에서 선택
-                </ColumnBtnPick>
-                <ColumnBtnName
+                </button>
+                <button className={styles.button}
                     onClick={() => {
                         openDialog({
                             width: 420,
@@ -82,10 +73,10 @@ const ListColumn = ({ teamInfo, children }: Props) => {
                     }}
                 >
                     팀명 변경
-                </ColumnBtnName>
-            </ColumnBtnDiv>
-            <ColumnContent>{children}</ColumnContent>
-        </ListColumnContainer>
+                </button>
+            </div>
+            <div className={styles.columnContent}>{children}</div>
+        </section>
     );
 };
 

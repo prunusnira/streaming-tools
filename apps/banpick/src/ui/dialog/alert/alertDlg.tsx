@@ -1,5 +1,5 @@
 import { ModalType } from "../../../data/modal";
-import { AlertContainer, AlertTxt, AlertBtnWrapper, AlertButton } from "./alertDialog.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     msg: string;
@@ -12,13 +12,13 @@ type Props = {
 
 const AlertDialog = ({ msg, type, btn, btnOk, ok, closeDialog }: Props) => {
     return (
-        <AlertContainer>
-            <AlertTxt>{msg}</AlertTxt>
-            <AlertBtnWrapper>
-                {type === ModalType.TwoBtn && <AlertButton onClick={ok}>{btnOk}</AlertButton>}
-                <AlertButton onClick={closeDialog}>{btn}</AlertButton>
-            </AlertBtnWrapper>
-        </AlertContainer>
+        <section className={styles.stack}>
+            <p className={styles.alertText}>{msg}</p>
+            <div className="flex justify-center gap-2">
+                {type === ModalType.TwoBtn && <button className={styles.primaryButton} onClick={ok}>{btnOk}</button>}
+                <button className={styles.primaryButton} onClick={closeDialog}>{btn}</button>
+            </div>
+        </section>
     );
 };
 

@@ -5,16 +5,7 @@ import { ModalContext } from "../../lib/context/modalProvider";
 import { StatusContext } from "../../lib/context/statusProvider";
 import { TeamContext } from "../../lib/context/teamProvider";
 import AlertDialog from "../dialog/alert/alertDlg";
-import {
-    ConfButton,
-    ConfigBtnGroup,
-    ConfigContainer,
-    ConfigCtrl,
-    ConfigPhase,
-    ConfigPhaseWrapper,
-    ConfSButton,
-    PhaseChangeBtn,
-} from "./config.style";
+import styles from "../pref/legacy.module.css";
 import Control from "./control";
 
 const Config = () => {
@@ -54,11 +45,10 @@ const Config = () => {
     };
 
     return (
-        <ConfigContainer>
-            <ConfigBtnGroup>
-                <ConfSButton
-                    run={data.run}
-                    join={data.join}
+        <section className={styles.configContainer}>
+            <div className={styles.configGroup}>
+                <button
+                    className={styles.primaryButton}
                     onClick={() => {
                         !data.run && startup();
                         data.run && !data.join && resume();
@@ -68,8 +58,8 @@ const Config = () => {
                     {!data.run && "인원 모집 시작"}
                     {data.run && !data.join && "인원 모집 재개"}
                     {data.run && data.join && "인원 모집 중단"}
-                </ConfSButton>
-                <ConfButton
+                </button>
+                <button className={styles.button}
                     onClick={() => {
                         openDialog({
                             width: 420,
@@ -95,17 +85,17 @@ const Config = () => {
                     }}
                 >
                     리셋
-                </ConfButton>
-                <ConfButton
+                </button>
+                <button className={styles.button}
                     onClick={() => {
                         data.teamVisible ? changeTeamVisible(false) : changeTeamVisible(true);
                     }}
                 >
                     {data.teamVisible && "팀원 목록 가리기"}
                     {!data.teamVisible && "팀원 목록 보이기"}
-                </ConfButton>
-            </ConfigBtnGroup>
-            <ConfigCtrl>
+                </button>
+            </div>
+            <div className={styles.configCtrl}>
                 <Control
                     type={0}
                     title={"픽(전체)"}
@@ -127,21 +117,21 @@ const Config = () => {
                     add={phaseBanAdd}
                     sub={phaseBanSub}
                 />
-            </ConfigCtrl>
-            <ConfigPhaseWrapper>
-                <ConfigPhase>
+            </div>
+            <div className={styles.stack}>
+                <div className={styles.configPhase}>
                     {data.phase === Phase.Ready && "READY"}
                     {data.phase === Phase.Pick && "PICK PHASE"}
                     {data.phase === Phase.Ban && "BAN PHASE"}
-                </ConfigPhase>
-                <PhaseChangeBtn
+                </div>
+                <button className={styles.button}
                     disabled={data.phase === Phase.Ready ? true : false}
                     onClick={forcePhaseChange}
                 >
                     강제 페이즈 전환
-                </PhaseChangeBtn>
-            </ConfigPhaseWrapper>
-        </ConfigContainer>
+                </button>
+            </div>
+        </section>
     );
 };
 

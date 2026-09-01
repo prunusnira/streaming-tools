@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { TeamContext } from "../../lib/context/teamProvider";
 import ListColumn from "../listLayout/listColumn";
-import { BanpickListContainer, BPListDesc, BPListWrapper } from "./banpickList.style";
+import styles from "../pref/legacy.module.css";
 import BanpickItem from "./banpickItem";
 import { Message } from "../../data/message";
 import BanpickListEmpty from "./banpickListEmpty";
@@ -114,9 +114,9 @@ const BanpickList = () => {
     };
 
     return (
-        <BanpickListContainer>
-            <BPListDesc>* 사용자 밴픽 리스트가 표시되는 화면입니다</BPListDesc>
-            <BPListWrapper>
+        <section className={styles.listContainer}>
+            <p className={styles.listDesc}>* 사용자 밴픽 리스트가 표시되는 화면입니다</p>
+            <div className={styles.listWrapper}>
                 <ListColumn teamInfo={team1}>
                     {checkLength(team1.pickList) ? (
                         team1.pickList.map((x, i) => (
@@ -153,8 +153,8 @@ const BanpickList = () => {
                         <BanpickListEmpty />
                     )}
                 </ListColumn>
-            </BPListWrapper>
-        </BanpickListContainer>
+            </div>
+        </section>
     );
 };
 

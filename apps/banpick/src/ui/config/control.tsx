@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
 import { ModalContext } from "../../lib/context/modalProvider";
 import AlertDialog from "../dialog/alert/alertDlg";
-import { ControlContainer, CtrlRow, Help, NumCtrl, NumText } from "./control.style";
+import styles from "../pref/legacy.module.css";
 
 type Props = {
     type: number;
@@ -40,19 +40,19 @@ const Control = ({ type, title, num, add, sub }: Props) => {
     };
 
     return (
-        <ControlContainer>
-            <CtrlRow>
+        <section className={styles.stack}>
+            <div className="flex items-center justify-center gap-2">
                 {title}&nbsp;
-                <Help onClick={() => openDescription(type)}>
+                <button className="cursor-pointer text-blue-300" onClick={() => openDescription(type)} aria-label={`${title} 설명`}>
                     <FontAwesomeIcon icon={faCircleInfo} />
-                </Help>
-            </CtrlRow>
-            <CtrlRow>
-                <NumCtrl onClick={sub}>-</NumCtrl>
-                <NumText>{num}</NumText>
-                <NumCtrl onClick={add}>+</NumCtrl>
-            </CtrlRow>
-        </ControlContainer>
+                </button>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+                <button className={styles.button} onClick={sub}>-</button>
+                <div className="w-full text-center">{num}</div>
+                <button className={styles.button} onClick={add}>+</button>
+            </div>
+        </section>
     );
 };
 

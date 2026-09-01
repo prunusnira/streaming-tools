@@ -5,13 +5,7 @@ import { emptyUser, UserType } from "../../../data/user";
 import { StatusContext } from "../../../lib/context/statusProvider";
 import { TalkContext } from "../../../lib/context/talkProvider";
 import { TeamContext } from "../../../lib/context/teamProvider";
-import {
-    TalkButton,
-    TalkItemContainer,
-    TalkItemMsg,
-    TalkItemTime,
-    TalkWrapper,
-} from "./talkItem.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     pickedUser: UserType;
@@ -47,13 +41,13 @@ const TalkItem = ({ pickedUser, msg }: Props) => {
     };
 
     return (
-        <TalkItemContainer>
-            <TalkWrapper>
-                <TalkItemMsg>{msg.msg}</TalkItemMsg>
-                <TalkItemTime>{msg.timeInTxt}</TalkItemTime>
-            </TalkWrapper>
-            {!negoMode && <TalkButton onClick={addToPickList}>선택하기</TalkButton>}
-        </TalkItemContainer>
+        <div className={styles.talkItem}>
+            <div className={styles.stack}>
+                <div>{msg.msg}</div>
+                <div className="text-xs text-slate-500">{msg.timeInTxt}</div>
+            </div>
+            {!negoMode && <button className={styles.button} onClick={addToPickList}>선택하기</button>}
+        </div>
     );
 };
 

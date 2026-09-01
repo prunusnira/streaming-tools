@@ -4,17 +4,6 @@ import styles from "../pref/legacy.module.css";
 import { Message } from "../../data/message";
 import { Phase } from "../../data/status";
 import { StatusContext } from "../../lib/context/statusProvider";
-import {
-    ItemBody,
-    ItemBodyBtnWrapper,
-    ItemBodyContent,
-    ItemButton,
-    ItemContainer,
-    ItemFooter,
-    ItemTitle,
-    ItemTitleName,
-    ItemTitlePick,
-} from "./banpickItem.style";
 
 type Props = {
     team: number;
@@ -37,28 +26,28 @@ const BanpickItem = ({
 }: Props) => {
     const { data } = useContext(StatusContext);
     return (
-        <ItemContainer>
-            <ItemTitle>
-                <ItemTitlePick>PICK {idx + 1}</ItemTitlePick>
-                <ItemTitleName>by {item.name}</ItemTitleName>
-            </ItemTitle>
-            <ItemBody>
-                <ItemBodyContent className={cn(item.ban && styles.banned)}>{item.msg}</ItemBodyContent>
-            </ItemBody>
-            <ItemFooter>{item.timeInTxt}</ItemFooter>
-            <ItemBodyBtnWrapper>
-                <ItemButton onClick={() => openEditDialog(team, idx, item)}>수정</ItemButton>
-                <ItemButton onClick={() => openDeleteDialog(team, idx)}>삭제</ItemButton>
-                <ItemButton onClick={() => openNegoMode(item.id)}>협상</ItemButton>
-                <ItemButton
+        <article className={styles.item}>
+            <div className={styles.itemTitle}>
+                <div>PICK {idx + 1}</div>
+                <div>by {item.name}</div>
+            </div>
+            <div className={styles.row}>
+                <div className={cn(styles.itemContent, item.ban && styles.banned)}>{item.msg}</div>
+            </div>
+            <div className="text-sm text-slate-400">{item.timeInTxt}</div>
+            <div className={styles.itemButtons}>
+                <button className={styles.button} onClick={() => openEditDialog(team, idx, item)}>수정</button>
+                <button className={styles.button} onClick={() => openDeleteDialog(team, idx)}>삭제</button>
+                <button className={styles.button} onClick={() => openNegoMode(item.id)}>협상</button>
+                <button className={styles.button}
                     disabled={data.phase !== Phase.Ban}
                     onClick={() => changeBanStatus(team, idx)}
                 >
                     {item.ban && "언밴"}
                     {!item.ban && "밴"}
-                </ItemButton>
-            </ItemBodyBtnWrapper>
-        </ItemContainer>
+                </button>
+            </div>
+        </article>
     );
 };
 

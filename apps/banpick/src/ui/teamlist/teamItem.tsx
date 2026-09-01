@@ -3,7 +3,6 @@ import { cn } from "@streaming-tools/ui";
 import styles from "../pref/legacy.module.css";
 import { UserType } from "../../data/user";
 import { TalkContext } from "../../lib/context/talkProvider";
-import { TeamItemCover } from "./teamItem.style";
 
 type Props = {
     children: React.ReactNode;
@@ -14,8 +13,8 @@ type Props = {
 const TeamItem = ({ children, picked, changePickedState }: Props) => {
     const { openTalkDialog, changeNegoMode, changePickedUser } = useContext(TalkContext);
     return (
-        <TeamItemCover
-            className={cn(picked.picked && styles.banned)}
+        <div
+            className={cn(styles.teamItem, picked.picked && styles.banned)}
             onClick={changePickedState}
             onContextMenu={(event: MouseEvent<HTMLDivElement>) => {
                 // 해당 유저에 대한 컨텍스트 메뉴 열기
@@ -26,7 +25,7 @@ const TeamItem = ({ children, picked, changePickedState }: Props) => {
             }}
         >
             {children}
-        </TeamItemCover>
+        </div>
     );
 };
 

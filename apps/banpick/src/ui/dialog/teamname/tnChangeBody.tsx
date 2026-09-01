@@ -1,7 +1,7 @@
 import { type ChangeEvent, useContext, useState } from "react";
 import { ModalContext } from "../../../lib/context/modalProvider";
 import { TeamContext } from "../../../lib/context/teamProvider";
-import { TNBtnWrapper, TNButton, TNChangeContainer, TNCurrent, TNNew } from "./tnChange.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     teamNum: number;
@@ -13,22 +13,22 @@ const TNChangeBody = ({ teamNum }: Props) => {
     const { closeDialog } = useContext(ModalContext);
 
     return (
-        <TNChangeContainer>
-            <TNCurrent>
+        <section className={styles.stack}>
+            <div className="pb-3">
                 현재 팀 {teamNum}의 이름:&nbsp;
                 {teamNum === 1 && team1.name}
                 {teamNum === 2 && team2.name}
-            </TNCurrent>
-            <TNNew
+            </div>
+            <input className={styles.input}
                 value={teamName}
                 autoFocus={true}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     setTeamName(event.target.value);
                 }}
             />
-            <TNBtnWrapper>
-                <TNButton onClick={closeDialog}>취소</TNButton>
-                <TNButton
+            <div className="flex justify-center gap-2 pt-3">
+                <button className={styles.primaryButton} onClick={closeDialog}>취소</button>
+                <button className={styles.primaryButton}
                     onClick={() => {
                         if (teamNum === 1) {
                             team1.name = teamName;
@@ -42,9 +42,9 @@ const TNChangeBody = ({ teamNum }: Props) => {
                     }}
                 >
                     확인
-                </TNButton>
-            </TNBtnWrapper>
-        </TNChangeContainer>
+                </button>
+            </div>
+        </section>
     );
 };
 

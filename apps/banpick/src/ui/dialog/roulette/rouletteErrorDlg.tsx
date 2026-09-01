@@ -1,11 +1,11 @@
-import { RouletteErrorContainer } from "./rouletteError.style";
+import styles from "../../pref/legacy.module.css";
 
 type Props = {
     content: string;
 };
 
 const RouletteErrorDlg = ({ content }: Props) => {
-    return <RouletteErrorContainer>{content}</RouletteErrorContainer>;
+    return <section className={styles.stack}>{content}</section>;
 };
 
 export default RouletteErrorDlg;

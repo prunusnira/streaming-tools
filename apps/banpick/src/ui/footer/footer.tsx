@@ -1,17 +1,17 @@
-import { FooterAnchor, FooterContainer, FooterItem } from "./footer.style";
+import styles from "../pref/legacy.module.css";
 
 const Footer = () => {
     return (
-        <FooterContainer>
-            <FooterItem>(c) 2020 PrunusNira</FooterItem>
-            <FooterAnchor target="_blank" href="https://twitter.com/_nira_one">
+        <footer className={styles.footer}>
+            <span>(c) 2020 PrunusNira</span>
+            <a className={styles.footerLink} target="_blank" href="https://twitter.com/_nira_one">
                 Twitter
-            </FooterAnchor>
-            <FooterAnchor target="_blank" href="https://github.com/prunusnira/twitch-banpicker">
+            </a>
+            <a className={styles.footerLink} target="_blank" href="https://github.com/prunusnira/twitch-banpicker">
                 GitHub
-            </FooterAnchor>
-            <FooterItem>minimum width: 1350px</FooterItem>
-        </FooterContainer>
+            </a>
+            <span>minimum width: 1350px</span>
+        </footer>
     );
 };
 

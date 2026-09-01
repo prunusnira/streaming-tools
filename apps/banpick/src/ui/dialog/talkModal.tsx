@@ -1,17 +1,12 @@
 import { useContext } from "react";
+import { cn } from "@streaming-tools/ui";
 import { ModalType } from "../../data/modal";
 import { emptyUser } from "../../data/user";
 import { ModalContext } from "../../lib/context/modalProvider";
 import { TalkContext } from "../../lib/context/talkProvider";
 import { TeamContext } from "../../lib/context/teamProvider";
 import AlertDialog from "./alert/alertDlg";
-import {
-    DialogOuter,
-    DialogContainer,
-    DialogHeader,
-    DialogBody,
-    DialogFooter,
-} from "./modal.style";
+import styles from "../pref/legacy.module.css";
 import Portal from "./portal";
 import TalkDlg from "./talk/talkDlg";
 import TalkDlgFooter from "./talk/talkDlgFooter";
@@ -83,23 +78,23 @@ const TalkModal = () => {
 
     return (
         <Portal domid="#talkdlg">
-            <DialogOuter active={data.active}>
-                <DialogContainer width={data.width} maxWidth={data.maxWidth}>
-                    <DialogHeader>
+            <section className={cn(styles.dialogOuter, !data.active && styles.dialogHidden)}>
+                <section className={styles.dialogContainer} style={{ width: data.width, maxWidth: data.maxWidth }}>
+                    <div className={styles.dialogHeader}>
                         <TalkDlgHeader active={data.active} user={pickedUser} initTime={initTime} />
-                    </DialogHeader>
-                    <DialogBody>
+                    </div>
+                    <div className={styles.dialogBody}>
                         <TalkDlg
                             pickedUser={pickedUser}
                             msglist={talkHistory}
                             negoMode={negoMode}
                         />
-                    </DialogBody>
-                    <DialogFooter>
+                    </div>
+                    <div className={styles.dialogFooter}>
                         <TalkDlgFooter skipDialog={skipDialog} cancelDialog={cancelDialog} />
-                    </DialogFooter>
-                </DialogContainer>
-            </DialogOuter>
+                    </div>
+                </section>
+            </section>
         </Portal>
     );
 };
