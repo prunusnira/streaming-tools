@@ -14,11 +14,10 @@ const useIRC = () => {
     const { data: dataStatus } = useContext(StatusContext);
     const { pickedUser } = useContext(TalkContext);
     const { openDialog, closeDialog } = useContext(ModalContext);
-    const socket = useRef<WebSocket>(new WebSocket(process.env.REACT_APP_URL_IRC!));
+    const socket = useRef<WebSocket>(new WebSocket(import.meta.env.VITE_URL_IRC!));
     const { processMessage } = useProcessMessage();
 
     useEffect(() => {
-        // socket.current = new WebSocket(process.env.REACT_APP_URL_IRC!);
         socket.current.onopen = () => {
             console.log("socket open");
             // socket.send("CAP REQ :twitch.tv/tags");

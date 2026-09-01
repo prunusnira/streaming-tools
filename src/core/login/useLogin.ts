@@ -14,7 +14,10 @@ const useLogin = () => {
         const login = async () => {
             if (data.acctok === "") {
                 if (window.location.hash === "") {
-                    window.location.href = `${process.env.REACT_APP_URL_LOGIN}?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIR_URI}&response_type=token&scope=chat:read+user:read:email`;
+                    const loginUrl = import.meta.env.VITE_URL_LOGIN!;
+                    const clientId = import.meta.env.VITE_CLIENT_ID!;
+                    const redirectUri = import.meta.env.VITE_REDIR_URI!;
+                    window.location.href = `${loginUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=chat:read+user:read:email`;
                 } else {
                     console.log(window.location.hash);
                     const token = getToken(window.location.hash);

@@ -1,10 +1,15 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 import App from "./App";
 
-jest.mock("react-router-dom", () => ({
+vi.mock("react-router-dom", () => ({
     __esModule: true,
-    useNavigate: (url: string) => {},
+    useNavigate: () => vi.fn(),
+}));
+
+vi.mock("./core/login/useLogin", () => ({
+    default: () => ({ loginStatus: 0 }),
 }));
 
 describe("App.tsx: 최초 로딩시 로그인 과정 검사", () => {

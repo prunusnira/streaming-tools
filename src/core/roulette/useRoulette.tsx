@@ -12,7 +12,7 @@ import RouletteErrorHeader from "../../ui/dialog/roulette/rouletteErrorHeader";
 
 const useRoulette = () => {
     const target = useRef<UserType>(emptyUser);
-    const roulette = useRef<NodeJS.Timeout>();
+    const roulette = useRef<NodeJS.Timeout | undefined>(undefined);
     const { userList } = useContext(TeamContext);
     const { changePickedUser, openTalkDialog, addTalkHistory } = useContext(TalkContext);
     const { openDialog, closeDialog } = useContext(ModalContext);
