@@ -1,5 +1,11 @@
 /// <reference types="vite/client" />
 
+declare module "react-dom" {
+    import type { ReactNode, ReactPortal } from "react";
+
+    export function createPortal(children: ReactNode, container: Element | DocumentFragment): ReactPortal;
+}
+
 interface ImportMetaEnv {
     readonly VITE_URL_LOGIN?: string;
     readonly VITE_URL_VALIDATE?: string;

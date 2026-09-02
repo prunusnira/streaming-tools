@@ -1,0 +1,8 @@
+@reference "@streaming-tools/ui/globals.css";
+.footer {
+    @apply flex w-full justify-center gap-3 px-6 pb-4 text-xs text-slate-500;
+}
+
+.footerLink {
+    @apply text-blue-300 hover:text-blue-200;
+}

@@ -1,0 +1,8 @@
+@reference "@streaming-tools/ui/globals.css";
+.teamItem {
+    @apply cursor-pointer px-5 py-1.5 hover:bg-slate-800;
+}
+
+.banned {
+    @apply line-through opacity-50;
+}

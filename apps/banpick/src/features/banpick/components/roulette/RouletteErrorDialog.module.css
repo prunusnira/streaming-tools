@@ -1,0 +1,4 @@
+@reference "@streaming-tools/ui/globals.css";
+.stack {
+    @apply flex flex-col;
+}

@@ -6,7 +6,10 @@
   "exports": {
     ".": "./src/index.ts",
     "./globals.css": "./src/styles/globals.css",
-    "./components/*": "./src/components/*.tsx",
+    "./components/button": "./src/components/button/Button.tsx",
+    "./components/dialog": "./src/components/dialog/AlertDialog.tsx",
+    "./components/portal": "./src/components/portal/Portal.tsx",
+    "./components/loading": "./src/components/loading/Loading.tsx",
     "./lib/*": "./src/lib/*.ts"
   },
   "scripts": {
@@ -16,11 +19,11 @@
     "build-storybook": "storybook build"
   },
   "peerDependencies": {
-    "react": "catalog:"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0",
     "tailwind-merge": "^3.4.0"

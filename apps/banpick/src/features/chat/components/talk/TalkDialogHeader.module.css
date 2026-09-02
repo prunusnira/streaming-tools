@@ -1,0 +1,4 @@
+@reference "@streaming-tools/ui/globals.css";
+.titleIcon {
+    @apply size-12 rounded-full object-cover;
+}

@@ -1,0 +1,24 @@
+@reference "@streaming-tools/ui/globals.css";
+.dialogOuter {
+    @apply absolute inset-0 flex items-center justify-center bg-slate-950/70 p-4;
+}
+
+.dialogHidden {
+    display: none;
+}
+
+.dialogContainer {
+    @apply z-10 flex w-[90%] flex-col overflow-hidden rounded-xl border border-slate-700 bg-slate-900 text-slate-100 shadow-2xl;
+}
+
+.dialogHeader {
+    @apply bg-slate-800 px-5 py-3 text-xl font-semibold;
+}
+
+.dialogBody {
+    @apply px-6 py-4 text-sm;
+}
+
+.dialogFooter {
+    @apply flex items-center justify-center gap-2 px-5 py-3;
+}

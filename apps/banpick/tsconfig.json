@@ -19,6 +19,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@banpick/*": ["src/*"]
+    },
     "types": [
       "node",
       "vitest/globals"

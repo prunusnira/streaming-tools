@@ -1,0 +1,4 @@
+@reference "@streaming-tools/ui/globals.css";
+.empty {
+    @apply flex h-full items-center justify-center text-slate-500;
+}

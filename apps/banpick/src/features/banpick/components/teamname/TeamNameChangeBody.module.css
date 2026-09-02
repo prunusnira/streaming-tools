@@ -1,0 +1,12 @@
+@reference "@streaming-tools/ui/globals.css";
+.stack {
+    @apply flex flex-col;
+}
+
+.input {
+    @apply w-full rounded-md border border-slate-600 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30;
+}
+
+.primaryButton {
+    @apply rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white;
+}

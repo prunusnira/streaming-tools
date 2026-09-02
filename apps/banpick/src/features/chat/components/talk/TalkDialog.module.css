@@ -1,0 +1,8 @@
+@reference "@streaming-tools/ui/globals.css";
+.talk {
+    @apply flex h-[80%] min-h-[500px] w-full flex-col overflow-y-auto;
+}
+
+.talkList {
+    @apply h-[50vh] overflow-y-auto;
+}

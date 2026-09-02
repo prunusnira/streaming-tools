@@ -1,13 +1,13 @@
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
-import CombinedProviders from "./lib/context/combinedProvider";
-import ModalProvider from "./lib/context/modalProvider";
-import StatusProvider from "./lib/context/statusProvider";
-import StreamerProvider from "./lib/context/streamerProvider";
-import TalkProvider from "./lib/context/talkProvider";
-import TeamProvider from "./lib/context/teamProvider";
+import { App } from "./App";
+import { CombinedProviders } from "@banpick/app/providers/CombinedProviders";
+import { ModalProvider } from "@banpick/shared/modal/ModalProvider";
+import { StatusProvider } from "@banpick/features/banpick/model/StatusProvider";
+import { StreamerProvider } from "@banpick/features/streamer/model/StreamerProvider";
+import { TalkProvider } from "@banpick/features/chat/model/TalkProvider";
+import { TeamProvider } from "@banpick/features/banpick/model/TeamProvider";
 
-const BanpickRoot = () => {
+export const BanpickRoot = () => {
     return (
         <BrowserRouter>
             <CombinedProviders
@@ -24,5 +24,3 @@ const BanpickRoot = () => {
         </BrowserRouter>
     );
 };
-
-export default BanpickRoot;

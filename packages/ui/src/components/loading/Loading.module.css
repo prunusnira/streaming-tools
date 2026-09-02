@@ -1,0 +1,8 @@
+@reference "../../styles/globals.css";
+.loading {
+    @apply flex min-h-screen w-full items-center justify-center text-center text-3xl font-semibold;
+}
+
+.spinner {
+    @apply size-8 animate-spin rounded-full border-4 border-slate-600 border-t-slate-100;
+}

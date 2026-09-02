@@ -1,0 +1,28 @@
+@reference "@streaming-tools/ui/globals.css";
+.configContainer {
+    @apply mx-6 my-4 grid w-[calc(100%-3rem)] grid-cols-[1.1fr_1fr_.7fr] items-center gap-5 rounded-2xl border border-slate-700/70 bg-slate-900/75 px-5 py-4 shadow-xl shadow-slate-950/20 backdrop-blur;
+}
+
+.configGroup, .configCtrl {
+    @apply grid grid-cols-3 gap-2;
+}
+
+.configCtrl {
+    @apply rounded-xl border border-slate-700/70 bg-slate-950/40 p-2;
+}
+
+.configPhase {
+    @apply text-center text-lg font-bold tracking-[0.18em] text-indigo-200;
+}
+
+.stack {
+    @apply flex flex-col;
+}
+
+.button {
+    @apply rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-2 text-sm font-medium text-slate-100 transition-all hover:-translate-y-px hover:border-slate-500 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.primaryButton {
+    @apply rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-950/30 transition-all hover:-translate-y-px hover:from-indigo-400 hover:to-violet-400 disabled:cursor-not-allowed disabled:opacity-50;
+}

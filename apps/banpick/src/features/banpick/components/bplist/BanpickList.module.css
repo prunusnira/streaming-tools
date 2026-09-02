@@ -1,0 +1,12 @@
+@reference "@streaming-tools/ui/globals.css";
+.listContainer {
+    @apply flex h-full w-full flex-col;
+}
+
+.listDesc {
+    @apply mb-3 w-full px-3 text-center text-sm text-slate-400;
+}
+
+.listWrapper {
+    @apply flex min-h-0 flex-1 gap-4 overflow-y-auto;
+}

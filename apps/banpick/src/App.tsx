@@ -1,9 +1,9 @@
-import useLogin from "./core/login/useLogin";
-import { LoginStatusType } from "./data/loginStatus";
-import Loading from "./ui/loading/loading";
-import MainPage from "./ui/main";
+import { Loading } from "@streaming-tools/ui";
+import { useLogin } from "@banpick/features/streamer/logic/login/useLogin";
+import { LoginStatusType } from "@banpick/features/streamer/model/loginStatus";
+import { MainPage } from "@banpick/app/MainPage";
 
-const App = () => {
+export const App = () => {
     const { loginStatus } = useLogin();
 
     switch (loginStatus) {
@@ -14,5 +14,3 @@ const App = () => {
             return <Loading />;
     }
 };
-
-export default App;

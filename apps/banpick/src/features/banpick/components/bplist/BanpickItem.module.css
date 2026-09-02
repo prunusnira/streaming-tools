@@ -1,0 +1,28 @@
+@reference "@streaming-tools/ui/globals.css";
+.item {
+    @apply m-2 flex flex-col gap-2 rounded-xl border border-slate-700/70 bg-slate-950/40 p-4 transition-colors hover:border-slate-600;
+}
+
+.itemTitle {
+    @apply flex justify-between text-sm text-slate-400;
+}
+
+.itemContent {
+    @apply text-2xl font-medium;
+}
+
+.banned {
+    @apply line-through opacity-50;
+}
+
+.itemButtons {
+    @apply flex gap-2;
+}
+
+.row {
+    @apply flex items-center;
+}
+
+.button {
+    @apply rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-2 text-sm font-medium text-slate-100 hover:bg-slate-700;
+}

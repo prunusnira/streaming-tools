@@ -1,0 +1,4 @@
+@reference "@streaming-tools/ui/globals.css";
+.primaryButton {
+    @apply rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white;
+}

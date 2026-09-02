@@ -1,0 +1,20 @@
+@reference "@streaming-tools/ui/globals.css";
+.headerContainer {
+    @apply grid w-full grid-cols-3 items-center border-b border-slate-800/80 bg-slate-950/70 px-8 py-5 backdrop-blur;
+}
+
+.headerItem {
+    @apply flex items-center justify-center gap-3 text-sm text-slate-300;
+}
+
+.headerTitle {
+    @apply justify-start text-xl font-bold tracking-tight text-white;
+}
+
+.headerActions {
+    @apply justify-end;
+}
+
+.headerIcon {
+    @apply size-9 rounded-full border border-slate-600 object-cover shadow-sm;
+}
