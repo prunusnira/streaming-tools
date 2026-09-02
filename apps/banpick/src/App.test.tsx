@@ -3,12 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import { App } from "./App";
 
-vi.mock("react-router-dom", () => ({
-    __esModule: true,
-    useNavigate: () => vi.fn(),
-}));
-
-vi.mock("./core/login/useLogin", () => ({
+vi.mock("@banpick/features/streamer/logic/login/useLogin", () => ({
     useLogin: () => ({ loginStatus: 0 }),
 }));
 

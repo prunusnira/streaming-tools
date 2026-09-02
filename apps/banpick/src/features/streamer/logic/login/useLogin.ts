@@ -3,28 +3,26 @@ import { LoginStatusType } from "@banpick/features/streamer/model/loginStatus";
 import { StreamerContext } from "@banpick/features/streamer/model/StreamerProvider";
 import { apiValidate } from "../api/validate";
 import { apiGetUsers } from "../api/user";
-import { useNavigate } from "react-router-dom";
+import { getAccessTokenFromCookie, getAccessTokenFromHash } from "./oauthAccessToken";
 
 export const useLogin = () => {
     const [loginStatus, setLoginStatus] = useState(LoginStatusType.None);
     const { data, updateStreamer } = useContext(StreamerContext);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const login = async () => {
             if (data.acctok === "") {
-                if (window.location.hash === "") {
+                const accessToken = getAccessTokenFromHash(window.location.hash) || getAccessTokenFromCookie();
+
+                if (accessToken === "") {
                     const loginUrl = import.meta.env.VITE_URL_LOGIN!;
                     const clientId = import.meta.env.VITE_CLIENT_ID!;
                     const redirectUri = import.meta.env.VITE_REDIR_URI!;
                     window.location.href = `${loginUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=chat:read+user:read:email`;
                 } else {
-                    console.log(window.location.hash);
-                    const token = getToken(window.location.hash);
-                    const userid = await validateLogin(token);
-                    await getUserData(userid, token);
+                    const userid = await validateLogin(accessToken);
+                    await getUserData(userid, accessToken);
                     setLoginStatus(LoginStatusType.Signed);
-                    navigate("/");
                 }
             } else {
                 setLoginStatus(LoginStatusType.Signed);
@@ -33,10 +31,6 @@ export const useLogin = () => {
 
         loginStatus === LoginStatusType.None && login();
     }, []);
-
-    const getToken = (hash: string) => {
-        return hash.split("&")[0].split("#access_token=")[1];
-    };
 
     const validateLogin = (acctok: string) => {
         return apiValidate(acctok)

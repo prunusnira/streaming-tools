@@ -4,13 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode dev",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@streaming-tools/banpick": "workspace:*",
     "@streaming-tools/ui": "workspace:*",
+    "@tanstack/react-router": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
