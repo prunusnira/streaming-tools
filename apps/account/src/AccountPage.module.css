@@ -1,0 +1,63 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.loading {
+    @apply min-h-screen;
+}
+
+.page {
+    @apply p-8;
+}
+
+.title {
+    @apply m-0 text-xl font-bold;
+}
+
+.description {
+    @apply mt-2 text-sm text-slate-400;
+}
+
+.accountList {
+    @apply mt-6 grid max-w-2xl gap-3 p-0;
+}
+
+.accountItem {
+    @apply flex items-center justify-between gap-4 rounded-lg border border-slate-800 bg-slate-900/60 p-4;
+}
+
+.accountInfo {
+    @apply flex min-w-0 items-center gap-3;
+}
+
+.providerLogo {
+    @apply h-7 w-10 shrink-0 object-contain;
+}
+
+.buttonLogo {
+    @apply size-4 object-contain;
+}
+
+.profileImage,
+.profilePlaceholder {
+    @apply size-10 shrink-0 rounded-full border border-slate-700 object-cover;
+}
+
+.profilePlaceholder {
+    @apply bg-slate-800;
+}
+
+.accountName,
+.disconnected {
+    @apply mt-1 block text-sm;
+}
+
+.accountName {
+    @apply truncate text-slate-300;
+}
+
+.disconnected {
+    @apply text-slate-500;
+}
+
+.logoutButton {
+    @apply mt-6;
+}

@@ -1,10 +1,9 @@
 import { useContext } from "react";
-import { cn, Portal } from "@streaming-tools/ui";
+import { AlertDialog, cn, ModalType, Portal } from "@streaming-tools/ui";
 import { emptyUser } from "@banpick/features/streamer/model/user";
 import { ModalContext } from "@banpick/shared/modal/ModalProvider";
 import { TalkContext } from "@banpick/features/chat/model/TalkProvider";
 import { TeamContext } from "@banpick/features/banpick/model/TeamProvider";
-import { AlertDialog, ModalType } from "@streaming-tools/ui";
 import styles from "@banpick/shared/modal/Modal.module.css";
 import { TalkDialog } from "./talk/TalkDialog";
 import { TalkDialogFooter } from "./talk/TalkDialogFooter";
@@ -77,9 +76,16 @@ export const TalkModal = () => {
     return (
         <Portal id="talkdlg">
             <section className={cn(styles.dialogOuter, !data.active && styles.dialogHidden)}>
-                <section className={styles.dialogContainer} style={{ width: data.width, maxWidth: data.maxWidth }}>
+                <section
+                    className={styles.dialogContainer}
+                    style={{ width: data.width, maxWidth: data.maxWidth }}
+                >
                     <div className={styles.dialogHeader}>
-                        <TalkDialogHeader active={data.active} user={pickedUser} initTime={initTime} />
+                        <TalkDialogHeader
+                            active={data.active}
+                            user={pickedUser}
+                            initTime={initTime}
+                        />
                     </div>
                     <div className={styles.dialogBody}>
                         <TalkDialog

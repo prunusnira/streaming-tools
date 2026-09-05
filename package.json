@@ -1,20 +1,33 @@
 {
-  "name": "streaming-tools",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "packageManager": "pnpm@11.8.0",
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
-  "scripts": {
-    "dev": "pnpm --filter @streaming-tools/main dev",
-    "build": "pnpm --recursive run build",
-    "test": "pnpm --filter @streaming-tools/banpick test",
-    "typecheck": "pnpm --recursive run typecheck"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "catalog:",
-    "tailwindcss": "catalog:"
-  }
+    "name": "streaming-tools",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "packageManager": "pnpm@11.8.0",
+    "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+    },
+    "scripts": {
+        "dev": "pnpm --filter @streaming-tools/main dev",
+        "build": "pnpm --recursive run build",
+        "test": "pnpm --filter @streaming-tools/banpick test",
+        "typecheck": "pnpm --recursive run typecheck",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier . --write",
+        "format:check": "prettier . --check"
+    },
+    "devDependencies": {
+        "@eslint/js": "catalog:",
+        "@streaming-tools/convention": "workspace:*",
+        "@tailwindcss/vite": "catalog:",
+        "eslint": "catalog:",
+        "eslint-plugin-react-hooks": "catalog:",
+        "eslint-plugin-react-refresh": "catalog:",
+        "globals": "catalog:",
+        "prettier": "catalog:",
+        "tailwindcss": "catalog:",
+        "typescript": "catalog:",
+        "typescript-eslint": "catalog:"
+    }
 }

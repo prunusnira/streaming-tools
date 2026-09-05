@@ -1,25 +1,30 @@
-import React, { useState } from "react";
-import { emptyStreamer, StreamerType } from "@banpick/features/streamer/model/user";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+    getAccessToken,
+    getAuthenticatedAccounts,
+    type AuthAccount,
+    type AuthProvider,
+} from "@streaming-tools/auth";
+import { StreamerType } from "@banpick/features/streamer/model/user";
 
 const initUser: StreamerType = {
     acctok: "",
     userid: "",
     iconurl: "",
     displayname: "",
+    provider: "",
 };
 
 type StreamerContextType = {
     data: StreamerType;
-    loadStreamer: () => void;
-    updateStreamer: (user: StreamerType) => void;
-    resetStreamer: () => void;
+    accounts: AuthAccount[] | undefined;
+    accessTokens: Partial<Record<AuthProvider, string>>;
 };
 
 export const StreamerContext = React.createContext<StreamerContextType>({
     data: initUser,
-    loadStreamer: () => {},
-    updateStreamer: (user: StreamerType) => {},
-    resetStreamer: () => {},
+    accounts: undefined,
+    accessTokens: {},
 });
 
 type ProviderProps = {
@@ -27,48 +32,53 @@ type ProviderProps = {
 };
 
 export const StreamerProvider = ({ children }: ProviderProps) => {
-    const [acctok, setAcctok] = useState("");
-    const [userid, setUserid] = useState("");
-    const [iconurl, setIconurl] = useState("");
-    const [displayname, setDisplayname] = useState("");
+    const [accounts, setAccounts] = useState<AuthAccount[]>();
+    const [accessTokens, setAccessTokens] = useState<Partial<Record<AuthProvider, string>>>({});
 
-    const loadStreamer = () => {
-        // 최초 로딩 시 로컬스토리지에서 데이터를 가져옴
-        const streamer = localStorage.getItem("streamer");
-        if (streamer) {
-            const info = JSON.parse(streamer) as StreamerType;
-            setAcctok(info.acctok);
-            setUserid(info.userid);
-            setIconurl(info.iconurl);
-            setDisplayname(info.displayname);
+    useEffect(() => {
+        getAuthenticatedAccounts()
+            .then(setAccounts)
+            .catch(() => setAccounts([]));
+    }, []);
+
+    useEffect(() => {
+        if (!accounts?.length) {
+            setAccessTokens({});
+            return;
         }
-    };
 
-    const updateStreamer = (user: StreamerType) => {
-        setAcctok(user.acctok);
-        setUserid(user.userid);
-        setIconurl(user.iconurl);
-        setDisplayname(user.displayname);
+        Promise.all(
+            accounts.map(async ({ provider }) => {
+                try {
+                    const session = await getAccessToken(provider);
+                    return [provider, session?.accessToken ?? ""] as const;
+                } catch {
+                    return [provider, ""] as const;
+                }
+            }),
+        )
+            .then((entries) => setAccessTokens(Object.fromEntries(entries)));
+    }, [accounts]);
 
-        localStorage.setItem("streamer", JSON.stringify(user));
-    };
-
-    const resetStreamer = () => {
-        updateStreamer(emptyStreamer);
-    };
+    const data = useMemo<StreamerType>(() => {
+        const account = accounts?.find((item) => item.provider === "twitch") ?? accounts?.[0];
+        return account
+            ? {
+                  acctok: accessTokens[account.provider] ?? "",
+                  displayname: account.name,
+                  iconurl: account.imageUrl,
+                  provider: account.provider,
+                  userid: account.id,
+              }
+            : initUser;
+    }, [accessTokens, accounts]);
 
     return (
         <StreamerContext.Provider
             value={{
-                data: {
-                    acctok,
-                    userid,
-                    iconurl,
-                    displayname,
-                },
-                loadStreamer,
-                updateStreamer,
-                resetStreamer,
+                data,
+                accounts,
+                accessTokens,
             }}
         >
             {children}

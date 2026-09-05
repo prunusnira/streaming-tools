@@ -1,9 +1,10 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { ModalContext } from "@banpick/shared/modal/ModalProvider";
 import { StatusContext } from "@banpick/features/banpick/model/StatusProvider";
 import { StreamerContext } from "@banpick/features/streamer/model/StreamerProvider";
 import { TalkContext } from "@banpick/features/chat/model/TalkProvider";
-import { AlertDialog, ModalType } from "@streaming-tools/ui";
+import { AlertDialog } from "@streaming-tools/ui";
+import { twitchIrcUrl } from "@banpick/shared/constants/twitch";
 import { Observer, Subject } from "./observer";
 import { useProcessMessage } from "./useProcessMessage";
 
@@ -14,26 +15,33 @@ export const useIRC = () => {
     const { data: dataStatus } = useContext(StatusContext);
     const { pickedUser } = useContext(TalkContext);
     const { openDialog, closeDialog } = useContext(ModalContext);
-    const socket = useRef<WebSocket>(new WebSocket(import.meta.env.VITE_URL_IRC!));
+    const socket = useRef<WebSocket | null>(null);
+    const intentionallyClosed = useRef(false);
     const { processMessage } = useProcessMessage();
 
     useEffect(() => {
-        socket.current.onopen = () => {
+        // access token은 HttpOnly 쿠키로 보관하므로 브라우저 IRC 연결에 직접 전달하지 않아.
+        // Lambda IRC 중계가 준비되기 전까지는 토큰을 노출하지 않고 연결을 생략해.
+        if (dataStreamer.provider !== "twitch" || dataStreamer.acctok === "") return;
+        intentionallyClosed.current = false;
+        socket.current = new WebSocket(twitchIrcUrl);
+        const currentSocket = socket.current;
+        currentSocket.onopen = () => {
             console.log("socket open");
             // socket.send("CAP REQ :twitch.tv/tags");
-            socket.current.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
-            socket.current.send(`PASS oauth:${dataStreamer.acctok}`);
-            socket.current.send(`NICK ${dataStreamer.userid}`);
-            socket.current.send(`JOIN #${dataStreamer.userid}`);
+            currentSocket.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
+            currentSocket.send(`PASS oauth:${dataStreamer.acctok}`);
+            currentSocket.send(`NICK ${dataStreamer.userid}`);
+            currentSocket.send(`JOIN #${dataStreamer.userid}`);
         };
 
-        socket.current.onmessage = (ev: MessageEvent) => {
+        currentSocket.onmessage = (ev: MessageEvent) => {
             if (ev.data !== undefined) {
                 const msg: string = ev.data;
 
                 // 채팅 메시지 처리하기
                 if (msg.startsWith("PING :tmi.twitch.tv")) {
-                    socket.current.send("PONG :tmi.twitch.tv");
+                    currentSocket.send("PONG :tmi.twitch.tv");
                     return;
                 }
 
@@ -44,11 +52,12 @@ export const useIRC = () => {
             }
         };
 
-        socket.current.onerror = (ev: Event) => {
+        currentSocket.onerror = (ev: Event) => {
             console.log("Error " + ev);
         };
 
-        socket.current.onclose = (ev: CloseEvent) => {
+        currentSocket.onclose = (ev: CloseEvent) => {
+            if (intentionallyClosed.current) return;
             // 소켓 닫힘 알림 보내고 리로드
             openDialog({
                 width: 420,
@@ -67,7 +76,11 @@ export const useIRC = () => {
         };
 
         registerObserver(observer.current);
-    }, []);
+        return () => {
+            intentionallyClosed.current = true;
+            currentSocket.close();
+        };
+    }, [dataStreamer.acctok, dataStreamer.provider, dataStreamer.userid]);
 
     useEffect(() => {
         // 상태가 변경되면 subject도 같이 변경되어야 함

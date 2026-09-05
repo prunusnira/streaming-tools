@@ -12,13 +12,13 @@ type AlertDialogProps = {
 };
 
 export const AlertDialog = ({
-    message,
-    type,
-    cancelLabel,
-    confirmLabel,
-    onConfirm,
-    onCancel,
-}: AlertDialogProps) => {
+                                message,
+                                type,
+                                cancelLabel,
+                                confirmLabel,
+                                onConfirm,
+                                onCancel,
+                            }: AlertDialogProps) => {
     return (
         <section className={styles.dialog}>
             <p className={styles.message}>{message}</p>

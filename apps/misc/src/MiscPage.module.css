@@ -1,0 +1,17 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.content {
+    @apply mx-auto w-[calc(100%-4rem)] max-w-3xl py-8;
+}
+
+.title {
+    @apply m-0 text-2xl font-bold;
+}
+
+.description {
+    @apply mt-2 text-slate-300;
+}
+
+.banpickButton {
+    @apply mt-6;
+}

@@ -1,0 +1,49 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.panel {
+    @apply flex h-full min-h-0 flex-col;
+}
+
+.header {
+    @apply border-b border-slate-700/70 px-4 py-3 text-sm font-bold text-slate-100;
+}
+
+.messages {
+    @apply flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4;
+}
+
+.error {
+    @apply mx-4 mt-3 rounded border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-xs leading-5 text-rose-200;
+}
+
+.empty {
+    @apply m-auto text-center text-sm leading-6 text-slate-400;
+}
+
+.message {
+    @apply flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm leading-5 text-slate-200;
+}
+
+.provider {
+    @apply rounded px-1.5 py-0.5 text-[10px] font-bold;
+}
+
+.provider[data-provider="twitch"] {
+    @apply bg-violet-500/20 text-violet-200;
+}
+
+.provider[data-provider="chzzk"] {
+    @apply bg-emerald-500/20 text-emerald-200;
+}
+
+.provider[data-provider="soop"] {
+    @apply bg-blue-500/20 text-blue-200;
+}
+
+.name {
+    @apply text-slate-100;
+}
+
+.text {
+    @apply m-0 w-full break-words text-slate-300;
+}

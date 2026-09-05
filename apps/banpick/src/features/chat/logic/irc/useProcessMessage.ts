@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { emptyMessage, Message } from "@banpick/features/banpick/model/message";
 import { emptyUser } from "@banpick/features/streamer/model/user";
-import { ModalContext } from "@banpick/shared/modal/ModalProvider";
 import { StatusContext } from "@banpick/features/banpick/model/StatusProvider";
 import { StreamerContext } from "@banpick/features/streamer/model/StreamerProvider";
 import { TalkContext } from "@banpick/features/chat/model/TalkProvider";
@@ -10,152 +9,170 @@ import { getFormatDate } from "./getFormatDate";
 import { apiGetUsers } from "@banpick/features/streamer/logic/api/user";
 import { useSpeech } from "../speech/useSpeech";
 import { chatParser } from "./chatParser";
+import type { IncomingChatMessage } from "@banpick/features/chat/model/chatMessage";
 
 export const useProcessMessage = () => {
     const { userList, team1, team2, updateUserList, updateTeam1, updateTeam2 } =
         useContext(TeamContext);
-    const { data: dataStreamer } = useContext(StreamerContext);
+    const { accessTokens } = useContext(StreamerContext);
     const { data: dataStatus } = useContext(StatusContext);
-    const { pickedUser, negoMode, addTalkHistory, closeTalkDialog, changePickedUser } =
-        useContext(TalkContext);
+    const {
+        pickedUser,
+        negoMode,
+        addTalkHistory,
+        addLiveChatMessage,
+        closeTalkDialog,
+        changePickedUser,
+    } = useContext(TalkContext);
     const { speech } = useSpeech();
 
     const getUser = (userid: string) => {
         return userList.filter((x) => x.userid === userid)[0];
     };
 
-    const processMessage = async (msg: string) => {
-        const msgParsed = chatParser(msg);
+    const processIncomingMessage = async (
+        incoming: IncomingChatMessage,
+        { isSub = false }: { isSub?: boolean } = {},
+    ) => {
+        const message: Message = {
+            // 플랫폼 간 동일한 사용자 ID 충돌을 막기 위해 내부 식별자에 플랫폼을 포함해.
+            id: `${incoming.provider}:${incoming.id}`,
+            name: incoming.name,
+            msg: incoming.text,
+            ban: false,
+            time: Date.now(),
+            timeInTxt: getFormatDate(Date.now()),
+            provider: incoming.provider,
+        };
 
-        if (msgParsed.size > 0) {
-            // 뱃지 검사해서 subscriber 확인
-            const badges = msgParsed.get("badges")!.split(",");
-            let isSub = false;
-            badges.forEach((v) => {
-                if (v.startsWith("subscriber")) {
-                    isSub = true;
-                }
-            });
+        addLiveChatMessage(message);
 
-            const msg: Message = {
-                id: msgParsed.get("userid")!,
-                name: msgParsed.get("display-name")!,
-                msg: msgParsed.get("msg")!,
-                ban: false,
-                time: Date.now(),
-                timeInTxt: getFormatDate(Date.now()),
+        let user = getUser(message.id);
+        // 사용자의 등록유무 확인
+        if (!user || user.userid === "") {
+            user = {
+                userid: message.id,
+                displayname: message.name,
+                sub: isSub,
+                iconurl: "",
+                picked: false,
+                recentChat: emptyMessage,
+                team: 0,
             };
+        }
 
-            let user = getUser(msg.id);
-            // 사용자의 등록유무 확인
-            if (!user || user.userid === "") {
-                user = {
-                    userid: msgParsed.get("userid")!,
-                    displayname: msgParsed.get("display-name")!,
-                    sub: isSub,
-                    iconurl: "",
-                    picked: false,
-                    recentChat: emptyMessage,
-                    team: 0,
-                };
+        // 프로필 이미지 가져오기 (없을 때)
+        if (incoming.provider === "twitch" && user.iconurl === "") {
+            const userRes = (await apiGetUsers(incoming.id, accessTokens.twitch ?? "")).data;
+
+            if (userRes != null) {
+                user.iconurl = userRes.data[0]["profile_image_url"];
             }
+        }
 
-            // 프로필 이미지 가져오기 (없을 때)
-            if (user.iconurl === "") {
-                const userRes = (await apiGetUsers(user.userid, dataStreamer.acctok)).data;
+        // 해당 유저의 최종 채팅 변경
+        user.recentChat = message;
 
-                if (userRes != null) {
-                    user.iconurl = userRes.data[0]["profile_image_url"];
-                }
+        // 팀 등록 및 이동
+        if (
+            dataStatus.run &&
+            dataStatus.join &&
+            (message.msg.startsWith("!team ") || message.msg.startsWith("!팀 "))
+        ) {
+            const teamNum = message.msg.split(" ")[1].split("\r\n")[0];
+            const tnInNum = parseInt(teamNum);
+
+            if (tnInNum !== 1 && tnInNum !== 2) return;
+
+            const useridx = userList.findIndex((x) => x.userid === message.id);
+            if (useridx > -1) {
+                // 기존 데이터를 지우고 다시 해당 사용자를 추가
+                userList[useridx].team = tnInNum;
+                updateUserList(userList);
+            } else {
+                // 새 사용자를 추가
+                user.team = tnInNum;
+                userList.push(user);
+                updateUserList(userList);
             }
+        }
 
-            // 해당 유저의 최종 채팅 변경
-            user.recentChat = msg;
+        // 선택된 사용자의 채팅 입력 처리
+        if (pickedUser.userid !== "" && pickedUser.userid === message.id) {
+            if (!negoMode && (message.msg.startsWith("!pick ") || message.msg.startsWith("!픽 "))) {
+                // picked user의 아이디를 기반으로 userlist에서 사용자 판별
+                // teamnum을 기반으로 해당팀의 picklist에 채팅내용을 추가 후 팀 내용 갱신
+                // 해당 사용자의 picked를 true로 변경하고 사용자 리스트 갱신
+                const index = userList.findIndex((x) => x.userid === pickedUser.userid);
+                const userinfo = userList[index];
 
-            // 팀 등록 및 이동
-            if (
-                dataStatus.run &&
-                dataStatus.join &&
-                (msg.msg.startsWith("!team ") || msg.msg.startsWith("!팀 "))
-            ) {
-                const teamNum = msg.msg.split(" ")[1].split("\r\n")[0];
-                const tnInNum = parseInt(teamNum);
-
-                if (tnInNum !== 1 && tnInNum !== 2) return;
-
-                const useridx = userList.findIndex((x) => x.userid === msg.id);
-                if (useridx > -1) {
-                    // 기존 데이터를 지우고 다시 해당 사용자를 추가
-                    userList[useridx].team = tnInNum;
-                    updateUserList(userList);
-                } else {
-                    // 새 사용자를 추가
-                    user.team = tnInNum;
-                    userList.push(user);
-                    updateUserList(userList);
+                const pickSplited = message.msg.split(" ");
+                let pickMsg = "";
+                for (let i = 1; i < pickSplited.length; i++) {
+                    pickMsg += pickSplited[i];
+                    if (i !== pickSplited.length - 1) pickMsg += " ";
                 }
-            }
 
-            // 선택된 사용자의 채팅 입력 처리
-            if (pickedUser.userid !== "" && pickedUser.userid === msg.id) {
-                if (!negoMode && (msg.msg.startsWith("!pick ") || msg.msg.startsWith("!픽 "))) {
-                    // picked user의 아이디를 기반으로 userlist에서 사용자 판별
-                    // teamnum을 기반으로 해당팀의 picklist에 채팅내용을 추가 후 팀 내용 갱신
-                    // 해당 사용자의 picked를 true로 변경하고 사용자 리스트 갱신
-                    const index = userList.findIndex((x) => x.userid === pickedUser.userid);
-                    const userinfo = userList[index];
-
-                    const pickSplited = msg.msg.split(" ");
-                    let pickMsg = "";
-                    for (let i = 1; i < pickSplited.length; i++) {
-                        pickMsg += pickSplited[i];
-                        if (i !== pickSplited.length - 1) pickMsg += " ";
-                    }
-
-                    if (userinfo.team === 1) {
-                        team1.pickList.push({
-                            id: user.userid,
-                            name: user.displayname,
-                            msg: pickMsg,
-                            time: msg.time,
-                            timeInTxt: msg.timeInTxt,
-                            ban: false,
-                        });
-                        team1.curPick++;
-                        updateTeam1(team1);
-                    } else if (userinfo.team === 2) {
-                        team2.pickList.push({
-                            id: user.userid,
-                            name: user.displayname,
-                            msg: pickMsg,
-                            time: msg.time,
-                            timeInTxt: msg.timeInTxt,
-                            ban: false,
-                        });
-                        team2.curPick++;
-                        updateTeam2(team2);
-                    }
-
-                    userList[index].picked = true;
-                    updateUserList(userList);
-
-                    // 여기는 pick을 수행하므로 이후 다이얼로그를 닫고
-                    // 현재 채팅 리스트를 초기화 해주어야 함
-                    // !pick을 제외하고 말하기 필요
-                    speech(pickMsg);
-                    changePickedUser(emptyUser);
-                    closeTalkDialog();
-                } else {
-                    // !pick 이외의 경우
-                    // 그냥 화면에 표시할 데이터 추가하고 말하기 처리
-                    addTalkHistory(msg);
-                    speech(msg.msg);
+                if (userinfo.team === 1) {
+                    team1.pickList.push({
+                        id: user.userid,
+                        name: user.displayname,
+                        msg: pickMsg,
+                        time: message.time,
+                        timeInTxt: message.timeInTxt,
+                        ban: false,
+                    });
+                    team1.curPick++;
+                    updateTeam1(team1);
+                } else if (userinfo.team === 2) {
+                    team2.pickList.push({
+                        id: user.userid,
+                        name: user.displayname,
+                        msg: pickMsg,
+                        time: message.time,
+                        timeInTxt: message.timeInTxt,
+                        ban: false,
+                    });
+                    team2.curPick++;
+                    updateTeam2(team2);
                 }
+
+                userList[index].picked = true;
+                updateUserList(userList);
+
+                // 여기는 pick을 수행하므로 이후 다이얼로그를 닫고
+                // 현재 채팅 리스트를 초기화 해주어야 함
+                // !pick을 제외하고 말하기 필요
+                speech(pickMsg);
+                changePickedUser(emptyUser);
+                closeTalkDialog();
+            } else {
+                // !pick 이외의 경우
+                // 그냥 화면에 표시할 데이터 추가하고 말하기 처리
+                addTalkHistory(message);
+                speech(message.msg);
             }
         }
     };
 
+    const processMessage = async (rawMessage: string) => {
+        const parsed = chatParser(rawMessage);
+        if (parsed.size === 0) return;
+
+        const badges = parsed.get("badges")?.split(",") ?? [];
+        await processIncomingMessage(
+            {
+                id: parsed.get("userid") ?? "",
+                name: parsed.get("display-name") ?? "",
+                provider: "twitch",
+                text: parsed.get("msg") ?? "",
+            },
+            { isSub: badges.some((badge) => badge.startsWith("subscriber")) },
+        );
+    };
+
     return {
         processMessage,
+        processIncomingMessage,
     };
 };

@@ -1,27 +1,30 @@
 {
-  "name": "@streaming-tools/main",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite --mode dev",
-    "build": "tsc --noEmit && vite build",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@streaming-tools/banpick": "workspace:*",
-    "@streaming-tools/ui": "workspace:*",
-    "@tanstack/react-router": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "catalog:",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:"
-  }
+    "name": "@streaming-tools/main",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite --mode dev",
+        "build": "tsc --noEmit && vite build",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@streaming-tools/account": "workspace:*",
+        "@streaming-tools/banpick": "workspace:*",
+        "@streaming-tools/misc": "workspace:*",
+        "@streaming-tools/ui": "workspace:*",
+        "@tanstack/react-router": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:"
+    },
+    "devDependencies": {
+        "@streaming-tools/config": "workspace:*",
+        "@tailwindcss/vite": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:"
+    }
 }

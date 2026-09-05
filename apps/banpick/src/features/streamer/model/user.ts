@@ -15,6 +15,7 @@ export type StreamerType = {
     userid: string;
     iconurl: string;
     displayname: string;
+    provider: "twitch" | "chzzk" | "soop" | "";
 };
 
 export const emptyUser: UserType = {
@@ -39,4 +40,5 @@ export const emptyStreamer: StreamerType = {
     userid: "",
     iconurl: "",
     displayname: "",
+    provider: "",
 };

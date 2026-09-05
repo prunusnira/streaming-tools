@@ -1,0 +1,22 @@
+{
+    "name": "@streaming-tools/misc",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "dependencies": {
+        "@fortawesome/free-brands-svg-icons": "catalog:",
+        "@fortawesome/react-fontawesome": "catalog:",
+        "@streaming-tools/auth": "workspace:*",
+        "@streaming-tools/ui": "workspace:*",
+        "@tanstack/react-router": "catalog:",
+        "react": "catalog:"
+    },
+    "devDependencies": {
+        "@streaming-tools/config": "workspace:*",
+        "@types/react": "catalog:",
+        "typescript": "catalog:"
+    }
+}

@@ -28,3 +28,6 @@ yarn-error.log*
 .idea
 .env
 .env*
+
+oauth-lambda.zip
+cdk.out

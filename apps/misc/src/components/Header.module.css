@@ -1,0 +1,38 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.header {
+    @apply flex shrink-0 items-center border-b border-slate-800 bg-slate-950 p-4;
+}
+
+.logo {
+    @apply font-bold text-inherit no-underline;
+}
+
+.menuLink {
+    @apply ml-6 text-inherit;
+}
+
+.loginStatus {
+    @apply ml-auto flex items-center gap-2 text-sm;
+}
+
+.accountLink {
+    @apply ml-2 text-inherit;
+}
+
+.connected,
+.disconnected {
+    @apply inline-flex items-center gap-1 rounded px-2 py-1;
+}
+
+.providerLogo {
+    @apply size-3 object-contain;
+}
+
+.connected {
+    @apply bg-emerald-950 text-emerald-300;
+}
+
+.disconnected {
+    @apply bg-slate-900 text-slate-500;
+}

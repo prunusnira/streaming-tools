@@ -1,35 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
-    "paths": {
-      "@banpick/*": ["src/*"]
+    "extends": "@streaming-tools/config/tsconfig.react.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
+        "paths": {
+            "@banpick/*": [
+                "src/*"
+            ]
+        },
+        "types": [
+            "@streaming-tools/config/css-modules",
+            "node",
+            "vitest/globals"
+        ]
     },
-    "types": [
-      "node",
-      "vitest/globals"
+    "include": [
+        "src"
     ]
-  },
-  "include": [
-    "src"
-  ]
 }

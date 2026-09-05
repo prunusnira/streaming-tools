@@ -1,0 +1,14 @@
+{
+    "extends": "@streaming-tools/config/tsconfig.react.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@misc/*": [
+                "src/*"
+            ]
+        }
+    },
+    "include": [
+        "src"
+    ]
+}

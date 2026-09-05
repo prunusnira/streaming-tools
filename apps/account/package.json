@@ -1,0 +1,20 @@
+{
+    "name": "@streaming-tools/account",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "dependencies": {
+        "@streaming-tools/auth": "workspace:*",
+        "@streaming-tools/ui": "workspace:*",
+        "@tanstack/react-router": "catalog:",
+        "react": "catalog:"
+    },
+    "devDependencies": {
+        "@streaming-tools/config": "workspace:*",
+        "@types/react": "catalog:",
+        "typescript": "catalog:"
+    }
+}

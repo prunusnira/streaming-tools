@@ -1,9 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import {
-    getAccessTokenFromCookie,
-    getAccessTokenFromHash,
-    saveAccessTokenFromHash,
-} from "./oauthAccessToken";
+import { getAccessTokenFromCookie, getAccessTokenFromHash, saveAccessTokenFromHash } from "./oauthAccessToken";
 
 const accessTokenCookieName = "streaming-tools-access-token";
 

@@ -7,7 +7,6 @@ import page2 from "./content/page2.md?raw";
 import page3 from "./content/page3.md?raw";
 import styles from "./howtoMarkdown.module.css";
 
-
 const pages = [page1, page2, page3];
 
 const markdownComponents: Components = {

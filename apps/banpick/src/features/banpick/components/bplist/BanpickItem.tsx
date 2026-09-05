@@ -16,14 +16,14 @@ type Props = {
 };
 
 export const BanpickItem = ({
-    team,
-    item,
-    idx,
-    changeBanStatus,
-    openEditDialog,
-    openDeleteDialog,
-    openNegoMode,
-}: Props) => {
+                                team,
+                                item,
+                                idx,
+                                changeBanStatus,
+                                openEditDialog,
+                                openDeleteDialog,
+                                openNegoMode,
+                            }: Props) => {
     const { data } = useContext(StatusContext);
     return (
         <article className={styles.item}>
@@ -36,10 +36,17 @@ export const BanpickItem = ({
             </div>
             <div className="text-sm text-slate-400">{item.timeInTxt}</div>
             <div className={styles.itemButtons}>
-                <Button className={styles.button} onClick={() => openEditDialog(team, idx, item)}>수정</Button>
-                <Button className={styles.button} onClick={() => openDeleteDialog(team, idx)}>삭제</Button>
-                <Button className={styles.button} onClick={() => openNegoMode(item.id)}>협상</Button>
-                <Button className={styles.button}
+                <Button className={styles.button} onClick={() => openEditDialog(team, idx, item)}>
+                    수정
+                </Button>
+                <Button className={styles.button} onClick={() => openDeleteDialog(team, idx)}>
+                    삭제
+                </Button>
+                <Button className={styles.button} onClick={() => openNegoMode(item.id)}>
+                    협상
+                </Button>
+                <Button
+                    className={styles.button}
                     disabled={data.phase !== Phase.Ban}
                     onClick={() => changeBanStatus(team, idx)}
                 >

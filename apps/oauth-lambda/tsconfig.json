@@ -1,0 +1,4 @@
+{
+    "extends": "@streaming-tools/config/tsconfig.node.json",
+    "include": ["src", "infra"]
+}

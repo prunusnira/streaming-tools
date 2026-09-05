@@ -12,8 +12,14 @@ export const TalkDialogFooter = ({ skipDialog, cancelDialog }: Props) => {
     const { negoMode } = useContext(TalkContext);
     return (
         <div className="flex gap-2">
-            {!negoMode && <Button className={styles.primaryButton} onClick={skipDialog}>스킵</Button>}
-            <Button className={styles.primaryButton} onClick={cancelDialog}>취소</Button>
+            {!negoMode && (
+                <Button className={styles.primaryButton} onClick={skipDialog}>
+                    스킵
+                </Button>
+            )}
+            <Button className={styles.primaryButton} onClick={cancelDialog}>
+                취소
+            </Button>
         </div>
     );
 };

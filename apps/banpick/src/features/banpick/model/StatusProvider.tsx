@@ -1,6 +1,5 @@
 import { createContext, useState } from "react";
 import { Phase, StatusType } from "@banpick/features/banpick/model/status";
-import { emptyUser, UserType } from "@banpick/features/streamer/model/user";
 
 const initStatus: StatusType = {
     phase: Phase.Ready,
@@ -14,19 +13,31 @@ const initStatus: StatusType = {
 
 export const StatusContext = createContext({
     data: initStatus,
-    startup: () => {},
-    pause: () => {},
-    resume: () => {},
-    resetStatus: () => {},
-    changePhase: (phase: Phase) => {},
-    changeTeamVisible: (v: boolean) => {},
+    startup: () => {
+    },
+    pause: () => {
+    },
+    resume: () => {
+    },
+    resetStatus: () => {
+    },
+    changePhase: (phase: Phase) => {
+    },
+    changeTeamVisible: (v: boolean) => {
+    },
     /////////
-    totalPickAdd: () => {},
-    totalPickSub: () => {},
-    phasePickAdd: () => {},
-    phasePickSub: () => {},
-    phaseBanAdd: () => {},
-    phaseBanSub: () => {},
+    totalPickAdd: () => {
+    },
+    totalPickSub: () => {
+    },
+    phasePickAdd: () => {
+    },
+    phasePickSub: () => {
+    },
+    phaseBanAdd: () => {
+    },
+    phaseBanSub: () => {
+    },
 });
 
 type ProviderProps = {

@@ -1,0 +1,21 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.page {
+    @apply p-8;
+}
+
+.title {
+    @apply m-0 text-xl font-bold;
+}
+
+.description {
+    @apply mt-2;
+}
+
+.actions {
+    @apply mt-6 flex gap-3;
+}
+
+.buttonLogo {
+    @apply size-4 object-contain;
+}

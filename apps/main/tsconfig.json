@@ -1,25 +1,35 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
-    "paths": {
-      "@banpick/*": ["../banpick/src/*"]
+    "extends": "@streaming-tools/config/tsconfig.react.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
+        "paths": {
+            "@main/*": [
+                "src/*"
+            ],
+            "@account": [
+                "../account/src/index.ts"
+            ],
+            "@account/*": [
+                "../account/src/*"
+            ],
+            "@banpick/*": [
+                "../banpick/src/*"
+            ],
+            "@misc": [
+                "../misc/src/index.ts"
+            ],
+            "@misc/*": [
+                "../misc/src/*"
+            ]
+        },
+        "types": [
+            "@streaming-tools/config/css-modules",
+            "node",
+            "vite/client"
+        ]
     },
-    "types": ["node", "vite/client"]
-  },
-  "include": ["src"]
+    "include": [
+        "src"
+    ]
 }

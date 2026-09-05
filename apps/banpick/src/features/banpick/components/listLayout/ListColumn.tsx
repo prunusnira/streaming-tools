@@ -5,7 +5,7 @@ import { TeamInfoType } from "@banpick/features/banpick/model/team";
 import { ModalContext } from "@banpick/shared/modal/ModalProvider";
 import { StatusContext } from "@banpick/features/banpick/model/StatusProvider";
 import { TeamContext } from "@banpick/features/banpick/model/TeamProvider";
-import { AlertDialog, Button, ModalType } from "@streaming-tools/ui";
+import { AlertDialog, Button } from "@streaming-tools/ui";
 import { TeamNameChangeBody } from "@banpick/features/banpick/components/teamname/TeamNameChangeBody";
 import { TeamNameChangeHeader } from "@banpick/features/banpick/components/teamname/TeamNameChangeHeader";
 import styles from "./ListColumn.module.css";
@@ -36,7 +36,8 @@ export const ListColumn = ({ teamInfo, children }: Props) => {
                 </div>
             </div>
             <div className={styles.columnButtons}>
-                <Button className={styles.primaryButton}
+                <Button
+                    className={styles.primaryButton}
                     onClick={() => {
                         if (data.phase === Phase.Pick && teamInfo.curPick < data.pickPhase) {
                             runRoulette(teamInfo.num);
@@ -60,7 +61,8 @@ export const ListColumn = ({ teamInfo, children }: Props) => {
                 >
                     이 팀에서 선택
                 </Button>
-                <Button className={styles.button}
+                <Button
+                    className={styles.button}
                     onClick={() => {
                         openDialog({
                             width: 420,
