@@ -1,0 +1,11 @@
+{
+    "name": "@streaming-tools/config",
+    "version": "0.1.0",
+    "private": true,
+    "exports": {
+        "./tsconfig.base.json": "./tsconfig.base.json",
+        "./tsconfig.react.json": "./tsconfig.react.json",
+        "./tsconfig.node.json": "./tsconfig.node.json",
+        "./css-modules": "./css-modules.d.ts"
+    }
+}

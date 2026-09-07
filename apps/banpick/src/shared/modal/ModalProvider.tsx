@@ -21,9 +21,12 @@ const initModal: ModalData = {
 
 export const ModalContext = React.createContext<ModalType>({
     data: initModal,
-    openDialog: (d: ModalData) => {},
-    modifyDlgBody: (body: React.ReactNode) => {},
-    closeDialog: () => {},
+    openDialog: (d: ModalData) => {
+    },
+    modifyDlgBody: (body: React.ReactNode) => {
+    },
+    closeDialog: () => {
+    },
 });
 
 type Props = {
@@ -47,7 +50,7 @@ export const ModalProvider = ({ children }: Props) => {
             setBody(body);
             setFooter(footer);
         },
-        [header, body, footer]
+        [header, body, footer],
     );
 
     const closeDialog = () => {

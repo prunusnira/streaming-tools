@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { TeamContext } from "@banpick/features/banpick/model/TeamProvider";
 import { ListColumn } from "../listLayout/ListColumn";
 import styles from "./TeamList.module.css";

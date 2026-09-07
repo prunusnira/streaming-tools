@@ -7,6 +7,14 @@
     @apply flex items-center justify-center gap-3 text-sm text-slate-300;
 }
 
+.accountList {
+    @apply gap-5;
+}
+
+.account {
+    @apply flex items-center gap-2 whitespace-nowrap;
+}
+
 .headerTitle {
     @apply justify-start text-xl font-bold tracking-tight text-white;
 }
@@ -17,4 +25,12 @@
 
 .headerIcon {
     @apply size-9 rounded-full border border-slate-600 object-cover shadow-sm;
+}
+
+.headerIconPlaceholder {
+    @apply size-9 rounded-full border border-slate-700 bg-slate-800;
+}
+
+.providerLogo {
+    @apply size-4 object-contain;
 }

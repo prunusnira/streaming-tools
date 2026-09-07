@@ -1,14 +1,49 @@
 @reference "@streaming-tools/ui/globals.css";
 
-.document { @apply space-y-4 leading-7 text-slate-200; }
-.headingOne { @apply mt-6 border-b border-slate-700 pb-2 text-xl font-semibold text-slate-50 first:mt-0; }
-.headingTwo { @apply mt-5 text-lg font-medium text-slate-100; }
-.list { @apply ml-5 list-disc space-y-1; }
-.orderedList { @apply ml-5 list-decimal space-y-2; }
-.image { @apply my-4 max-w-full rounded-md border border-slate-700; }
-.paragraph { @apply my-3; }
-.inlineCode { @apply rounded bg-slate-800 px-1.5 py-0.5 font-mono text-sm text-blue-200; }
-.stack { @apply flex flex-col; }
-.howtoContent { @apply h-[70vh] min-h-[400px] overflow-y-auto; }
-.pager { @apply flex justify-center gap-2; }
-.button { @apply rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-2 text-sm font-medium text-slate-100 hover:bg-slate-700; }
+.document {
+    @apply space-y-4 leading-7 text-slate-200;
+}
+
+.headingOne {
+    @apply mt-6 border-b border-slate-700 pb-2 text-xl font-semibold text-slate-50 first:mt-0;
+}
+
+.headingTwo {
+    @apply mt-5 text-lg font-medium text-slate-100;
+}
+
+.list {
+    @apply ml-5 list-disc space-y-1;
+}
+
+.orderedList {
+    @apply ml-5 list-decimal space-y-2;
+}
+
+.image {
+    @apply my-4 max-w-full rounded-md border border-slate-700;
+}
+
+.paragraph {
+    @apply my-3;
+}
+
+.inlineCode {
+    @apply rounded bg-slate-800 px-1.5 py-0.5 font-mono text-sm text-blue-200;
+}
+
+.stack {
+    @apply flex flex-col;
+}
+
+.howtoContent {
+    @apply h-[70vh] min-h-[400px] overflow-y-auto;
+}
+
+.pager {
+    @apply flex justify-center gap-2;
+}
+
+.button {
+    @apply rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-2 text-sm font-medium text-slate-100 hover:bg-slate-700;
+}

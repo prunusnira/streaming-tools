@@ -6,5 +6,9 @@ type Props = {
 };
 
 export const RouletteErrorFooter = ({ closeDialog }: Props) => {
-    return <Button className={styles.button} onClick={() => closeDialog()}>닫기</Button>;
+    return (
+        <Button className={styles.button} onClick={() => closeDialog()}>
+            닫기
+        </Button>
+    );
 };

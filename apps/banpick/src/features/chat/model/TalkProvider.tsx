@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
+import type { AuthProvider } from "@streaming-tools/auth";
 import { Message } from "@banpick/features/banpick/model/message";
 import { emptyUser, UserType } from "@banpick/features/streamer/model/user";
 
@@ -7,6 +8,8 @@ type InitVal = {
     maxWidth: number;
     active: boolean;
 };
+
+type ConnectionErrors = Partial<Record<AuthProvider, string>>;
 
 const initModal: InitVal = {
     width: "90%",
@@ -19,13 +22,17 @@ export const TalkContext = React.createContext({
     pickedUser: emptyUser,
     negoMode: false,
     talkHistory: Array<Message>(),
+    liveChatHistory: Array<Message>(),
+    connectionErrors: {} as ConnectionErrors,
     initTime: 0,
     changePickedUser: (user: UserType) => {},
     changeNegoMode: (n: boolean) => {},
     addTalkHistory: (msg: Message) => {},
+    addLiveChatMessage: (msg: Message) => {},
     resetTalkHistory: () => {},
     openTalkDialog: () => {},
     closeTalkDialog: () => {},
+    setConnectionError: (_provider: AuthProvider, _message?: string) => {},
 });
 
 type ProviderProps = {
@@ -41,6 +48,20 @@ export const TalkProvider = ({ children }: ProviderProps) => {
     const [pickedUser, setPickedUser] = useState(emptyUser);
     const [negoMode, setNegoMode] = useState(false);
     const [talkHistory, setTalkHistory] = useState<Array<Message>>([]);
+    const [liveChatHistory, setLiveChatHistory] = useState<Array<Message>>([]);
+    const [connectionErrors, setConnectionErrors] = useState<ConnectionErrors>({});
+
+    const setConnectionError = useCallback((provider: AuthProvider, message?: string) => {
+        setConnectionErrors((previous) => {
+            if (!message) {
+                const remaining = { ...previous };
+                delete remaining[provider];
+                return remaining;
+            }
+
+            return { ...previous, [provider]: message };
+        });
+    }, []);
 
     const openTalkDialog = () => {
         setInitTime(Date.now());
@@ -64,6 +85,10 @@ export const TalkProvider = ({ children }: ProviderProps) => {
         setTalkHistory((prev) => [...prev, msg]);
     };
 
+    const addLiveChatMessage = (msg: Message) => {
+        setLiveChatHistory((prev) => [...prev.slice(-199), msg]);
+    };
+
     const resetTalkHistory = () => {
         setTalkHistory([]);
     };
@@ -79,13 +104,17 @@ export const TalkProvider = ({ children }: ProviderProps) => {
                 pickedUser,
                 negoMode,
                 talkHistory,
+                liveChatHistory,
+                connectionErrors,
                 initTime,
                 changePickedUser,
                 changeNegoMode,
                 addTalkHistory,
+                addLiveChatMessage,
                 resetTalkHistory,
                 openTalkDialog,
                 closeTalkDialog,
+                setConnectionError,
             }}
         >
             {children}

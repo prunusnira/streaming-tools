@@ -26,10 +26,14 @@ export const TeamContext = React.createContext<TeamContextType>({
     team1: initTeam,
     team2: initTeam,
     userList: [],
-    updateTeam1: (data: TeamInfoType) => {},
-    updateTeam2: (data: TeamInfoType) => {},
-    updateUserList: (list: Array<UserType>) => {},
-    resetTeam: () => {},
+    updateTeam1: (data: TeamInfoType) => {
+    },
+    updateTeam2: (data: TeamInfoType) => {
+    },
+    updateUserList: (list: Array<UserType>) => {
+    },
+    resetTeam: () => {
+    },
 });
 
 type ProviderProps = {

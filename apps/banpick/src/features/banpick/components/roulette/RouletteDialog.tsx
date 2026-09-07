@@ -18,7 +18,7 @@ export const RouletteDialog = ({ list }: Props) => {
                 console.log(idx, list[idx].displayname);
                 idx++;
                 if (idx === list.length) idx = 0;
-            }, 100)
+            }, 100),
         );
         setTimeout(() => {
             clearRoulette();

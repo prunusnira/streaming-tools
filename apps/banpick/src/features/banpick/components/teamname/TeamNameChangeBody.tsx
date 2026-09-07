@@ -20,7 +20,8 @@ export const TeamNameChangeBody = ({ teamNum }: Props) => {
                 {teamNum === 1 && team1.name}
                 {teamNum === 2 && team2.name}
             </div>
-            <input className={styles.input}
+            <input
+                className={styles.input}
                 value={teamName}
                 autoFocus={true}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
@@ -28,8 +29,11 @@ export const TeamNameChangeBody = ({ teamNum }: Props) => {
                 }}
             />
             <div className="flex justify-center gap-2 pt-3">
-                <Button className={styles.primaryButton} onClick={closeDialog}>취소</Button>
-                <Button className={styles.primaryButton}
+                <Button className={styles.primaryButton} onClick={closeDialog}>
+                    취소
+                </Button>
+                <Button
+                    className={styles.primaryButton}
                     onClick={() => {
                         if (teamNum === 1) {
                             team1.name = teamName;

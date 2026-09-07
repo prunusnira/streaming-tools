@@ -1,0 +1,19 @@
+{
+    "name": "@streaming-tools/convention",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        "./eslint": "./eslint.config.js",
+        "./prettier": "./prettier.config.js"
+    },
+    "dependencies": {
+        "@eslint/js": "catalog:",
+        "eslint": "catalog:",
+        "eslint-plugin-react-hooks": "catalog:",
+        "eslint-plugin-react-refresh": "catalog:",
+        "globals": "catalog:",
+        "prettier": "catalog:",
+        "typescript-eslint": "catalog:"
+    }
+}

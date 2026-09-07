@@ -25,7 +25,11 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
     render() {
         if (this.state.hasError) {
-            return <div role="alert">밴픽 앱을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.</div>;
+            return (
+                <div role="alert">
+                    밴픽 앱을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.
+                </div>
+            );
         }
 
         return this.props.children;

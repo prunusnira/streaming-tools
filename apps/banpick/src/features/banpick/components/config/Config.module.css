@@ -3,7 +3,8 @@
     @apply mx-6 my-4 grid w-[calc(100%-3rem)] grid-cols-[1.1fr_1fr_.7fr] items-center gap-5 rounded-2xl border border-slate-700/70 bg-slate-900/75 px-5 py-4 shadow-xl shadow-slate-950/20 backdrop-blur;
 }
 
-.configGroup, .configCtrl {
+.configGroup,
+.configCtrl {
     @apply grid grid-cols-3 gap-2;
 }
 

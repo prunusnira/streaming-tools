@@ -3,7 +3,6 @@ import { Button } from "@streaming-tools/ui";
 import { useSpeech } from "@banpick/features/chat/logic/speech/useSpeech";
 import { Message } from "@banpick/features/banpick/model/message";
 import { emptyUser, UserType } from "@banpick/features/streamer/model/user";
-import { StatusContext } from "@banpick/features/banpick/model/StatusProvider";
 import { TalkContext } from "@banpick/features/chat/model/TalkProvider";
 import { TeamContext } from "@banpick/features/banpick/model/TeamProvider";
 import styles from "./TalkItem.module.css";
@@ -47,7 +46,11 @@ export const TalkItem = ({ pickedUser, msg }: Props) => {
                 <div>{msg.msg}</div>
                 <div className="text-xs text-slate-500">{msg.timeInTxt}</div>
             </div>
-            {!negoMode && <Button className={styles.button} onClick={addToPickList}>선택하기</Button>}
+            {!negoMode && (
+                <Button className={styles.button} onClick={addToPickList}>
+                    선택하기
+                </Button>
+            )}
         </div>
     );
 };

@@ -1,0 +1,35 @@
+{
+    "name": "@streaming-tools/oauth-lambda",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "main": "src/index.ts",
+    "scripts": {
+        "check": "pnpm run typecheck",
+        "typecheck": "tsc --project tsconfig.json",
+        "local": "tsx scripts/local.ts",
+        "cdk:bootstrap": "cdk bootstrap",
+        "cdk:diff": "cdk diff",
+        "cdk:import": "cdk import",
+        "cdk:synth": "cdk synth",
+        "cdk:deploy": "cdk deploy"
+    },
+    "dependencies": {
+        "@aws-sdk/client-ssm": "^3.0.0",
+        "@streaming-tools/auth": "workspace:*",
+        "cookie-parser": "^1.4.7",
+        "express": "^5.0.0",
+        "serverless-http": "^3.2.0"
+    },
+    "devDependencies": {
+        "@streaming-tools/config": "workspace:*",
+        "@types/cookie-parser": "catalog:",
+        "@types/express": "catalog:",
+        "aws-cdk": "catalog:",
+        "aws-cdk-lib": "catalog:",
+        "constructs": "catalog:",
+        "esbuild": "catalog:",
+        "tsx": "catalog:",
+        "typescript": "catalog:"
+    }
+}

@@ -1,6 +1,8 @@
 interface ISubject {
     attach(observer: Observer): void;
+
     detach(observer: Observer): void;
+
     notify(): void;
 
     updateMessage(msg: string): void;
@@ -16,7 +18,8 @@ export class Subject implements ISubject {
     public updateFunction: (msg: string) => void;
 
     constructor() {
-        this.updateFunction = (msg: string) => {};
+        this.updateFunction = (msg: string) => {
+        };
     }
 
     setFunction = (updateFunction: (msg: string) => void) => {

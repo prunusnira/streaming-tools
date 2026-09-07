@@ -1,24 +1,21 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Button, cn } from "@streaming-tools/ui";
 import styles from "./TabLayout.module.css";
 import { TabType } from "./TabType";
-import { StreamerContext } from "@banpick/features/streamer/model/StreamerProvider";
 import { BanpickList } from "@banpick/features/banpick/components/bplist/BanpickList";
 import { TeamList } from "@banpick/features/banpick/components/teamlist/TeamList";
+import { LiveChatPanel } from "@banpick/features/chat/components/LiveChatPanel";
 
 export const TabLayout = () => {
     const [tabType, setTabType] = useState(TabType.TeamList);
-    const { data } = useContext(StreamerContext);
-    const { userid } = data;
-
-    const baseUrl: string = "https://www.twitch.tv/embed/";
-    const baseUrl2: string = "/chat?parent=banpick.nira.one&darkpopout";
-
     return (
         <section className={styles.tabLayout}>
             <nav className={styles.tabPlacement}>
                 <Button
-                    className={cn(styles.tabButton, tabType === TabType.TeamList && styles.tabActive)}
+                    className={cn(
+                        styles.tabButton,
+                        tabType === TabType.TeamList && styles.tabActive,
+                    )}
                     onClick={() => setTabType(TabType.TeamList)}
                 >
                     유저목록
@@ -35,7 +32,7 @@ export const TabLayout = () => {
                 {tabType === TabType.BPList && <BanpickList />}
             </section>
             <section className={styles.tabChat}>
-                <iframe title="Twitch 채팅" frameBorder="0" src={`${baseUrl}${userid}${baseUrl2}`} />
+                <LiveChatPanel />
             </section>
         </section>
     );

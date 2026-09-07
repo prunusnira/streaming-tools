@@ -1,16 +1,14 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "strict": true,
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["node", "vitest/globals"]
-  },
-  "include": ["src", ".storybook"]
+    "extends": "@streaming-tools/config/tsconfig.react.json",
+    "compilerOptions": {
+        "types": [
+            "@streaming-tools/config/css-modules",
+            "node",
+            "vitest/globals"
+        ]
+    },
+    "include": [
+        "src",
+        ".storybook"
+    ]
 }

@@ -1,3 +1,5 @@
+import type { AuthProvider } from "@streaming-tools/auth";
+
 export type Message = {
     id: string;
     name: string;
@@ -5,6 +7,7 @@ export type Message = {
     time: number;
     timeInTxt: string;
     ban: boolean;
+    provider?: AuthProvider;
 };
 
 export const emptyMessage: Message = {

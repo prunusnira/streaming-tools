@@ -1,6 +1,7 @@
 @reference "@streaming-tools/ui/globals.css";
+
 .footer {
-    @apply flex w-full justify-center gap-3 px-6 pb-4 text-xs text-slate-500;
+    @apply flex w-full shrink-0 justify-center gap-3 border-t border-slate-800 px-6 py-4 text-xs text-slate-500;
 }
 
 .footerLink {

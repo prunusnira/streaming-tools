@@ -15,11 +15,11 @@ export const TalkDialogHeader = ({ active, user, initTime }: Props) => {
 
     useEffect(() => {
         active &&
-            timer.current.push(
-                setInterval(() => {
-                    setTimerNum(convertMStoSec(Date.now() - initTime));
-                }, 1000)
-            );
+        timer.current.push(
+            setInterval(() => {
+                setTimerNum(convertMStoSec(Date.now() - initTime));
+            }, 1000),
+        );
 
         !active && stopTimer();
     }, [initTime, active]);

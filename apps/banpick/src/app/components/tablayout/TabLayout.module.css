@@ -22,7 +22,3 @@
 .tabChat {
     @apply h-full w-[320px] shrink-0 overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-900/75 shadow-xl shadow-slate-950/20;
 }
-
-.tabChat iframe {
-    height: 100%;
-}

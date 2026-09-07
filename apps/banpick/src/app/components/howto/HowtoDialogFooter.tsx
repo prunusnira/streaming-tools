@@ -6,5 +6,9 @@ type Props = {
 };
 
 export const HowtoDialogFooter = ({ closeDialog }: Props) => {
-    return <Button className={styles.primaryButton} onClick={() => closeDialog()}>닫기</Button>;
+    return (
+        <Button className={styles.primaryButton} onClick={() => closeDialog()}>
+            닫기
+        </Button>
+    );
 };

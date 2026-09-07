@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Phase } from "@banpick/features/banpick/model/status";
 import { ModalContext } from "@banpick/shared/modal/ModalProvider";
 import { StatusContext } from "@banpick/features/banpick/model/StatusProvider";
@@ -58,7 +58,8 @@ export const Config = () => {
                     {data.run && !data.join && "인원 모집 재개"}
                     {data.run && data.join && "인원 모집 중단"}
                 </Button>
-                <Button className={styles.button}
+                <Button
+                    className={styles.button}
                     onClick={() => {
                         openDialog({
                             width: 420,
@@ -85,7 +86,8 @@ export const Config = () => {
                 >
                     리셋
                 </Button>
-                <Button className={styles.button}
+                <Button
+                    className={styles.button}
                     onClick={() => {
                         data.teamVisible ? changeTeamVisible(false) : changeTeamVisible(true);
                     }}
@@ -123,7 +125,8 @@ export const Config = () => {
                     {data.phase === Phase.Pick && "PICK PHASE"}
                     {data.phase === Phase.Ban && "BAN PHASE"}
                 </div>
-                <Button className={styles.button}
+                <Button
+                    className={styles.button}
                     disabled={data.phase === Phase.Ready ? true : false}
                     onClick={forcePhaseChange}
                 >
