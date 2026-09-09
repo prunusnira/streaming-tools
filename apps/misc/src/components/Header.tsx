@@ -22,9 +22,13 @@ export const Header = () => {
         <header className={styles.header}>
             <Link to="/misc" className={styles.logo}>
                 Streaming Tools
+                <span className={styles.betaBadge}>BETA</span>
             </Link>
             <Link to="/banpick" className={styles.menuLink}>
                 Ban &amp; Pick
+            </Link>
+            <Link to="/roulette" className={styles.menuLink}>
+                룰렛
             </Link>
             <div className={styles.loginStatus} aria-label="서비스별 로그인 상태">
                 {authProviders.map((provider) => {

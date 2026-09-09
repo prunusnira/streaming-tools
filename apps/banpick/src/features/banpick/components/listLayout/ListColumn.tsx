@@ -20,6 +20,7 @@ export const ListColumn = ({ teamInfo, children }: Props) => {
     const { userList } = useContext(TeamContext);
     const { data } = useContext(StatusContext);
     const { runRoulette } = useRoulette();
+    const currentPickCount = teamInfo.pickList.filter(Boolean).length;
     return (
         <section className={styles.listColumn}>
             <div className={styles.columnTitle}>
@@ -31,7 +32,7 @@ export const ListColumn = ({ teamInfo, children }: Props) => {
                     명)
                 </div>
                 <div className="text-sm text-slate-400">
-                    {data.phase === Phase.Pick && `픽 ${teamInfo.curPick} / ${data.pickPhase}`}
+                    {data.phase === Phase.Pick && `현재 픽 ${currentPickCount}개`}
                     {data.phase === Phase.Ban && `밴 ${teamInfo.curBan} / ${data.banPhase}`}
                 </div>
             </div>

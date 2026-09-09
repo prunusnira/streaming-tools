@@ -12,7 +12,6 @@ import { RouletteErrorHeader } from "@banpick/features/banpick/components/roulet
 
 export const useRoulette = () => {
     const target = useRef<UserType>(emptyUser);
-    const roulette = useRef<NodeJS.Timeout | undefined>(undefined);
     const { userList } = useContext(TeamContext);
     const { changePickedUser, openTalkDialog, addTalkHistory } = useContext(TalkContext);
     const { openDialog, closeDialog } = useContext(ModalContext);
@@ -57,7 +56,7 @@ export const useRoulette = () => {
             maxWidth: 420,
             active: true,
             header: <RouletteDialogHeader />,
-            body: <RouletteDialog list={rouletteUsers} />,
+            body: <RouletteDialog list={rouletteUsers} target={target.current} />,
             footer: undefined,
         });
 
@@ -67,7 +66,6 @@ export const useRoulette = () => {
     const stopRoulette = () => {
         setTimeout(() => {
             changePickedUser(target.current);
-            clearInterval(roulette.current);
             closeDialog();
 
             addTalkHistory(target.current.recentChat);

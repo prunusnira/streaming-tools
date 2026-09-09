@@ -100,13 +100,13 @@ export const BanpickList = () => {
 
     const deleteMessage = (teamNum: number, idx: number) => {
         if (teamNum === 1) {
-            delete team1.pickList[idx];
-            team1.curPick--;
+            team1.pickList.splice(idx, 1);
+            team1.curPick = Math.max(0, team1.curPick - 1);
             updateTeam1(team1);
         }
         if (teamNum === 2) {
-            delete team2.pickList[idx];
-            team2.curPick--;
+            team2.pickList.splice(idx, 1);
+            team2.curPick = Math.max(0, team2.curPick - 1);
             updateTeam2(team2);
         }
         closeDialog();

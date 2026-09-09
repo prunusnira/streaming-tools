@@ -2,3 +2,7 @@
 .titleIcon {
     @apply size-12 rounded-full object-cover;
 }
+
+.titleIconPlaceholder {
+    @apply size-12 rounded-full bg-slate-700;
+}

@@ -1,0 +1,74 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.editor {
+    @apply flex min-h-0 flex-col overflow-hidden rounded-lg bg-slate-900 p-4;
+    flex: 0 1 22rem;
+    min-width: 22rem;
+    order: 3;
+}
+.optionControls {
+    @apply min-h-0 flex-1 space-y-4 overflow-y-auto pr-1;
+}
+.actions,
+.weightMode {
+    @apply flex flex-wrap items-end gap-2;
+}
+.modeActions {
+    @apply mb-6;
+}
+.autoAddStatus {
+    @apply flex items-center justify-between gap-2;
+}
+.autoAddState {
+    @apply text-sm;
+}
+.stateOn {
+    @apply text-sky-400;
+}
+.stateOff {
+    @apply text-slate-400;
+}
+.editor:has(.embeddedChat) .optionControls,
+.embeddedChat {
+    flex: 1 1 50%;
+    min-height: 0;
+}
+.embeddedChat {
+    @apply mt-4 overflow-y-auto border-t border-slate-700 pt-4;
+}
+.editor input {
+    @apply mt-1 w-full rounded border border-slate-600 bg-slate-800 px-2 py-1;
+}
+.weightMode {
+    @apply flex-col items-start;
+}
+.weightMode select {
+    @apply rounded border border-slate-600 bg-slate-800 px-2 py-1 text-slate-100;
+}
+.spinDuration {
+    @apply flex flex-col gap-1 text-sm;
+}
+.spinDuration output {
+    @apply text-sky-300;
+}
+.spinDuration input {
+    @apply mt-0 accent-sky-400;
+}
+.helper {
+    @apply rounded bg-sky-950 p-3 text-sm;
+}
+.items {
+    @apply m-0 mt-3 list-none space-y-2 p-0;
+}
+.items li {
+    @apply flex items-center gap-2 rounded bg-slate-800 p-2;
+}
+.items input {
+    @apply mt-0 w-20;
+}
+.items .itemName {
+    @apply flex-1;
+}
+.addItemButton {
+    @apply mt-3 w-full;
+}

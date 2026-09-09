@@ -18,13 +18,14 @@
         "@fortawesome/free-solid-svg-icons": "catalog:",
         "@fortawesome/react-fontawesome": "catalog:",
         "@streaming-tools/auth": "workspace:*",
+        "@streaming-tools/chat": "workspace:*",
+        "@streaming-tools/roulette": "workspace:*",
         "@streaming-tools/ui": "workspace:*",
         "axios": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-markdown": "catalog:",
-        "remark-gfm": "catalog:",
-        "socket.io-client": "catalog:"
+        "remark-gfm": "catalog:"
     },
     "devDependencies": {
         "@streaming-tools/config": "workspace:*",

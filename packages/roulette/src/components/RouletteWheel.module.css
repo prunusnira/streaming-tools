@@ -1,0 +1,43 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.wheelArea {
+    @apply flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto rounded-lg bg-slate-900 p-4;
+    min-width: min(100%, 20rem);
+    order: 2;
+}
+.wheelTitle {
+    @apply m-0 text-center text-2xl font-bold text-white;
+}
+.pointer {
+    @apply -mb-7 h-0 w-0 border-x-[16px] border-t-[28px] border-x-transparent border-t-white;
+    z-index: 1;
+}
+.wheel {
+    @apply aspect-square w-full rounded-full border-8 border-slate-700 shadow-2xl;
+    max-width: min(100%, clamp(20rem, 35vw, 42rem));
+    position: relative;
+    transition: transform var(--spin-duration, 3s) cubic-bezier(0.18, 0.82, 0.2, 1);
+}
+.wheelLabel {
+    @apply absolute inline-block max-w-[26%] -translate-x-1/2 -translate-y-1/2 truncate whitespace-nowrap rounded bg-slate-950/70 px-2 py-1 text-center text-xs font-bold text-white shadow-sm;
+}
+.ratioTable {
+    @apply w-full overflow-hidden rounded border-collapse text-sm;
+    max-width: min(100%, 42rem);
+}
+.ratioTable caption {
+    @apply mb-2 text-left font-semibold text-slate-200;
+}
+.ratioTable th,
+.ratioTable td {
+    @apply border border-slate-950/30 px-2 py-1 text-left text-slate-950;
+}
+.ratioTable thead {
+    @apply bg-slate-800;
+}
+.ratioTable thead th {
+    @apply text-white;
+}
+.ratioTable td {
+    @apply text-right tabular-nums;
+}

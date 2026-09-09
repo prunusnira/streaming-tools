@@ -1,0 +1,29 @@
+@reference "@streaming-tools/ui/globals.css";
+.stack {
+    @apply flex min-h-28 items-center justify-center overflow-hidden rounded-lg bg-slate-900 px-6 text-3xl font-bold text-white;
+}
+.item {
+    animation: drop 85ms ease-out;
+}
+.result {
+    @apply text-sky-300;
+    animation: settle 220ms ease-out;
+}
+@keyframes drop {
+    from {
+        transform: translateY(-120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+@keyframes settle {
+    from {
+        transform: scale(1.08);
+    }
+    to {
+        transform: scale(1);
+    }
+}

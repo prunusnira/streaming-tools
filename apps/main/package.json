@@ -6,12 +6,14 @@
     "scripts": {
         "dev": "vite --mode dev",
         "build": "tsc --noEmit && vite build",
+        "deploy": "bash scripts/deploy.sh",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@streaming-tools/account": "workspace:*",
         "@streaming-tools/banpick": "workspace:*",
         "@streaming-tools/misc": "workspace:*",
+        "@streaming-tools/roulette-app": "workspace:*",
         "@streaming-tools/ui": "workspace:*",
         "@tanstack/react-router": "catalog:",
         "react": "catalog:",

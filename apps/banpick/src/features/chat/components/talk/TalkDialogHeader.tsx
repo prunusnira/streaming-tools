@@ -11,7 +11,10 @@ type Props = {
 
 export const TalkDialogHeader = ({ active, user, initTime }: Props) => {
     const [timerNum, setTimerNum] = useState(0);
+    const [imageFailed, setImageFailed] = useState(false);
     const timer = useRef<Array<NodeJS.Timeout>>([]);
+
+    useEffect(() => setImageFailed(false), [user.iconurl]);
 
     useEffect(() => {
         active &&
@@ -34,9 +37,17 @@ export const TalkDialogHeader = ({ active, user, initTime }: Props) => {
     return (
         <section className="flex justify-between gap-4">
             <div className="flex items-center gap-3">
-                <img className={styles.titleIcon} src={user.iconurl} alt="사용자 프로필" />
+                {user.iconurl && !imageFailed ? (
+                    <img
+                        className={styles.titleIcon}
+                        src={user.iconurl}
+                        alt=""
+                        onError={() => setImageFailed(true)}
+                    />
+                ) : (
+                    <span className={styles.titleIconPlaceholder} aria-hidden="true" />
+                )}
                 <div className="font-medium">{user.displayname}</div>
-                <div className="text-sm text-slate-400">({user.userid})</div>
             </div>
             <div className="text-sm text-slate-400">{timerNum} 초</div>
         </section>

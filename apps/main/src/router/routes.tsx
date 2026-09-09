@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { createRootRoute, createRoute } from "@tanstack/react-router";
 import { AccountPage, LoginPage } from "@account";
 import { MiscPage } from "@misc";
+import { RoulettePage } from "@roulette";
 import { AppLayout } from "@main/layout/AppLayout";
 import { Loading } from "@streaming-tools/ui";
 
@@ -44,12 +45,19 @@ const banpickRoute = createRoute({
     component: BanpickRoute,
 });
 
+const rouletteRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/roulette",
+    component: RoulettePage,
+});
+
 export const routeTree = rootRoute.addChildren([
     indexRoute,
     miscRoute,
     accountRoute,
     loginRoute,
     banpickRoute,
+    rouletteRoute,
 ]);
 
 function BanpickRoute() {

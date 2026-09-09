@@ -29,7 +29,11 @@ export const AccountPage = () => {
     useEffect(() => {
         void refreshAccounts();
     }, []);
-    if (accounts === undefined) return <Loading className={styles.loading} />;
+
+    if (accounts === undefined) {
+        return <Loading className={styles.loading} />;
+    }
+
     const handleLogout = async (provider: Account["provider"]) => {
         try {
             await logoutProvider(provider);

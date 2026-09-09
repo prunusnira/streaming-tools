@@ -1,0 +1,5 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.workspace {
+    @apply flex h-[calc(100dvh-10rem)] flex-nowrap items-stretch gap-5 overflow-x-auto overflow-y-hidden rounded-xl bg-slate-950 p-5 text-slate-100;
+}

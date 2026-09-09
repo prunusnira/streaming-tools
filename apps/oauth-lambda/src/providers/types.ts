@@ -35,5 +35,9 @@ export type OAuthProvider = {
         clientSecret: string;
     }): Promise<AuthUser>;
     createChatSession?(input: { accessToken: string }): Promise<ChatSession>;
-    subscribeToChat?(input: { accessToken: string; sessionKey: string }): Promise<void>;
+    subscribeToEvent?(input: {
+        accessToken: string;
+        eventType: "chat" | "donation";
+        sessionKey: string;
+    }): Promise<void>;
 };

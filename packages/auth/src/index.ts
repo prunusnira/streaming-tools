@@ -102,12 +102,15 @@ export const createChzzkChatSession = async () => {
     return (await response.json()) as { socketUrl: string };
 };
 
-export const subscribeToChzzkChat = async (sessionKey: string) => {
-    const url = new URL(`${authApiBaseUrl}/chat/chzzk/subscriptions`);
+export const subscribeToChzzkEvent = async (
+    sessionKey: string,
+    eventType: "chat" | "donation",
+) => {
+    const url = new URL(`${authApiBaseUrl}/chat/chzzk/subscriptions/${eventType}`);
     url.searchParams.set("sessionKey", sessionKey);
     const response = await fetch(url, {
         method: "POST",
         credentials: "include",
     });
-    if (!response.ok) throw new Error("치지직 채팅 구독에 실패했어.");
+    if (!response.ok) throw new Error("치지직 이벤트 구독에 실패했어.");
 };

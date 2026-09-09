@@ -17,16 +17,18 @@ chatRouter.post("/chat/chzzk/session", (request, response, next) => {
         .catch(next);
 });
 
-chatRouter.post("/chat/chzzk/subscriptions", (request, response, next) => {
+chatRouter.post("/chat/chzzk/subscriptions/:eventType", (request, response, next) => {
     const provider = getProvider("chzzk");
-    const subscribeToChat = provider?.subscribeToChat;
+    const subscribeToEvent = provider?.subscribeToEvent;
+    const { eventType } = request.params;
     const sessionKey = request.query.sessionKey;
-    if (!provider || !subscribeToChat) return response.sendStatus(501);
+    if (!provider || !subscribeToEvent) return response.sendStatus(501);
+    if (eventType !== "chat" && eventType !== "donation") return response.sendStatus(400);
     if (typeof sessionKey !== "string" || !sessionKey) return response.sendStatus(400);
     void getUsableAccessToken(request, response, provider)
         .then(async (accessToken) => {
             if (!accessToken) return response.sendStatus(401);
-            await subscribeToChat({ accessToken, sessionKey });
+            await subscribeToEvent({ accessToken, eventType, sessionKey });
             return response.sendStatus(204);
         })
         .catch(next);

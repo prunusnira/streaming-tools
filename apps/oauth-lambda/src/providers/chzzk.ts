@@ -134,13 +134,13 @@ export const chzzkProvider: OAuthProvider = {
         if (!socketUrl) throw new Error("치지직 채팅 socket URL이 비어 있어.");
         return { socketUrl };
     },
-    async subscribeToChat({ accessToken, sessionKey }) {
-        const url = new URL(`${chatApiBaseUrl}/events/subscribe/chat`);
+    async subscribeToEvent({ accessToken, eventType, sessionKey }) {
+        const url = new URL(`${chatApiBaseUrl}/events/subscribe/${eventType}`);
         url.searchParams.set("sessionKey", sessionKey);
         const response = await fetch(url, {
             method: "POST",
             headers: { Authorization: `Bearer ${accessToken}` },
         });
-        if (!response.ok) throw new Error("치지직 채팅 구독에 실패했어.");
+        if (!response.ok) throw new Error("치지직 이벤트 구독에 실패했어.");
     },
 };

@@ -1,15 +1,13 @@
 import { useContext, useRef } from "react";
+import { getFormatDate, type IncomingChatMessage } from "@streaming-tools/chat";
 import { emptyMessage, Message } from "@banpick/features/banpick/model/message";
 import { emptyUser } from "@banpick/features/streamer/model/user";
 import { StatusContext } from "@banpick/features/banpick/model/StatusProvider";
 import { StreamerContext } from "@banpick/features/streamer/model/StreamerProvider";
 import { TalkContext } from "@banpick/features/chat/model/TalkProvider";
 import { TeamContext } from "@banpick/features/banpick/model/TeamProvider";
-import { getFormatDate } from "./getFormatDate";
 import { apiGetUsers } from "@banpick/features/streamer/logic/api/user";
 import { useSpeech } from "../speech/useSpeech";
-import { chatParser } from "./chatParser";
-import type { IncomingChatMessage } from "@banpick/features/chat/model/chatMessage";
 
 export const useProcessMessage = () => {
     const twitchProfileImageCache = useRef(new Map<string, string>());
@@ -31,10 +29,8 @@ export const useProcessMessage = () => {
         return userList.filter((x) => x.userid === userid)[0];
     };
 
-    const processIncomingMessage = async (
-        incoming: IncomingChatMessage,
-        { isSub = false }: { isSub?: boolean } = {},
-    ) => {
+    const processIncomingMessage = async (incoming: IncomingChatMessage) => {
+        if (incoming.donation) return;
         const message: Message = {
             // 플랫폼 간 동일한 사용자 ID 충돌을 막기 위해 내부 식별자에 플랫폼을 포함해.
             id: `${incoming.provider}:${incoming.id}`,
@@ -54,7 +50,7 @@ export const useProcessMessage = () => {
             user = {
                 userid: message.id,
                 displayname: message.name,
-                sub: isSub,
+                sub: incoming.isSubscriber ?? false,
                 iconurl: "",
                 picked: false,
                 recentChat: emptyMessage,
@@ -167,24 +163,7 @@ export const useProcessMessage = () => {
         }
     };
 
-    const processMessage = async (rawMessage: string) => {
-        const parsed = chatParser(rawMessage);
-        if (parsed.size === 0) return;
-
-        const badges = parsed.get("badges")?.split(",") ?? [];
-        await processIncomingMessage(
-            {
-                id: parsed.get("userid") ?? "",
-                name: parsed.get("display-name") ?? "",
-                provider: "twitch",
-                text: parsed.get("msg") ?? "",
-            },
-            { isSub: badges.some((badge) => badge.startsWith("subscriber")) },
-        );
-    };
-
     return {
-        processMessage,
         processIncomingMessage,
     };
 };

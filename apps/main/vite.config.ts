@@ -15,6 +15,7 @@ export default defineConfig({
             "@account": fileURLToPath(new URL("../account/src", import.meta.url)),
             "@banpick": fileURLToPath(new URL("../banpick/src", import.meta.url)),
             "@misc": fileURLToPath(new URL("../misc/src", import.meta.url)),
+            "@roulette": fileURLToPath(new URL("../roulette/src", import.meta.url)),
         },
     },
     plugins: [react(), tailwindcss()],

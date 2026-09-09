@@ -1,11 +1,9 @@
-import { useContext, useEffect, useRef } from "react";
-import { StreamerContext } from "@banpick/features/streamer/model/StreamerProvider";
-import { TalkContext } from "@banpick/features/chat/model/TalkProvider";
-import { useProcessMessage } from "@banpick/features/chat/logic/irc/useProcessMessage";
+import { useEffect, useRef } from "react";
+import type { ChatEventType } from "../../model/chatConnection";
+import type { IncomingChatMessage } from "../../model/chatMessage";
 
 const soopClientId = "5be9d42ea5924e66ae020a0427346121";
 const soopSdkUrl = "https://static.sooplive.com/asset/app/chat-sdk/sooplive-chat-sdk.js";
-
 type SoopChatSdk = {
     connect: () => Promise<unknown>;
     disconnect: () => void;
@@ -14,22 +12,15 @@ type SoopChatSdk = {
     ) => void;
     setAuth: (accessToken: string) => void;
 };
-
 declare global {
     interface Window {
-        SOOP?: {
-            ChatSDK: new (clientId: string, clientSecret?: string) => SoopChatSdk;
-        };
+        SOOP?: { ChatSDK: new (clientId: string, clientSecret?: string) => SoopChatSdk };
     }
 }
 
 const loadSoopSdk = () =>
     new Promise<void>((resolve, reject) => {
-        if (window.SOOP?.ChatSDK) {
-            resolve();
-            return;
-        }
-
+        if (window.SOOP?.ChatSDK) return resolve();
         const script = document.createElement("script");
         script.src = soopSdkUrl;
         script.async = true;
@@ -38,54 +29,59 @@ const loadSoopSdk = () =>
         document.head.append(script);
     });
 
-export const useSoopChat = () => {
-    const { accessTokens } = useContext(StreamerContext);
-    const { setConnectionError } = useContext(TalkContext);
-    const { processIncomingMessage } = useProcessMessage();
-    const processMessageRef = useRef(processIncomingMessage);
+type UseSoopChatOptions = {
+    accessToken?: string;
+    events: readonly ChatEventType[];
+    onError: (message?: string) => void;
+    onMessage: (message: IncomingChatMessage) => Promise<void> | void;
+};
 
+export const useSoopChat = ({ accessToken, events, onError, onMessage }: UseSoopChatOptions) => {
+    const onMessageRef = useRef(onMessage);
+    const onErrorRef = useRef(onError);
     useEffect(() => {
-        processMessageRef.current = processIncomingMessage;
-    }, [processIncomingMessage]);
-
+        onMessageRef.current = onMessage;
+    }, [onMessage]);
     useEffect(() => {
-        const accessToken = accessTokens.soop;
-        // 심사 전에는 Client ID가 비어 있으므로 SDK 연결을 시도하지 않아.
+        onErrorRef.current = onError;
+    }, [onError]);
+    useEffect(() => {
         if (!accessToken || !soopClientId) return;
-
         let chatSdk: SoopChatSdk | undefined;
         let cancelled = false;
-
         const connect = async () => {
             try {
                 await loadSoopSdk();
                 if (cancelled || !window.SOOP?.ChatSDK) return;
-
                 chatSdk = new window.SOOP.ChatSDK(soopClientId);
                 chatSdk.setAuth(accessToken);
                 chatSdk.handleMessageReceived((action, message) => {
-                    if (action !== "MESSAGE") return;
+                    if (action !== "MESSAGE" || !events.includes("chat")) return;
                     const id = typeof message.userId === "string" ? message.userId : "";
                     const name =
                         typeof message.userNickname === "string" ? message.userNickname : id;
                     const text = typeof message.message === "string" ? message.message : "";
-                    if (!id || !text) return;
-
-                    void processMessageRef.current({ id, name, provider: "soop", text });
+                    if (id && text) void onMessageRef.current({ id, name, provider: "soop", text });
                 });
                 await chatSdk.connect();
-                setConnectionError("soop");
+                if (!cancelled) onErrorRef.current();
             } catch (error) {
-                const message =
-                    error instanceof Error ? error.message : "SOOP 채팅 연결에 실패했어.";
-                setConnectionError("soop", message);
+                if (!cancelled)
+                    onErrorRef.current(
+                        error instanceof Error ? error.message : "SOOP 채팅 연결에 실패했어.",
+                    );
             }
         };
-
         void connect();
         return () => {
             cancelled = true;
-            chatSdk?.disconnect();
+            if (chatSdk) {
+                try {
+                    chatSdk.disconnect();
+                } catch {
+                    // SOOP SDK는 이미 종료된 연결을 다시 해제하면 내부적으로 예외를 낼 수 있어.
+                }
+            }
         };
-    }, [accessTokens.soop, setConnectionError]);
+    }, [accessToken, events.join(",")]);
 };

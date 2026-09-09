@@ -1,0 +1,23 @@
+{
+    "name": "@streaming-tools/roulette-app",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@streaming-tools/auth": "workspace:*",
+        "@streaming-tools/chat": "workspace:*",
+        "@streaming-tools/roulette": "workspace:*",
+        "react": "catalog:"
+    },
+    "devDependencies": {
+        "@streaming-tools/config": "workspace:*",
+        "@types/react": "catalog:",
+        "typescript": "catalog:"
+    }
+}

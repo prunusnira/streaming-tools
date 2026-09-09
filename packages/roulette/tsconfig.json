@@ -1,0 +1,7 @@
+{
+    "extends": "@streaming-tools/config/tsconfig.react.json",
+    "compilerOptions": {
+        "types": ["@streaming-tools/config/css-modules", "react", "react-dom"]
+    },
+    "include": ["src"]
+}

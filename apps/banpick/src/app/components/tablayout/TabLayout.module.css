@@ -16,7 +16,7 @@
 }
 
 .tabFragment {
-    @apply flex min-w-0 flex-1 items-center justify-center overflow-hidden;
+    @apply flex min-w-0 flex-1 items-center justify-center overflow-auto;
 }
 
 .tabChat {

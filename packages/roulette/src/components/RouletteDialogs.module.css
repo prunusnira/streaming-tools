@@ -1,0 +1,105 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.alertBackdrop {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm;
+}
+.alert {
+    @apply w-full max-w-md rounded-lg bg-slate-900 p-5 shadow-2xl;
+}
+.alertTitle {
+    @apply m-0 mb-3 border-b border-slate-700 pb-3 text-lg font-bold text-white;
+}
+.alert p {
+    @apply m-0 text-sm leading-6;
+}
+.actions {
+    @apply mt-5 flex flex-wrap justify-end gap-2;
+}
+.resultAlert {
+    @apply relative flex w-full max-w-md flex-col items-center overflow-hidden rounded-xl bg-slate-900 px-8 py-10 text-center shadow-2xl;
+}
+.resultLabel {
+    @apply relative m-0 text-sm font-semibold text-sky-300;
+}
+.resultWinner {
+    @apply relative mt-3 break-all text-4xl font-black text-white;
+}
+.resultMessage {
+    @apply relative mb-7 mt-2 text-xl font-bold text-amber-300;
+}
+.fireworks {
+    @apply pointer-events-none absolute inset-0;
+}
+.fireworks span {
+    @apply absolute h-2 w-2 rounded-full bg-amber-300;
+    animation: firework 1.2s ease-out both;
+    box-shadow:
+        0 -2.5rem #f472b6,
+        1.8rem -1.8rem #38bdf8,
+        2.5rem 0 #facc15,
+        1.8rem 1.8rem #34d399,
+        0 2.5rem #a78bfa,
+        -1.8rem 1.8rem #fb7185,
+        -2.5rem 0 #f97316,
+        -1.8rem -1.8rem #22d3ee;
+}
+.fireworks span:nth-child(1) {
+    left: 20%;
+    top: 22%;
+}
+.fireworks span:nth-child(2) {
+    left: 78%;
+    top: 28%;
+    animation-delay: 0.2s;
+}
+.fireworks span:nth-child(3) {
+    left: 50%;
+    top: 66%;
+    animation-delay: 0.4s;
+}
+@keyframes firework {
+    0% {
+        opacity: 0;
+        transform: scale(0.15);
+    }
+    35% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.6);
+    }
+}
+.donationDialog {
+    @apply w-full max-w-3xl rounded-lg bg-slate-900 p-5 shadow-2xl;
+}
+.donationHeader {
+    @apply flex items-center justify-between gap-4;
+}
+.donationHeader h2 {
+    @apply m-0 text-lg font-bold;
+}
+.minimumToggle,
+.minimumAmount {
+    @apply mt-4 flex items-center gap-2 text-sm;
+}
+.minimumAmount input,
+.donationTable input {
+    @apply w-28 rounded border border-slate-600 bg-slate-800 px-2 py-1 text-right text-white;
+}
+.donationHelp {
+    @apply mt-4 text-sm leading-5 text-slate-300;
+}
+.donationTable {
+    @apply mt-4 w-full border-collapse text-sm;
+}
+.donationTable th {
+    @apply bg-slate-800 text-left text-white;
+}
+.donationTable th,
+.donationTable td {
+    @apply border border-slate-700 px-2 py-2;
+}
+.addTierButton {
+    @apply mt-4;
+}

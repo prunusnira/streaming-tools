@@ -1,0 +1,22 @@
+{
+    "name": "@streaming-tools/chat",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@streaming-tools/auth": "workspace:*",
+        "react": "catalog:",
+        "socket.io-client": "catalog:"
+    },
+    "devDependencies": {
+        "@streaming-tools/config": "workspace:*",
+        "@types/react": "catalog:",
+        "typescript": "catalog:"
+    }
+}

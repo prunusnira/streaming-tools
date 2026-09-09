@@ -210,6 +210,12 @@ importers:
       '@streaming-tools/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@streaming-tools/chat':
+        specifier: workspace:*
+        version: link:../../packages/chat
+      '@streaming-tools/roulette':
+        specifier: workspace:*
+        version: link:../../packages/roulette
       '@streaming-tools/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -228,9 +234,6 @@ importers:
       remark-gfm:
         specifier: 'catalog:'
         version: 4.0.1
-      socket.io-client:
-        specifier: 'catalog:'
-        version: 2.0.3
     devDependencies:
       '@streaming-tools/config':
         specifier: workspace:*
@@ -283,6 +286,9 @@ importers:
       '@streaming-tools/misc':
         specifier: workspace:*
         version: link:../misc
+      '@streaming-tools/roulette-app':
+        specifier: workspace:*
+        version: link:../roulette
       '@streaming-tools/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -398,11 +404,58 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  apps/roulette:
+    dependencies:
+      '@streaming-tools/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@streaming-tools/chat':
+        specifier: workspace:*
+        version: link:../../packages/chat
+      '@streaming-tools/roulette':
+        specifier: workspace:*
+        version: link:../../packages/roulette
+      react:
+        specifier: 'catalog:'
+        version: 19.2.8
+    devDependencies:
+      '@streaming-tools/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.18
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/auth:
     devDependencies:
       '@streaming-tools/config':
         specifier: workspace:*
         version: link:../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/chat:
+    dependencies:
+      '@streaming-tools/auth':
+        specifier: workspace:*
+        version: link:../auth
+      react:
+        specifier: 'catalog:'
+        version: 19.2.8
+      socket.io-client:
+        specifier: 'catalog:'
+        version: 2.0.3
+    devDependencies:
+      '@streaming-tools/config':
+        specifier: workspace:*
+        version: link:../config
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.18
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -432,6 +485,43 @@ importers:
       typescript-eslint:
         specifier: 'catalog:'
         version: 8.69.0(eslint@10.9.1(jiti@2.7.0))(typescript@6.0.3)
+
+  packages/roulette:
+    dependencies:
+      '@fortawesome/fontawesome-svg-core':
+        specifier: 'catalog:'
+        version: 7.3.1
+      '@fortawesome/free-solid-svg-icons':
+        specifier: 'catalog:'
+        version: 7.3.1
+      '@fortawesome/react-fontawesome':
+        specifier: 'catalog:'
+        version: 3.5.0(@fortawesome/fontawesome-svg-core@7.3.1)(react@19.2.8)
+      '@streaming-tools/ui':
+        specifier: workspace:*
+        version: link:../ui
+      react:
+        specifier: 'catalog:'
+        version: 19.2.8
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@streaming-tools/config':
+        specifier: workspace:*
+        version: link:../config
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.5(@types/react@19.2.18)
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.11(@types/node@26.4.0)(jsdom@30.0.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13))
 
   packages/ui:
     dependencies:
@@ -1372,6 +1462,7 @@ packages:
   '@smithy/node-http-handler@4.12.0':
     resolution: {integrity: sha512-0mq1pHadfyXCYCqm2cNpbjNIT+fbaUpNxewZb/YNr2L0IrEVMOb8gM/Fl4K6XvHCW3uSNDFwPl/+iKm0bx9jYg==}
     engines: {node: '>=18.0.0'}
+    deprecated: Depreacted due to a memory leak issue https://github.com/smithy-lang/smithy-typescript/issues/2258
 
   '@smithy/signature-v4@5.7.3':
     resolution: {integrity: sha512-7ImGm+FkHRLcBaRttIAMZ6bzJZWb2cJGoYjq46F2UjycujWzrL9GEN9h4w7eQyXJYnltrUhxbbieBAIRrdqpow==}

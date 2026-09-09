@@ -4,32 +4,16 @@
         "baseUrl": ".",
         "ignoreDeprecations": "6.0",
         "paths": {
-            "@main/*": [
-                "src/*"
-            ],
-            "@account": [
-                "../account/src/index.ts"
-            ],
-            "@account/*": [
-                "../account/src/*"
-            ],
-            "@banpick/*": [
-                "../banpick/src/*"
-            ],
-            "@misc": [
-                "../misc/src/index.ts"
-            ],
-            "@misc/*": [
-                "../misc/src/*"
-            ]
+            "@main/*": ["src/*"],
+            "@account": ["../account/src/index.ts"],
+            "@account/*": ["../account/src/*"],
+            "@banpick/*": ["../banpick/src/*"],
+            "@misc": ["../misc/src/index.ts"],
+            "@misc/*": ["../misc/src/*"],
+            "@roulette": ["../roulette/src/index.ts"],
+            "@roulette/*": ["../roulette/src/*"]
         },
-        "types": [
-            "@streaming-tools/config/css-modules",
-            "node",
-            "vite/client"
-        ]
+        "types": ["@streaming-tools/config/css-modules", "node", "vite/client"]
     },
-    "include": [
-        "src"
-    ]
+    "include": ["src"]
 }
