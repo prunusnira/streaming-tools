@@ -3,6 +3,7 @@ import { createRootRoute, createRoute } from "@tanstack/react-router";
 import { AccountPage, LoginPage } from "@account";
 import { MiscPage } from "@misc";
 import { RoulettePage } from "@roulette";
+import { ViewerPickerPage } from "@viewer-picker";
 import { AppLayout } from "@main/layout/AppLayout";
 import { Loading } from "@streaming-tools/ui";
 
@@ -51,6 +52,12 @@ const rouletteRoute = createRoute({
     component: RoulettePage,
 });
 
+const viewerPickerRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/viewer-picker",
+    component: ViewerPickerPage,
+});
+
 export const routeTree = rootRoute.addChildren([
     indexRoute,
     miscRoute,
@@ -58,6 +65,7 @@ export const routeTree = rootRoute.addChildren([
     loginRoute,
     banpickRoute,
     rouletteRoute,
+    viewerPickerRoute,
 ]);
 
 function BanpickRoute() {

@@ -1,0 +1,40 @@
+@reference "@streaming-tools/ui/globals.css";
+
+.page {
+    @apply mx-auto max-w-7xl p-6;
+}
+.header {
+    @apply mb-6 flex items-center justify-between gap-3;
+}
+.header h1 {
+    @apply m-0 text-2xl font-bold;
+}
+.header p {
+    @apply mt-1 text-sm text-slate-300;
+}
+.header button {
+    @apply rounded bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500;
+}
+.content {
+    @apply flex items-start gap-6;
+}
+
+.loginBackdrop {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6;
+}
+
+.loginModal {
+    @apply w-full max-w-md rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-2xl;
+}
+
+.loginModal h2 {
+    @apply mb-4 text-lg font-semibold;
+}
+
+.loginModal p {
+    @apply mb-4 text-sm text-slate-300;
+}
+
+.loginModal button {
+    @apply rounded bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500;
+}

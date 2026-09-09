@@ -92,6 +92,25 @@ export const getAccessToken = async (provider: AuthProvider) => {
     return (await response.json()) as { accessToken: string; provider: AuthProvider };
 };
 
+export const getAccessTokens = async (
+    accounts: AuthAccount[] | undefined,
+): Promise<Partial<Record<AuthProvider, string>>> => {
+    if (!accounts?.length) return {};
+
+    const entries = await Promise.all(
+        accounts.map(async ({ provider }) => {
+            try {
+                const session = await getAccessToken(provider);
+                return [provider, session?.accessToken ?? ""] as const;
+            } catch {
+                return [provider, ""] as const;
+            }
+        }),
+    );
+
+    return Object.fromEntries(entries);
+};
+
 export const createChzzkChatSession = async () => {
     const response = await fetch(`${authApiBaseUrl}/chat/chzzk/session`, {
         method: "POST",
@@ -102,10 +121,7 @@ export const createChzzkChatSession = async () => {
     return (await response.json()) as { socketUrl: string };
 };
 
-export const subscribeToChzzkEvent = async (
-    sessionKey: string,
-    eventType: "chat" | "donation",
-) => {
+export const subscribeToChzzkEvent = async (sessionKey: string, eventType: "chat" | "donation") => {
     const url = new URL(`${authApiBaseUrl}/chat/chzzk/subscriptions/${eventType}`);
     url.searchParams.set("sessionKey", sessionKey);
     const response = await fetch(url, {

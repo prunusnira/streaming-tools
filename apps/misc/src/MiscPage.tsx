@@ -20,6 +20,13 @@ export const MiscPage = () => (
                 </span>
                 <span className={styles.menuAction}>룰렛 열기</span>
             </Link>
+            <Link to="/viewer-picker" className={styles.menuCard}>
+                <span className={styles.menuTitle}>참여자 추첨</span>
+                <span className={styles.menuDescription}>
+                    채팅으로 참가자를 모아 한 명을 추첨해봐.
+                </span>
+                <span className={styles.menuAction}>참여자 추첨 열기</span>
+            </Link>
         </div>
     </main>
 );

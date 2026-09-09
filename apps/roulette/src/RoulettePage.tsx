@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-    getAccessToken,
+    getAccessTokens,
     getAuthenticatedAccounts,
     type AuthAccount,
     type AuthProvider,
@@ -19,16 +19,7 @@ export const RoulettePage = () => {
             .catch(() => setAccounts([]));
     }, []);
     useEffect(() => {
-        if (!accounts?.length) return;
-        void Promise.all(
-            accounts.map(
-                async (account) =>
-                    [
-                        account.provider,
-                        (await getAccessToken(account.provider))?.accessToken ?? "",
-                    ] as const,
-            ),
-        ).then((entries) => setTokens(Object.fromEntries(entries)));
+        void getAccessTokens(accounts).then(setTokens);
     }, [accounts]);
     const onMessage = useMemo(
         () => (message: IncomingChatMessage) =>

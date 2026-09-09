@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-    getAccessToken,
+    getAccessTokens,
     getAuthenticatedAccounts,
     type AuthAccount,
     type AuthProvider,
@@ -42,22 +42,7 @@ export const StreamerProvider = ({ children }: ProviderProps) => {
     }, []);
 
     useEffect(() => {
-        if (!accounts?.length) {
-            setAccessTokens({});
-            return;
-        }
-
-        Promise.all(
-            accounts.map(async ({ provider }) => {
-                try {
-                    const session = await getAccessToken(provider);
-                    return [provider, session?.accessToken ?? ""] as const;
-                } catch {
-                    return [provider, ""] as const;
-                }
-            }),
-        )
-            .then((entries) => setAccessTokens(Object.fromEntries(entries)));
+        void getAccessTokens(accounts).then(setAccessTokens);
     }, [accounts]);
 
     const data = useMemo<StreamerType>(() => {

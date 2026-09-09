@@ -1,0 +1,25 @@
+@reference "@streaming-tools/ui/globals.css";
+.backdrop {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6;
+}
+.modal {
+    @apply max-h-[80dvh] w-full max-w-xl overflow-y-auto rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-2xl;
+}
+.header {
+    @apply flex items-center justify-between gap-3;
+}
+h2 {
+    @apply m-0 text-lg font-semibold;
+}
+button {
+    @apply rounded bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500;
+}
+.list {
+    @apply m-0 mt-4 list-none p-0;
+}
+.list li {
+    @apply border-b border-slate-800 py-3 text-sm;
+}
+.empty {
+    @apply mt-1 text-sm text-slate-300;
+}

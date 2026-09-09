@@ -1,0 +1,29 @@
+{
+    "name": "@streaming-tools/viewer-picker",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "test": "vitest run",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@streaming-tools/auth": "workspace:*",
+        "@streaming-tools/chat": "workspace:*",
+        "@streaming-tools/roulette": "workspace:*",
+        "react": "catalog:"
+    },
+    "devDependencies": {
+        "@streaming-tools/config": "workspace:*",
+        "@testing-library/jest-dom": "catalog:",
+        "@testing-library/react": "catalog:",
+        "@testing-library/user-event": "catalog:",
+        "@types/react": "catalog:",
+        "jsdom": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:"
+    }
+}

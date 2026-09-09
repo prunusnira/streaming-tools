@@ -30,6 +30,9 @@ export const Header = () => {
             <Link to="/roulette" className={styles.menuLink}>
                 룰렛
             </Link>
+            <Link to="/viewer-picker" className={styles.menuLink}>
+                참여자 추첨
+            </Link>
             <div className={styles.loginStatus} aria-label="서비스별 로그인 상태">
                 {authProviders.map((provider) => {
                     const account = accounts.find((item) => item.provider === provider);
@@ -37,11 +40,7 @@ export const Header = () => {
                         <span
                             key={provider}
                             className={account ? styles.connected : styles.disconnected}
-                            title={
-                                account
-                                    ? account.name
-                                    : "미연결"
-                            }
+                            title={account ? account.name : "미연결"}
                         >
                             <img
                                 className={styles.providerLogo}

@@ -1,0 +1,10 @@
+@reference "@streaming-tools/ui/globals.css";
+.backdrop {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6;
+}
+.modal {
+    @apply w-full max-w-xl rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-2xl;
+}
+h2 {
+    @apply mb-5 text-center text-lg font-semibold;
+}
